@@ -1,0 +1,3 @@
+Verify the intended use of provided credentials, e.g. for JWTs validate ,  claims and scopes
+
+ Example attack scenarios.

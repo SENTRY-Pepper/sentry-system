@@ -1,0 +1,3 @@
+Often selfresponsibility of developers is underappreciated. Foster a culture of awareness, responsibility and proactive risk mitigation. Regular exchanges about security (e.g. during threat modeling sessions) can generate a mindset for including security in all important design decisions.  
+
+ How to prevent.

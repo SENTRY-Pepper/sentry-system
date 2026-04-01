@@ -1,0 +1,1 @@
+A06:2025  Insecure Design slides two spots from 4 to 6 in the ranking as Security Misconfiguration and Software Supply Chain Failures leapfrog it. This category was introduced in 2021, and we have seen noticeable improvements in the industry related to threat modeling and a greater emphasis on secure design.

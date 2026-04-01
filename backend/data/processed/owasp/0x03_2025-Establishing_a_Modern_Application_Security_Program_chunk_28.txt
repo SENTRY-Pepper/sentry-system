@@ -1,0 +1,11 @@
+Rollout:
+
+ Put the application in operation and migrate from previously used applications if needed.
+
+ Finalize all documentation, including the change management database (CMDB) and security architecture.
+
+ Operations and Change Management:
+
+  Operations must include guidelines for the security management of the application (e.g. patch management).
+
+  Raise the security awareness of users and manage conflicts about usability vs. security.

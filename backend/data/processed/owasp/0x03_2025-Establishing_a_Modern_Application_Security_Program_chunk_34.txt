@@ -1,0 +1,5 @@
+Set your application’s state to retired in the CMDB.
+
+ Using the OWASP Top 10 as a standard
+
+The OWASP Top 10 is primarily an awareness document. However, this has not stopped organizations from using it as a de facto industry AppSec standard since its inception in 2003. If you want to use the OWASP Top 10 as a coding or testing standard, know that it is the bare minimum and just a starting point.

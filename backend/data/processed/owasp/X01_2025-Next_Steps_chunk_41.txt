@@ -1,0 +1,1 @@
+pointer to it. Before the browser realizes the memory has been freed, the attacker allocates a new object that occupies the same memory space. When the browser tries to use the original pointer, it now points to attackercontrolled data. If this pointer was for a virtual function table, the attacker can redirect code execution to their payload.

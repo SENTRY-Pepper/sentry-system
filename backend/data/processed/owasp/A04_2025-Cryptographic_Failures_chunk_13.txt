@@ -1,0 +1,5 @@
+See references ASVS: Cryptography (V11), Secure Communication (V12) and Data Protection (V14).
+
+ How to prevent. 
+
+Do the following, at a minimum, and consult the references:

@@ -1,0 +1,13 @@
+CWE538 Insertion of Sensitive Information into ExternallyAccessible File or Directory
+
+ CWE540 Inclusion of Sensitive Information in Source Code
+
+ CWE548 Exposure of Information Through Directory Listing
+
+ CWE552 Files or Directories Accessible to External Parties
+
+ CWE566 Authorization Bypass Through UserControlled SQL Primary Key
+
+ CWE601 URL Redirection to Untrusted Site ('Open Redirect')
+
+ CWE615 Inclusion of Sensitive Information in Source Code Comments

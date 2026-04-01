@@ -1,0 +1,2 @@
+you do not fix or upgrade the underlying platform, frameworks, and dependencies in a riskbased, timely fashion. This commonly happens in environments when patching is a monthly or quarterly task under change control, leaving organizations open to days or months of unnecessary exposure before fixing vulnerabilities.
+ software developers do not test the compatibility of updated, upgraded, or patched libraries.

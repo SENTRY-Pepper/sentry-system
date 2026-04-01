@@ -1,0 +1,5 @@
+Raise the security awareness of users and manage conflicts about usability vs. security.
+
+  Plan and manage changes, e.g. migrate to new versions of the application or other components like OS, middleware, and libraries.
+
+  Ensure all apps are in your inventory, with all important details documented. Update all documentation, including in the CMDB and the security architecture, controls, and countermeasures, including any runbooks or project documentation.

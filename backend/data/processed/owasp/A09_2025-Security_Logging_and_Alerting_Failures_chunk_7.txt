@@ -1,0 +1,4 @@
+Logs are only stored locally, and not properly backedup.
+ Appropriate alerting thresholds and response escalation processes are not in place or effective. Alerts are not received or reviewed within a reasonable amount of time.
+ Penetration testing and scans by dynamic application security testing (DAST) tools (such as Burp or ZAP) do not trigger alerts.
+ The application cannot detect, escalate, or alert for active attacks in realtime or near realtime.

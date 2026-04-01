@@ -1,0 +1,7 @@
+Establish Continuous Application Security Testing:
+
+  Test the technical functions and integration with the IT architecture and coordinate business tests.
+
+ Create “use” and “abuse” test cases from technical and business perspectives.
+
+ Manage security tests according to internal processes, the protection needs, and the assumed threat level by the application.

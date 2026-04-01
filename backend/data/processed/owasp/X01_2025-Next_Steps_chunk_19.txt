@@ -1,0 +1,9 @@
+CWE598 Use of GET Request Method With Sensitive Query Strings
+ CWE602 ClientSide Enforcement of ServerSide Security
+ CWE628 Function Call with Incorrectly Specified Arguments
+ CWE642 External Control of Critical State Data
+ CWE646 Reliance on File Name or Extension of ExternallySupplied File
+ CWE653 Improper Isolation or Compartmentalization
+ CWE656 Reliance on Security Through Obscurity
+ CWE657 Violation of Secure Design Principles
+ CWE676 Use of Potentially Dangerous Function

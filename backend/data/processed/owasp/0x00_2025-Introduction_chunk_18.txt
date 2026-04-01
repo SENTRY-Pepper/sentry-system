@@ -1,0 +1,3 @@
+How the categories are structured
+
+A few categories have changed from the previous installment of the OWASP Top Ten. Here is a highlevel summary of the category changes.

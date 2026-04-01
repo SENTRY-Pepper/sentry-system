@@ -1,0 +1,3 @@
+How to prevent. 
+
+The best way to prevent memory management failures is to use a memorysafe language. Examples include Rust, Java, Go, C, Python, Swift, Kotlin, JavaScript, etc. When creating new applications, try hard to convince your organization that it is worth the learning curve to switch to a memorysafe language. If performing a full refactor, push for a rewrite in a memorysafe language when it is possible and feasible.

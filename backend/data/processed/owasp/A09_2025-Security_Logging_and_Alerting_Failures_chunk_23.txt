@@ -1,0 +1,15 @@
+Data Integrity: Detecting and Responding to Ransomware and Other Destructive Events
+
+   Real world example of such failures in Snowflake Breach
+
+ List of Mapped CWEs
+
+ CWE117 Improper Output Neutralization for Logs
+
+ CWE221 Information Loss of Omission
+
+ CWE223 Omission of Securityrelevant Information
+
+ CWE532 Insertion of Sensitive Information into Log File
+
+ CWE778 Insufficient Logging

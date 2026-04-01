@@ -1,0 +1,15 @@
+CWE523 Unprotected Transport of Credentials
+
+ CWE757 Selection of LessSecure Algorithm During Negotiation('Algorithm Downgrade')
+
+ CWE759 Use of a OneWay Hash without a Salt
+
+ CWE760 Use of a OneWay Hash with a Predictable Salt
+
+ CWE780 Use of RSA Algorithm without OAEP
+
+ CWE916 Use of Password Hash With Insufficient Computational Effort
+
+ CWE1240 Use of a Cryptographic Primitive with a Risky Implementation
+
+ CWE1241 Use of Predictable Algorithm in Random Number Generator

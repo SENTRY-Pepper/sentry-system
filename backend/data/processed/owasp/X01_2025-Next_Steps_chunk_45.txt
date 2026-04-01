@@ -1,0 +1,11 @@
+List of Mapped CWEs
+ CWE14 Compiler Removal of Code to Clear Buffers
+ CWE119 Improper Restriction of Operations within the Bounds of a Memory Buffer
+ CWE120 Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')
+ CWE121 Stackbased Buffer Overflow
+ CWE122 Heapbased Buffer Overflow
+ CWE124 Buffer Underwrite ('Buffer Underflow')
+ CWE125 Outofbounds Read
+ CWE126 Buffer Overread
+ CWE190 Integer Overflow or Wraparound
+ CWE191 Integer Underflow (Wrap or Wraparound)

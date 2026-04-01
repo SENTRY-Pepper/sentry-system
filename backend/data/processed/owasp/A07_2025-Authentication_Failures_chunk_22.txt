@@ -1,0 +1,11 @@
+CWE940 Improper Verification of Source of a Communication Channel
+
+ CWE941 Incorrectly Specified Destination in a Communication Channel
+
+ CWE1390 Weak Authentication
+
+ CWE1391 Use of Weak Credentials
+
+ CWE1392 Use of Default Credentials
+
+ CWE1393 Use of Default Password

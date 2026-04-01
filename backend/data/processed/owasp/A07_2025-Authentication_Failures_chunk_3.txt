@@ -1,0 +1,3 @@
+Description. 
+
+When an attacker is able to trick a system into recognizing an invalid or incorrect user as legitimate, this vulnerability is present. There may be authentication weaknesses if the application:

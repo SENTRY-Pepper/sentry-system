@@ -1,0 +1,1 @@
+Review your current system development life cycle and all software security activities, tooling, policies, and processes, then document them.

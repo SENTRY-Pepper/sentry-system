@@ -1,0 +1,33 @@
+<tr
+   <tdIntegration testing
+   </td
+   <tdOccasionally
+   </td
+   <tdYes
+   </td
+  </tr
+  <tr
+   <tdPenetration testing
+   </td
+   <tdBare minimum
+   </td
+   <tdYes
+   </td
+  </tr
+  <tr
+   <tdTool support
+   </td
+   <tdBare minimum
+   </td
+   <tdYes
+   </td
+  </tr
+  <tr
+   <tdSecure Supply Chain
+   </td
+   <tdOccasionally
+   </td
+   <tdYes
+   </td
+  </tr
+</table

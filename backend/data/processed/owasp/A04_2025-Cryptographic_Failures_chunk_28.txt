@@ -1,0 +1,19 @@
+CWE325 Missing Required Cryptographic Step
+
+ CWE326 Inadequate Encryption Strength
+
+ CWE327 Use of a Broken or Risky Cryptographic Algorithm
+
+ CWE328 Reversible OneWay Hash
+
+ CWE329 Not Using a Random IV with CBC Mode
+
+ CWE330 Use of Insufficiently Random Values
+
+ CWE331 Insufficient Entropy
+
+ CWE332 Insufficient Entropy in PRNG
+
+ CWE334 Small Space of Random Values
+
+ CWE335 Incorrect Usage of Seeds in PseudoRandom Number Generator(PRNG)

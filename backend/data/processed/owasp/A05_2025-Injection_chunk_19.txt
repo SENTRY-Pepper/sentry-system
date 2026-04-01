@@ -1,0 +1,11 @@
+CWE86 Improper Neutralization of Invalid Characters in Identifiers in Web Pages
+
+ CWE88 Improper Neutralization of Argument Delimiters in a Command ('Argument Injection')
+
+ CWE89 Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')
+
+ CWE90 Improper Neutralization of Special Elements used in an LDAP Query ('LDAP Injection')
+
+ CWE91 XML Injection (aka Blind XPath Injection)
+
+ CWE93 Improper Neutralization of CRLF Sequences ('CRLF Injection')

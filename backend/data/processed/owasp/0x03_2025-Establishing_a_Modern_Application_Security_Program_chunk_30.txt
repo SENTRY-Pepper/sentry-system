@@ -1,0 +1,9 @@
+Perform logging, monitoring, and alerting for all apps. Add it if it’s missing.
+
+  Create processes for effective and efficient updating and patching.
+
+  Create regular scanning schedules (hopefully dynamic, static, secrets, IaC, and software composition analysis).
+
+  SLAs for fixing security bugs.
+
+  Provide a way for employees (and ideally also your customers) to report bugs.

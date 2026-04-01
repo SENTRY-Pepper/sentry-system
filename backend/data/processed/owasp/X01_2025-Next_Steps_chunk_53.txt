@@ -1,0 +1,2 @@
+Implement policies and processes as part of your SDLC to inform developers (and all employees) of how they should and should not use AI within your organization.
+ Create a list of good and effective prompts, that take IT security best practices into account. Ideally they should also consider your internal secure coding guidelines. Developers can use this prompts as a starting point for their programs.

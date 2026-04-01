@@ -1,0 +1,7 @@
+CWE484	Omitted Break Statement in Switch
+ CWE550	Servergenerated Error Message Containing Sensitive Information
+ CWE636	Not Failing Securely ('Failing Open')
+ CWE703	Improper Check or Handling of Exceptional Conditions
+ CWE754	Improper Check for Unusual or Exceptional Conditions
+ CWE755	Improper Handling of Exceptional Conditions
+ CWE756	Missing Custom Error Page

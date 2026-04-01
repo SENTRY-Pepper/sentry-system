@@ -1,0 +1,9 @@
+OWASP Proactive Controls: C2: Use Cryptography to Protect Data 
+ OWASP Application Security Verification Standard (ASVS):  V11, 12,  14
+ OWASP Cheat Sheet: Transport Layer Protection
+ OWASP Cheat Sheet: User Privacy Protection
+ OWASP Cheat Sheet: Password Storage
+ OWASP Cheat Sheet: Cryptographic Storage
+ OWASP Cheat Sheet: HSTS
+ OWASP Testing Guide: Testing for weak cryptography
+ ENISA: A Coordinated Implementation Roadmap for the Transition to PostQuantum Cryptography

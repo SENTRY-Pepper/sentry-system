@@ -1,0 +1,1 @@
+requirements, including functional and nonfunctional security requirements. Plan and negotiate the budget covering all design, build, testing, and operation, including security activities.

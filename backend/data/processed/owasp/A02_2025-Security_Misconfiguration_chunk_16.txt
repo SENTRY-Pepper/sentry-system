@@ -1,0 +1,15 @@
+References.
+
+ OWASP Testing Guide: Configuration Management
+ OWASP Testing Guide: Testing for Error Codes
+ Application Security Verification Standard V13 Configuration
+ NIST Guide to General Server Hardening
+ CIS Security Configuration Guides/Benchmarks
+ Amazon S3 Bucket Discovery and Enumeration
+ ScienceDirect: Security Misconfiguration
+
+ List of Mapped CWEs
+
+ CWE5 J2EE Misconfiguration: Data Transmission Without Encryption
+
+ CWE11 ASP.NET Misconfiguration: Creating Debug Binary

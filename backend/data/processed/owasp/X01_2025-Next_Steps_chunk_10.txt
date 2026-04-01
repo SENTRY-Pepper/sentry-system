@@ -1,0 +1,6 @@
+Carefully test your error handling functionality
+ Implement resilience patterns such as circuit breakers, bulkheads, retry logic, and graceful degradation
+ Do performance and load testing; add chaos engineering if you have the risk appetite for it
+ Implement and architect for redundancy where reasonable and affordable
+ Implement monitoring, observability, and alerting
+ Filter invalid sender addresses in accordance with RFC 2267

@@ -1,0 +1,5 @@
+Every organization must ensure an ongoing plan for monitoring, triaging, and applying updates or configuration changes for the lifetime of the application or portfolio.
+
+ Example attack scenarios.
+
+Scenario 1: A trusted vendor is compromised with malware, leading to your computer systems being compromised when you upgrade. The most famous example of this is probably:

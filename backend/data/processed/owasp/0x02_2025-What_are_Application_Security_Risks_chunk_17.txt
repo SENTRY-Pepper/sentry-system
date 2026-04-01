@@ -1,0 +1,9 @@
+Data Factors
+
+There are data factors that are listed for each of the Top Ten Categories, here is what they mean:
+
+CWEs Mapped: The number of CWEs mapped to a category by the Top Ten team.
+
+Incidence Rate: Incidence rate is the percentage of applications vulnerable to that CWE from the population tested by that org for that year.
+
+Weighted Exploit: The Exploit subscore from CVSSv2 and CVSSv3 scores assigned to CVEs mapped to CWEs, normalized, and placed on a 10pt scale.

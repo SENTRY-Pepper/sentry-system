@@ -1,0 +1,9 @@
+CWE784 Reliance on Cookies without Validation and Integrity Checking in a Security Decision
+
+ CWE829 Inclusion of Functionality from Untrusted Control Sphere
+
+ CWE830 Inclusion of Web Functionality from an Untrusted Source
+
+ CWE915 Improperly Controlled Modification of DynamicallyDetermined Object Attributes
+
+ CWE926 Improper Export of Android Application Components

@@ -1,0 +1,1 @@
+The worm reached over 500 package versions before being disrupted by npm.  This supply chain attack was advanced, fastspreading, and damaging, and by targeting developer machines it demonstrated developers themselves are now prime targets for supply chain attacks.

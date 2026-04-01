@@ -1,0 +1,11 @@
+List of Mapped CWEs
+ CWE209	Generation of Error Message Containing Sensitive Information
+ CWE215	Insertion of Sensitive Information Into Debugging Code
+ CWE234	Failure to Handle Missing Parameter
+ CWE235	Improper Handling of Extra Parameters
+ CWE248	Uncaught Exception
+ CWE252	Unchecked Return Value
+ CWE274	Improper Handling of Insufficient Privileges
+ CWE280	Improper Handling of Insufficient Permissions or Privileges
+ CWE369	Divide By Zero
+ CWE390	Detection of Error Condition Without Action

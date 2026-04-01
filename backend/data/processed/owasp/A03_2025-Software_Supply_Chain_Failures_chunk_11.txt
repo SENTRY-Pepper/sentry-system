@@ -1,0 +1,3 @@
+How to prevent.
+
+There should be a patch management process in place to:

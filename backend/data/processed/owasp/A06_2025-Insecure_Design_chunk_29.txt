@@ -1,0 +1,17 @@
+CWE382 J2EE Bad Practices: Use of System.exit()
+
+ CWE419 Unprotected Primary Channel
+
+ CWE434 Unrestricted Upload of File with Dangerous Type
+
+ CWE436 Interpretation Conflict
+
+ CWE444 Inconsistent Interpretation of HTTP Requests ('HTTP Request Smuggling')
+
+ CWE451 User Interface (UI) Misrepresentation of Critical Information
+
+ CWE454 External Initialization of Trusted Variables or Data Stores
+
+ CWE472 External Control of AssumedImmutable Web Parameter
+
+ CWE501 Trust Boundary Violation

@@ -1,0 +1,2 @@
+Are cryptographic error messages or side channel information exploitable, for example in the form of padding oracle attacks?
+ Can the cryptographic algorithm be downgraded or bypassed?

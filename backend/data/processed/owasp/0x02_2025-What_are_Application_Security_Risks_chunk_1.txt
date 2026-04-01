@@ -1,0 +1,11 @@
+<strongControls</strong
+   </td
+   <td
+    <strongTechnical</strong
+<p style="textalign: center"
+
+    <strongImpacts</strong
+   </td
+   <td
+    <strongBusiness</strong
+<p style="textalign: center"

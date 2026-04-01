@@ -1,0 +1,1 @@
+an application is unsure of its next instruction, an exceptional condition has been mishandled. Hardtofind errors and exceptions can threaten the security of the whole application for a long time.

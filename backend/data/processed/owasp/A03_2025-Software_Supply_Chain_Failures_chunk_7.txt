@@ -1,0 +1,2 @@
+you do not scan for vulnerabilities regularly and subscribe to security bulletins related to the components you use.
+ you do not have a change management process or tracking of changes within your supply chain, including tracking IDEs, IDE extensions and updates, changes to your organization's code repository, sandboxes, image and library repositories, the way artifacts are created and stored, etc. Every part of your supply chain should be documented, especially changes.

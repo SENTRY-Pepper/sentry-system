@@ -1,0 +1,3 @@
+Deliberately choose which version of a dependency you use and upgrade only when there is need.
+ Monitor for libraries and components that are unmaintained or do not create security patches for older versions. If patching is not possible, consider migrating to an alternative. If that is not possible, consider deploying a virtual patch to monitor, detect, or protect against the discovered issue.
+ Update your CI/CD, IDE, and any other developer tooling regularly

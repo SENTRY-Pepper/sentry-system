@@ -1,0 +1,3 @@
+Align password length, complexity, and rotation policies with National Institute of Standards and Technology (NIST) 80063b's guidelines in section 5.1.1 for Memorized Secrets or other modern, evidencebased password policies.
+
+ Do not force human beings to rotate passwords unless you suspect breach. If you suspect breach, force password resets immediately.

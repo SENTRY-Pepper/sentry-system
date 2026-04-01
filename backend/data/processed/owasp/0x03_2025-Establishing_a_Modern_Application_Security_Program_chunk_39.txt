@@ -1,0 +1,45 @@
+</td
+   <tdYes
+   </td
+  </tr
+  <tr
+   <tdCoding standard
+   </td
+   <tdBare minimum
+   </td
+   <tdYes
+   </td
+  </tr
+  <tr
+   <tdSecure Code review
+   </td
+   <tdBare minimum
+   </td
+   <tdYes
+   </td
+  </tr
+  <tr
+   <tdPeer review checklist
+   </td
+   <tdBare minimum
+   </td
+   <tdYes
+   </td
+  </tr
+  <tr
+   <tdUnit testing
+   </td
+   <tdOccasionally
+   </td
+   <tdYes
+   </td
+  </tr
+  <tr
+   <tdIntegration testing
+   </td
+   <tdOccasionally
+   </td
+   <tdYes
+   </td
+  </tr
+  <tr

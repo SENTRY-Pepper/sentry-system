@@ -1,0 +1,2 @@
+you do not carefully track the versions of all components that you use (both clientside and serverside). This includes components you directly use as well as nested (transitive) dependencies.
+ the software is vulnerable, unsupported, or out of date. This includes the OS, web/application server, database management system (DBMS), applications, APIs and all components, runtime environments, and libraries.

@@ -1,0 +1,3 @@
+Apply required security controls as per the data classification.
+ Do not use unencrypted protocols such as FTP, and STARTTLS. Avoid using SMTP for transmitting confidential data.
+ Store passwords using strong adaptive and salted hashing functions with a work factor (delay factor), such as Argon2, yescrypt, scrypt or PBKDF2HMACSHA512. For legacy systems using bcrypt, get more advice at OWASP Cheat Sheet: Password Storage

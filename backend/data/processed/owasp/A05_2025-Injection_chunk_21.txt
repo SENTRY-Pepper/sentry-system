@@ -1,0 +1,11 @@
+CWE97 Improper Neutralization of ServerSide Includes (SSI) Within a Web Page
+
+ CWE98 Improper Control of Filename for Include/Require Statement in PHP Program ('PHP Remote File Inclusion')
+
+ CWE99 Improper Control of Resource Identifiers ('Resource Injection')
+
+ CWE103 Struts: Incomplete validate() Method Definition
+
+ CWE104 Struts: Form Bean Does Not Extend Validation Class
+
+ CWE112 Missing XML Validation

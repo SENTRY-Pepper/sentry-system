@@ -1,0 +1,19 @@
+CWE23 Relative Path Traversal
+
+ CWE36 Absolute Path Traversal
+
+ CWE59 Improper Link Resolution Before File Access ('Link Following')
+
+ CWE61 UNIX Symbolic Link (Symlink) Following
+
+ CWE65 Windows Hard Link
+
+ CWE200 Exposure of Sensitive Information to an Unauthorized Actor
+
+ CWE201 Exposure of Sensitive Information Through Sent Data
+
+ CWE219 Storage of File with Sensitive Data Under Web Root
+
+ CWE276 Incorrect Default Permissions
+
+ CWE281 Improper Preservation of Permissions

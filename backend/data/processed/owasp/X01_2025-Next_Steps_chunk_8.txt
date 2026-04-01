@@ -1,0 +1,3 @@
+Add limits, quotas, and failover functionality, paying special attention to the most resource consuming operations
+ Identify resource intensive pages and plan ahead: Reduce attack surface especially not exposing unneeded ‘gadgets’ and functions that require a lot of resources (e.g. CPU, memory) to unknown or untrusted users
+ Perform strict input validation with allowlists and size limitations, then test thoroughly

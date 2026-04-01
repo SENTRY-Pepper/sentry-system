@@ -1,0 +1,10 @@
+OWASP Proactive Controls: Secure Database Access
+ OWASP ASVS: V5 Input Validation and Encoding
+ OWASP Testing Guide: SQL Injection, Command Injection, and ORM Injection
+ OWASP Cheat Sheet: Injection Prevention
+ OWASP Cheat Sheet: SQL Injection Prevention
+ OWASP Cheat Sheet: Injection Prevention in Java
+ OWASP Cheat Sheet: Query Parameterization
+ OWASP Automated Threats to Web Applications – OAT014
+ PortSwigger: Serverside template injection
+ Awesome Fuzzing: a list of fuzzing resources

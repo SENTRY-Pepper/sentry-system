@@ -1,0 +1,2 @@
+Update your CI/CD, IDE, and any other developer tooling regularly
+ Avoid deploying updates to all systems simultaneously. Use staged rollouts or canary deployments to limit exposure in case a trusted vendor is compromised.

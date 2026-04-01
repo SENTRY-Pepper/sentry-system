@@ -1,0 +1,5 @@
+Perform strict input validation with allowlists and size limitations, then test thoroughly
+ Limit response sizes, and never send raw responses back to the client (process on the server side)
+ Default to safe/closed (never open), deny by default and roll back if there’s an error
+ Avoid blocking synchronous calls in request threads (use asynchronous/nonblocking, have timeouts, have concurrency limits, etc.)
+ Carefully test your error handling functionality

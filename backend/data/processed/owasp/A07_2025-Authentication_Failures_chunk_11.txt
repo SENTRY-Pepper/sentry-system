@@ -1,0 +1,3 @@
+Use a serverside, secure, builtin session manager that generates a new random session ID with high entropy after login. Session identifiers should not be in the URL, be securely stored in a secure cookie, and invalidated after logout, idle, and absolute timeouts. 
+
+ Ideally, use a premade, welltrusted system to handle authentication, identity, and session management. Transfer this risk whenever possible by buying and utilizing a hardened and well tested system.

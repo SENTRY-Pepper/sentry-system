@@ -1,0 +1,11 @@
+List of Mapped CWEs
+ CWE73  External Control of File Name or Path
+ CWE183 Permissive List of Allowed Inputs
+ CWE256 Plaintext Storage of a Password
+ CWE266 Incorrect Privilege Assignment
+ CWE269 Improper Privilege Management
+ CWE286 Incorrect User Management
+ CWE311 Missing Encryption of Sensitive Data
+ CWE312 Cleartext Storage of Sensitive Information
+ CWE313 Cleartext Storage in a File or on Disk
+ CWE316 Cleartext Storage of Sensitive Information in Memory

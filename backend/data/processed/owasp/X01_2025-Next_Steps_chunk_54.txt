@@ -1,0 +1,4 @@
+AI is likely to become part of each phase of your system development life cycle, both how to use it effectively and safely. Use it wisely.
+ Actually it is <unot</u recommended to use vibe coding for complex functions, business critical programs, or programs that are used for a long time.
+ Implement technical checks and safeguards against the use of Shadow AI.
+ Train your developers on your policies, as well as safe AI usage and best practices for using AI in software development.

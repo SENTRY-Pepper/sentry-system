@@ -1,0 +1,5 @@
+The 2019 SolarWinds compromise that led to ~18,000 organizations being compromised. https://www.npr.org/2021/04/16/985439655/aworstnightmarecyberattacktheuntoldstoryofthesolarwindshack
+
+Scenario 2: A trusted vendor is compromised such that it behaves maliciously only under a specific condition.
+
+ The 2025 Bybit theft of $1.5 billion was caused by a supply chain attack in wallet software that only executed when the target wallet was being used.

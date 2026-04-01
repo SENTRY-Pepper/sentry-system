@@ -1,0 +1,4 @@
+Perform fuzzing on every input to your system.
+ If you have a penetration test performed, inform your tester that you are concerned about memory management failures and that you would like them to pay special attention to this while testing.
+  Fix all compiler errors and warnings. Do not ignore warnings because your program compiles.
+ Ensure your underlying infrastructure is regularly patched, scanned, and hardened.

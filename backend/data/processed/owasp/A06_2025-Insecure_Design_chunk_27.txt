@@ -1,0 +1,18 @@
+References.
+
+ OWASP Cheat Sheet: Secure Design Principles
+ OWASP SAMM: Design | Secure Architecture
+ OWASP SAMM: Design | Threat Assessment
+ NIST – Guidelines on Minimum Standards for Developer Verification of Software
+ The Threat Modeling Manifesto
+ Awesome Threat Modeling
+
+ List of Mapped CWEs
+
+ CWE73 External Control of File Name or Path
+
+ CWE183 Permissive List of Allowed Inputs
+
+ CWE256 Unprotected Storage of Credentials
+
+ CWE266 Incorrect Privilege Assignment

@@ -1,0 +1,9 @@
+CWE657 Violation of Secure Design Principles
+ CWE676 Use of Potentially Dangerous Function
+ CWE693 Protection Mechanism Failure
+ CWE799 Improper Control of Interaction Frequency
+ CWE807 Reliance on Untrusted Inputs in a Security Decision
+ CWE841 Improper Enforcement of Behavioral Workflow
+ CWE1021 Improper Restriction of Rendered UI Layers or Frames
+ CWE1022 Use of Web Link to Untrusted Target with window.opener Access
+ CWE1125 Excessive Attack Surface

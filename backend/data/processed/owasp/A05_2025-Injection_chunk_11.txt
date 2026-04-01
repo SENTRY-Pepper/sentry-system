@@ -1,0 +1,1 @@
+When it is not possible to separate the data from commands, you can reduce threats using the following techniques.

@@ -1,0 +1,18 @@
+from the command line.
+
+ References.
+
+ OWASP Proactive Controls: C1: Implement Access Control
+ OWASP Application Security Verification Standard: V8 Authorization
+ OWASP Testing Guide: Authorization Testing
+ OWASP Cheat Sheet: Authorization
+ PortSwigger: Exploiting CORS misconfiguration
+ OAuth: Revoking Access
+
+ List of Mapped CWEs
+
+ CWE22 Improper Limitation of a Pathname to a Restricted Directory ('Path Traversal')
+
+ CWE23 Relative Path Traversal
+
+ CWE36 Absolute Path Traversal

@@ -1,0 +1,9 @@
+At least annual penetration testing (depending upon the level assurance required for your app).
+
+  Establish processes and tooling for hardening and protecting your software supply chain.
+
+  Establish and update business continuity and disaster recovery planning that includes your most important applications and the tools you use to maintain them.
+
+ Retiring Systems:
+
+ Any required data should be archived. All other data should be securely wiped.

@@ -1,0 +1,7 @@
+Provide security testing tools (fuzzers, DAST, etc.), a safe place to test, and training on how to use them, OR do the testing for them OR hire a tester
+
+  If you require a high level of assurance, consider a formal penetration test, as well as stress testing and performance testing.
+
+  Work with your developers to help them decide what they need to fix from the bug reports, and ensure their managers give them time to do it.
+
+ Rollout:

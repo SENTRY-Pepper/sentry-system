@@ -1,0 +1,3 @@
+The application is missing or mishandling errors and other exceptional conditions, such that the system is unaware there was an error, and is therefore unable to log there was a problem.
+ Adequate ‘use cases’ for issuing alerts are missing or outdated to recognize a special situation.
+ Too many false positive alerts make it impossible to distinguish important alerts from unimportant ones, resulting in them being recognized too late or not at all (physical overload of the SOC team).

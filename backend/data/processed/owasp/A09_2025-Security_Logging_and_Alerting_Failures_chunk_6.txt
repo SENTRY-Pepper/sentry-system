@@ -1,0 +1,5 @@
+Auditable events, such as logins, failed logins, and highvalue transactions, are not logged or logged inconsistently (for instance, only logging successful logins, but not failed attempts).
+ Warnings and errors generate no, inadequate, or unclear log messages.
+ The integrity of logs is not properly protected from tampering.
+ Logs of applications and APIs are not monitored for suspicious activity.
+ Logs are only stored locally, and not properly backedup.

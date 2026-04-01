@@ -1,0 +1,5 @@
+Analyze data from the implementation and verification activities to look for root cause and vulnerability patterns to drive strategic and systemic improvements across the enterprise. Learn from mistakes and offer positive incentives to promote improvements.
+
+ Establish & Use Repeatable Security Processes and Standard Security Controls
+
+ Requirements and Resource Management Phase:

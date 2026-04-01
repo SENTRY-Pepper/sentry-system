@@ -1,0 +1,5 @@
+Use managed buffers and strings rather than raw arrays and pointers whenever possible.
+ Take secure coding training that focuses on memory issues and/or your language of choice. Inform your trainer that you are concerned about memory management failures.
+ Perform code reviews and/or static analyses.
+ Use compiler tools that help with memory management such as StackShield, StackGuard, and Libsafe.
+ Perform fuzzing on every input to your system.

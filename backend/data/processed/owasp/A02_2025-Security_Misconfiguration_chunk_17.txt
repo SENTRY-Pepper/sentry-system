@@ -1,0 +1,17 @@
+CWE11 ASP.NET Misconfiguration: Creating Debug Binary
+
+ CWE13 ASP.NET Misconfiguration: Password in Configuration File
+
+ CWE15 External Control of System or Configuration Setting
+
+ CWE16 Configuration
+
+ CWE260 Password in Configuration File
+
+ CWE315 Cleartext Storage of Sensitive Information in a Cookie
+
+ CWE489 Active Debug Code
+
+ CWE526 Exposure of Sensitive Information Through Environmental Variables
+
+ CWE547 Use of Hardcoded, Securityrelevant Constants

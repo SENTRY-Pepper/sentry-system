@@ -1,0 +1,42 @@
+<table
+  <tr
+   <tdCWEs Mapped 
+   </td
+   <tdMax Incidence Rate
+   </td
+   <tdAvg Incidence Rate
+   </td
+   <tdMax Coverage
+   </td
+   <tdAvg Coverage
+   </td
+   <tdAvg Weighted Exploit
+   </td
+   <tdAvg Weighted Impact
+   </td
+   <tdTotal Occurrences
+   </td
+   <tdTotal CVEs
+   </td
+  </tr
+  <tr
+   <td16
+   </td
+   <td20.05%
+   </td
+   <td4.55%
+   </td
+   <td86.01%
+   </td
+   <td41.47%
+   </td
+   <td7.92
+   </td
+   <td3.49
+   </td
+   <td865,066
+   </td
+   <td4,423
+   </td
+  </tr
+</table

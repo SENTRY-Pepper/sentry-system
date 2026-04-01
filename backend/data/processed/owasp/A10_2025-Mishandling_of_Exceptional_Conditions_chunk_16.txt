@@ -1,0 +1,3 @@
+If possible, your entire organization should handle exceptional conditions in the same way, as it makes it easier to review and audit code for errors in this important security control.
+
+ Example attack scenarios.

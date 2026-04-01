@@ -1,0 +1,15 @@
+CWE335 Incorrect Usage of Seeds in PseudoRandom Number Generator(PRNG)
+
+ CWE336 Same Seed in PseudoRandom Number Generator (PRNG)
+
+ CWE337 Predictable Seed in PseudoRandom Number Generator (PRNG)
+
+ CWE338 Use of Cryptographically Weak PseudoRandom Number Generator(PRNG)
+
+ CWE340 Generation of Predictable Numbers or Identifiers
+
+ CWE342 Predictable Exact Value from Previous Values
+
+ CWE347 Improper Verification of Cryptographic Signature
+
+ CWE523 Unprotected Transport of Credentials

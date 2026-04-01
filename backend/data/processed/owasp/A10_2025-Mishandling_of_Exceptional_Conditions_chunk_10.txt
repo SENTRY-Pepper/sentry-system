@@ -1,0 +1,1 @@
+of some kind. This can help us block and respond to scripts and bots that focus on our error handling weaknesses.

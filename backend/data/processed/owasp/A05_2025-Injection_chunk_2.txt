@@ -1,0 +1,1 @@
+impact) with more than 30k CVEs and SQL Injection (low frequency/high impact) with more than 14k CVEs. The massive number of reported CVEs for CWE79 Improper Neutralization of Input During Web Page Generation ('Crosssite Scripting') brings down the average weighted impact of this category.

@@ -1,0 +1,3 @@
+Is the received server certificate and the trust chain properly validated?
+ Are initialization vectors ignored, reused, or not generated sufficiently secure for the cryptographic mode of operation? Is an insecure mode of operation such as ECB in use? Is encryption used when authenticated encryption is more appropriate?
+ Are passwords being used as cryptographic keys in the absence of a password based key derivation function?

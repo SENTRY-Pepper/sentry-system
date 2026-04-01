@@ -1,0 +1,16 @@
+References.
+
+ OWASP Cheat Sheet: Software Supply Chain Security
+ OWASP Cheat Sheet: Infrastructure as Code
+ OWASP Cheat Sheet: Deserialization
+ SAFECode Software Integrity Controls
+ A 'Worst Nightmare' Cyberattack: The Untold Story Of The SolarWinds Hack
+ CodeCov Bash Uploader Compromise
+ Securing DevOps by Julien Vehent
+ Insecure Deserialization by Tenendo
+
+ List of Mapped CWEs
+
+ CWE345 Insufficient Verification of Data Authenticity
+
+ CWE353 Missing Support for Integrity Check

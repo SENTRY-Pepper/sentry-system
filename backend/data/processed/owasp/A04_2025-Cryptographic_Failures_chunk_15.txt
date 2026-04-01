@@ -1,0 +1,4 @@
+Use welltrusted implementations of cryptographic algorithms whenever possible.
+ Don't store sensitive data unnecessarily. Discard it as soon as possible or use PCI DSS compliant tokenization or even truncation. Data that is not retained cannot be stolen.
+ Make sure to encrypt all sensitive data at rest.
+ Ensure uptodate and strong standard algorithms, protocols, and keys are in place; use proper key management.

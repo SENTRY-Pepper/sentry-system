@@ -1,0 +1,3 @@
+How to prevent. 
+
+Access control is only effective when implemented in trusted serverside code or serverless APIs, where the attacker cannot modify the access control check or metadata.

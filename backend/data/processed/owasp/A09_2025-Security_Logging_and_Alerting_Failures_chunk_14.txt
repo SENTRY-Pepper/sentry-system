@@ -1,0 +1,2 @@
+Ensure all transactions that throw an error are rolled back and started over. Always fail closed.
+ If your application or its users behave suspiciously, issue an alert. Create guidance for your developers on this topic so they can code against this or buy a system for this.

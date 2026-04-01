@@ -1,0 +1,3 @@
+The calculated scores ranged from 621.60 for the category of Broken Access Control to 271.08 for Memory Management Errors.
+
+This is not a perfect system, but it is valuable for ranking risk categories.

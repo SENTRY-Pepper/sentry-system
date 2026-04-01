@@ -1,0 +1,5 @@
+Furthermore X02:2025 Memory Management Failures can also lead to failure of the application or even the entire system.
+
+ How to prevent 
+
+In order to prevent this type of vulnerability you must design for failure and recovery of your systems.

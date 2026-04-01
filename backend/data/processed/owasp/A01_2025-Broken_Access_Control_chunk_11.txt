@@ -1,0 +1,2 @@
+Stateful session identifiers should be invalidated on the server after logout. Stateless JWT tokens should be shortlived to minimize the window of opportunity for an attacker. For longerlived JWTs, consider using refresh tokens and following OAuth standards to revoke access.
+ Use wellestablished toolkits or patterns that provide simple, declarative access controls.

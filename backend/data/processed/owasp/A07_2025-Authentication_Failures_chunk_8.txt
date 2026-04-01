@@ -1,0 +1,7 @@
+Where possible, encourage and enable the use of password managers, to help users make better choices.
+
+ Do not ship or deploy with any default credentials, particularly for admin users.
+
+ Implement weak password checks, such as testing new or changed passwords against the top 10,000 worst passwords list.
+
+ During new account creation and password changes validate against lists of known breached credentials (eg: using haveibeenpwned.com).

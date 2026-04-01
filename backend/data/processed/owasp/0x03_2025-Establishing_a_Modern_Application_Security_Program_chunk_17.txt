@@ -1,0 +1,9 @@
+Add security activities to your project schedule.
+
+ Introduce yourself as the security representative at the project kick off, so they know who to talk to.
+
+ Request for Proposals (RFP) and Contracting:
+
+ Negotiate the requirements with internal or external developers, including guidelines and security requirements with respect to your security program, e.g. SDLC, best practices.
+
+  Rate the fulfillment of all technical requirements, including a planning and design phase.

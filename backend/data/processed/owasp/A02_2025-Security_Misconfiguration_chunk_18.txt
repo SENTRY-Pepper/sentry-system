@@ -1,0 +1,13 @@
+CWE547 Use of Hardcoded, Securityrelevant Constants
+
+ CWE611 Improper Restriction of XML External Entity Reference
+
+ CWE614 Sensitive Cookie in HTTPS Session Without 'Secure' Attribute
+
+ CWE776 Improper Restriction of Recursive Entity References in DTDs ('XML Entity Expansion')
+
+ CWE942 Permissive Crossdomain Policy with Untrusted Domains
+
+ CWE1004 Sensitive Cookie Without 'HttpOnly' Flag
+
+ CWE1174 ASP.NET Misconfiguration: Improper Model Validation

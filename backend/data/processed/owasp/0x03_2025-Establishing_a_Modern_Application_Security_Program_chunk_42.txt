@@ -1,0 +1,1 @@
+The ASVS is the only acceptable choice for tool vendors. Tools cannot comprehensively detect, test, or protect against the OWASP Top 10 due to the nature of several of the OWASP Top 10 risks, with reference to A06:2025Insecure Design. OWASP discourages any claims of full coverage of the OWASP Top 10, because it’s simply untrue.

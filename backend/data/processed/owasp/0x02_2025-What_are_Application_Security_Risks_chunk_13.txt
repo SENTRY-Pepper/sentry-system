@@ -1,0 +1,4 @@
+For coverage we look at the percentage of applications tested by all organizations for a given CWE. The higher the calculated coverage, the stronger the assurance that the incidence rate is accurate as the sample size is more representative of the population.
+
+The formula that we used for this iteration is similar to 2021, with some weighting changes:
+(Max Incidence Rate %  1000) + (Max Coverage %  100) + (Avg Exploit  10) + (Avg Impact  20) + (Sum Occurrences / 10000) = Risk Score

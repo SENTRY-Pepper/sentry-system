@@ -1,0 +1,5 @@
+Establish and use a secure development lifecycle with AppSec professionals to help evaluate and design security and privacyrelated controls
+ Establish and use a library of secure design patterns or pavedroad components
+ Use threat modeling for critical parts of the application such as authentication, access control, business logic, and key flows
+ User threat modeling as an educational tool to generate a security mindset
+ Integrate security language and controls into user stories

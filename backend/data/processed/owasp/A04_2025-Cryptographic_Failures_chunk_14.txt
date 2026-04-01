@@ -1,0 +1,3 @@
+Classify and label data processed, stored, or transmitted by an application. Identify which data is sensitive according to privacy laws, regulatory requirements, or business needs.
+ Store your most sensitive keys in a hardware or cloudbased HSM.
+ Use welltrusted implementations of cryptographic algorithms whenever possible.

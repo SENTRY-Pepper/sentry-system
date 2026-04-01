@@ -1,0 +1,3 @@
+It is missing appropriate security hardening across any part of the application stack or improperly configured permissions on cloud services.
+ Unnecessary features are enabled or installed (e.g., unnecessary ports, services, pages, accounts, testing frameworks, or privileges).
+ Default accounts and their passwords are still enabled and unchanged.

@@ -1,0 +1,2 @@
+A minimal platform without any unnecessary features, components, documentation, or samples. Remove or do not install unused features and frameworks.
+ A task to review and update the configurations appropriate to all security notes, updates, and patches as part of the patch management process (see A03 Software Supply Chain Failures). Review cloud storage permissions (e.g., S3 bucket permissions).

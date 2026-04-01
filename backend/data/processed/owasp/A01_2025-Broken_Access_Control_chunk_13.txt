@@ -1,0 +1,9 @@
+Scenario 2: An attacker simply forces browsers to target URLs. Admin rights are required for access to the admin page.
+
+If an unauthenticated user can access either page, it's a flaw. If a nonadmin can access the admin page, this is a flaw.
+
+Scenario 3: An application puts all of their access control in their frontend. While the attacker cannot get to  due to JavaScript code running in the browser, they can simply execute:
+
+from the command line.
+
+ References.

@@ -1,0 +1,11 @@
+!OWASP Logo
+
+ The Ten Most Critical Web Application Security Risks
+
+ Introduction
+
+Welcome to the 8th installment of the OWASP Top Ten! 
+
+A huge thank you to everyone who contributed data and perspectives in the survey. Without you, this installment would not have been possible. THANK YOU!
+
+ Introducing the OWASP Top 10:2025

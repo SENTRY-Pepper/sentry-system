@@ -1,0 +1,7 @@
+An attacker supplies: . This bypasses the filter and returns all accounts. While HQL has fewer dangerous functions than raw SQL, it still allows unauthorized data access when user input is concatenated into queries.
+
+Scenario 3: An application passes user input directly to an OS command:
+
+An attacker supplies  to execute arbitrary commands on the server.
+
+ References.

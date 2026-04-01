@@ -1,0 +1,11 @@
+List of Mapped CWEs
+
+ CWE20 Improper Input Validation
+
+ CWE74 Improper Neutralization of Special Elements in Output Used by a Downstream Component ('Injection')
+
+ CWE76 Improper Neutralization of Equivalent Special Elements
+
+ CWE77 Improper Neutralization of Special Elements used in a Command ('Command Injection')
+
+ CWE78 Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')

@@ -1,0 +1,5 @@
+Integrate security language and controls into user stories
+ Integrate plausibility checks at each tier of your application (from frontend to backend)
+ Write unit and integration tests to validate that all critical flows are resistant to the threat model. Compile usecases and misusecases for each tier of your application.
+ Segregate tier layers on the system and network layers, depending on the exposure and protection needs
+ Segregate tenants robustly by design throughout all tiers

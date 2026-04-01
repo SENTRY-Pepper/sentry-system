@@ -1,0 +1,14 @@
+Lead Authors
+ Andrew van der Stock  X: @vanderaj
+ Brian Glas  X: @infosecdad
+ Neil Smithline  X: @appsecneil
+ Tanya Janca  X: @shehackspurple
+ Torsten Gigler  Mastodon: @torsten_gigler@infosec.exchange
+
+ Log issues and pull requests
+
+Please log any corrections or issues:
+
+ Project links:
+ Homepage
+ GitHub repository

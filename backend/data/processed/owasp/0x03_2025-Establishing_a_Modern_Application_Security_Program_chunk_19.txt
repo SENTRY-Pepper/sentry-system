@@ -1,0 +1,5 @@
+Planning and Design Phase:
+
+  Negotiate planning and design with the developers and internal shareholders, e.g. security specialists.
+
+ Define the security architecture, controls, countermeasures and design reviews appropriate to the protection needs and the expected threat level. This should be supported by security specialists.

@@ -1,0 +1,8 @@
+CWE316 Cleartext Storage of Sensitive Information in Memory
+ CWE362 Concurrent Execution using Shared Resource with Improper Synchronization ('Race Condition')
+ CWE382 J2EE Bad Practices: Use of System.exit()
+ CWE419 Unprotected Primary Channel
+ CWE434 Unrestricted Upload of File with Dangerous Type
+ CWE436 Interpretation Conflict
+ CWE444 Inconsistent Interpretation of HTTP Requests ('HTTP Request/Response Smuggling')
+ CWE451 User Interface (UI) Misrepresentation of Critical Information

@@ -1,0 +1,4 @@
+Default accounts and their passwords are still enabled and unchanged.
+ A lack of central configuration for intercepting excessive error messages. Error handling reveals stack traces or other overly informative error messages to users.
+ For upgraded systems, the latest security features are disabled or not configured securely.
+ Excessive prioritization of backward compatibility leading to insecure configuration.

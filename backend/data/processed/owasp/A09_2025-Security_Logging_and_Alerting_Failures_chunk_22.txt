@@ -1,0 +1,11 @@
+OWASP Application Security Verification Standard: V16 Security Logging and Error Handling
+
+   OWASP Cheat Sheet: Application Logging Vocabulary
+
+   OWASP Cheat Sheet: Logging
+
+   Data Integrity: Recovering from Ransomware and Other Destructive Events
+
+   Data Integrity: Identifying and Protecting Assets Against Ransomware and Other Destructive Events
+
+   Data Integrity: Detecting and Responding to Ransomware and Other Destructive Events

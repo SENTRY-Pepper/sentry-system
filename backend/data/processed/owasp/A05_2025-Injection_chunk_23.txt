@@ -1,0 +1,13 @@
+CWE470 Use of ExternallyControlled Input to Select Classes or Code ('Unsafe Reflection')
+
+ CWE493 Critical Public Variable Without Final Modifier
+
+ CWE500 Public Static Field Not Marked Final
+
+ CWE564 SQL Injection: Hibernate
+
+ CWE610 Externally Controlled Reference to a Resource in Another Sphere
+
+ CWE643 Improper Neutralization of Data within XPath Expressions ('XPath Injection')
+
+ CWE644 Improper Neutralization of HTTP Headers for Scripting Syntax

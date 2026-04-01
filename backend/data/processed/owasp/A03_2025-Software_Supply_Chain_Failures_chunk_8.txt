@@ -1,0 +1,3 @@
+you have not hardened every part of your supply chain, with a special focus on access control and the application of least privilege.
+ your supply chain systems do not have any separation of duty. No single person should be able to write code and  promote it all the way to production without oversight from another human being.
+ components from untrusted sources, across any part of the tech stack, are used in or can impact on production environments.

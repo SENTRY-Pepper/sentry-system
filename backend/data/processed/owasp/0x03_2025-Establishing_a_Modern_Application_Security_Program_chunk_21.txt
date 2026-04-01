@@ -1,0 +1,9 @@
+Perform threat modelling, see OWASP Cheat Sheet: Threat Modeling.
+
+  Teach your software architects secure design concepts and patterns and ask them to add them to their designs where possible.
+
+  Examine data flows with your developers.
+
+  Add security user stories alongside all of your other user stories.
+
+ Secure Development Lifecycle:

@@ -1,0 +1,20 @@
+What are Application Security Risks?
+Attackers can potentially use many different paths through your application to do harm to your business or organization. Each of these ways poses a potential risk that needs to be investigated.
+
+!Calculation diagram
+
+<table
+  <tr
+   <td
+    <strongThreat Agents</strong
+   </td
+   <td
+    <strongAttack \
+Vectors</strong
+   </td
+   <td
+    <strongExploitability</strong
+   </td
+   <td
+    <strongLikelihood of Missing Security</strong
+<p style="textalign: center"

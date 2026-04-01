@@ -1,0 +1,37 @@
+<table
+  <tr
+   <td<strongUse Case</strong
+   </td
+   <td<strongOWASP Top 10 2025</strong
+   </td
+   <td<strongOWASP Application Security Verification Standard</strong
+   </td
+  </tr
+  <tr
+   <tdAwareness
+   </td
+   <tdYes
+   </td
+   <td
+   </td
+  </tr
+  <tr
+   <tdTraining
+   </td
+   <tdEntry level
+   </td
+   <tdComprehensive
+   </td
+  </tr
+  <tr
+   <tdDesign and architecture
+   </td
+   <tdOccasionally
+   </td
+   <tdYes
+   </td
+  </tr
+  <tr
+   <tdCoding standard
+   </td
+   <tdBare minimum

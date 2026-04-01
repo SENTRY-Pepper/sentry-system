@@ -1,0 +1,5 @@
+Without a concerted, repeatable application security configuration hardening process, systems are at a higher risk.
+
+ How to prevent. 
+
+Secure installation processes should be implemented, including:

@@ -1,0 +1,10 @@
+CWE369	Divide By Zero
+ CWE390	Detection of Error Condition Without Action
+ CWE391	Unchecked Error Condition
+ CWE394	Unexpected Status Code or Return Value
+ CWE396	Declaration of Catch for Generic Exception
+ CWE397	Declaration of Throws for Generic Exception
+ CWE460	Improper Cleanup on Thrown Exception
+ CWE476	NULL Pointer Dereference
+ CWE478	Missing Default Case in Multiple Condition Expression
+ CWE484	Omitted Break Statement in Switch

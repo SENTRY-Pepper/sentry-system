@@ -1,0 +1,17 @@
+Thank you to our data contributors
+
+The following organizations (along with several anonymous donors) kindly donated data for over 2.8 millions applications to make this the largest and most comprehensive application security data set. Without you, this would not be possible.
+
+ Accenture (Prague)
+ Anonymous (multiple)
+ Bugcrowd
+ Contrast Security
+ CryptoNet Labs
+ Intuitor SoftTech Services
+ Orca Security
+ Probely
+ Semgrep
+ Sonar
+ usd AG
+ Veracode
+ Wallarm

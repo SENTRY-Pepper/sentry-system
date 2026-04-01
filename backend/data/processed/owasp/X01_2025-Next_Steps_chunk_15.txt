@@ -1,0 +1,9 @@
+References.
+
+ OWASP Cheat Sheet: Denial of Service
+ OWASP MASVS‑RESILIENCE
+ ASP.NET Core Best Practices (Microsoft)
+ Resilience in Microservices: Bulkhead vs Circuit Breaker (Parser)
+ Bulkhead Pattern (Geeks for Geeks)
+ NIST Cybersecurity Framework (CSF)
+ Avoid Blocking Calls: Go Async in Java (Devlane)

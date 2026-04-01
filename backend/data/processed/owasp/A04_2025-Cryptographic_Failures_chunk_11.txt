@@ -1,0 +1,2 @@
+Is randomness used that was not designed to meet cryptographic requirements? Even if the correct function is chosen, does it need to be seeded by the developer, and if not, has the developer overwritten the strong seeding functionality built into it with a seed that lacks sufficient entropy/unpredictability?
+ Are deprecated hash functions such as MD5 or SHA1 in use, or are noncryptographic hash functions used when cryptographic hash functions are needed?

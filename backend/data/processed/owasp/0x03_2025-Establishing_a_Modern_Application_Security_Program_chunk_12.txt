@@ -1,0 +1,3 @@
+The OWASP Education Project provides training materials to help educate developers on web application security. For handson learning about vulnerabilities, try the OWASP Juice Shop Project, or OWASP WebGoat. To stay current, come to an OWASP AppSec Conference, OWASP Conference Training, or local OWASP Chapter meetings.
+
+ 5. Provide Management Visibility:

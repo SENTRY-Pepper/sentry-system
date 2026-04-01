@@ -1,0 +1,7 @@
+3. Integrate Security into Existing Processes:
+
+ Define and integrate secure implementation and verification activities into existing development and operational processes.
+
+ Activities include threat modeling, secure design and design review, secure coding and code review, penetration testing, and remediation.
+
+ Provide subject matter experts and support services for development and project teams to be successful.

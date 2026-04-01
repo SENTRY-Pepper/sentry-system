@@ -1,0 +1,8 @@
+Note: modern browsers use many levels of defenses to defend against such attacks, including browser sandboxing ASLR, DEP/NX, RELRO, and PIE. A memory management failure attack on a browser is not a simple attack to carry out.
+
+ References.
+
+ OWASP community pages: Memory leak, Doubly freeing memory, & Buffer Overflow
+ Awesome Fuzzing: a list of fuzzing resources 
+ Project Zero Blog
+ Microsoft MSRC Blog

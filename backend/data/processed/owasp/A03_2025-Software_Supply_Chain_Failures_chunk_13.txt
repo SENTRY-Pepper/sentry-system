@@ -1,0 +1,1 @@
+Continuously inventory the versions of both clientside and serverside components (e.g., frameworks, libraries) and their dependencies using tools like OWASP Dependency Track, OWASP Dependency Check, retire.js, etc.

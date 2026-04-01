@@ -1,0 +1,3 @@
+Filter invalid sender addresses in accordance with RFC 2267
+ Block known botnets by finger prints, IPs, or dynamically by behavior
+ ProofofWork: initiate resource consuming operations at the attackers side that does not have big impacts on normal users but impacts bots trying to send a huge amount of requests. Make the ProofofWork more difficult if the general load of the system raises, especially for systems that are less trustworthy or appear to be bots

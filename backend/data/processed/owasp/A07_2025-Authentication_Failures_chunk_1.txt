@@ -1,0 +1,5 @@
+Background. 
+
+Authentication Failures maintains its position at 7 with a slight name change to more accurately reflect the 36 CWEs in this category. Despite benefits from standardized frameworks, this category has kept its 7 rank from 2021. Notable CWEs included are CWE259 Use of Hardcoded Password, CWE297: Improper Validation of Certificate with Host Mismatch, CWE287: Improper Authentication, CWE384: Session Fixation, and CWE798 Use of Hardcoded Credentials.
+
+ Score table.

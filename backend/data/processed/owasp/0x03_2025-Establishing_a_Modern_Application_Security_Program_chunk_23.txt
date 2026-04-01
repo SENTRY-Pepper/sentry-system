@@ -1,0 +1,5 @@
+Code review, see OWASP Cheat Sheet: Secure Code Review.
+
+  Give your developers security tools, then teach them how to use them, especially static analysis, software composition analysis, secret, and InfrastructureasCode (IaC) scanners.
+
+  Create guardrails for your developers, if possible (technical safeguards to steer them towards more secure choices).

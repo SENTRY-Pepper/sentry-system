@@ -1,0 +1,7 @@
+Three key parts of having a secure design are:
+
+ Gathering Requirements and Resource Management
+ Creating a Secure Design
+ Having a Secure Development Lifecycle
+
+ Requirements and Resource Management

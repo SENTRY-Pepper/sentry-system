@@ -1,0 +1,5 @@
+An attacker modifies the 'id' parameter value in their browser to send: . For example:
+
+This changes the meaning of the query to return all records from the accounts table. More dangerous attacks could modify or delete data or even invoke stored procedures.
+
+Scenario 2: An application's blind trust in frameworks may result in queries that are still vulnerable. For example, Hibernate Query Language (HQL):

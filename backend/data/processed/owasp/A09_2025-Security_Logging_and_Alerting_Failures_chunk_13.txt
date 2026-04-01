@@ -1,0 +1,4 @@
+Ensure that logs are generated in a format that log management solutions can easily consume.
+ Ensure log data is encoded correctly to prevent injections or attacks on the logging or monitoring systems.
+ Ensure all transactions have an audit trail with integrity controls to prevent tampering or deletion, such as appendonly database tables or similar.
+ Ensure all transactions that throw an error are rolled back and started over. Always fail closed.

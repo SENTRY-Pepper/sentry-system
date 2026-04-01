@@ -1,0 +1,7 @@
+The OWASP Foundation is the nonprofit entity that ensures the project's longterm success. Almost everyone associated with OWASP is a volunteer, including the OWASP board, chapter leaders, project leaders, and project members. We support innovative security research with grants and infrastructure.
+
+Join us!
+
+ Copyright and License
+
+!License

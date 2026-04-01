@@ -1,0 +1,2 @@
+Ideally, write your own code, let the AI suggest improvements, check the AI's code, and let the AI make corrections until you are satisfied with the result.
+ Consider using a Retrieval Augmented Generation (RAG) server with your own collected  and reviewed secure code samples and documentation, such as your organization’s security coding guideline, standard, or policy, and have the RAG server enforce any policies or standards.

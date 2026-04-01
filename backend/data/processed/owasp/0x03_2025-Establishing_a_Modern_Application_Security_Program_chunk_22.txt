@@ -1,0 +1,5 @@
+Secure Development Lifecycle:
+
+ To improve the process your organization follows when building applications and APIs, OWASP recommends the OWASP Software Assurance Maturity Model (SAMM). This model helps organizations formulate and implement a strategy for software security that is tailored to the specific risks facing their organization.
+
+  Provide secure coding training to your software developers, and any other training you think will help them create more robust and secure applications.

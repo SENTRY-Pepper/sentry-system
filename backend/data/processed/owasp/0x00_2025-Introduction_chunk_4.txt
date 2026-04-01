@@ -1,0 +1,1 @@
+A02:2025  Security Misconfiguration moved up from 5 in 2021 to 2 in 2025. Misconfigurations are more prevalent in the data for this cycle. 3.00% of the applications tested had one or more of the 16 CWEs in this category. This is not surprising, as software engineering is continuing to increase the amount of an application’s behavior that is based on configurations.

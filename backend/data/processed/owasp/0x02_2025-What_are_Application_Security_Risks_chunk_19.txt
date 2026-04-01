@@ -1,0 +1,3 @@
+Total CVEs: Total number of CVEs in the NVD DB that were mapped to the CWEs mapped to a category.
+
+Formula: (Max Incidence Rate %  1000) + (Max Coverage %  100) + (Avg Exploit  10) + (Avg Impact  20) + (Sum Occurrences / 10000) = Risk Score

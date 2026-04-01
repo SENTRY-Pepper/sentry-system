@@ -1,0 +1,3 @@
+The application cannot detect, escalate, or alert for active attacks in realtime or near realtime.
+ You are vulnerable to sensitive information leakage by making logging and alerting events visible to a user or an attacker (see A01:2025Broken Access Control), or by logging sensitive information that should not be logged (such as PII or PHI).
+ You are vulnerable to injections or attacks on the logging or monitoring systems if log data is not correctly encoded.

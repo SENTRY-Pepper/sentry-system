@@ -1,0 +1,3 @@
+Requirements and Resource Management Phase:
+
+ Collect and negotiate the business requirements for an application with the business, including the protection requirements with regard to confidentiality, authenticity, integrity and availability of all data assets, and the expected business logic.

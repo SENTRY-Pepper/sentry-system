@@ -1,0 +1,3 @@
+Notable CWEs included in this category: CWE209 Generation of Error Message Containing Sensitive Information, CWE234 Failure to Handle Missing Parameter, CWE274 Improper Handling of Insufficient Privileges, CWE476 NULL Pointer Dereference, and CWE636 Not Failing Securely ('Failing Open').
+
+ Score table.

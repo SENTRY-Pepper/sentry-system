@@ -1,0 +1,7 @@
+Rate the fulfillment of all technical requirements, including a planning and design phase.
+
+  Negotiate all technical requirements, including design, security, and service level agreements (SLA).
+
+  Adopt templates and checklists, such as [OWASP Secure Software Contract Annex.<brNote: The annex is for US contract law, so please consult qualified legal advice before using the sample annex.
+
+ Planning and Design Phase:

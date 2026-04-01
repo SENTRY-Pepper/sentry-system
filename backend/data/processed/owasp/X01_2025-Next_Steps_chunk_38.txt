@@ -1,0 +1,3 @@
+Ensure your underlying infrastructure is regularly patched, scanned, and hardened.
+ Monitor your underlying infrastructure specifically for potential memory vulnerabilities and other failures.
+ Consider using canaries to protect your address stack from overflow attacks.

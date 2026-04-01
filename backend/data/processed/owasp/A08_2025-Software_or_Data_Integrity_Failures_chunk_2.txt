@@ -1,0 +1,1 @@
+and critical data, without verifying integrity. Notable Common Weakness Enumerations (CWEs) include CWE829: Inclusion of Functionality from Untrusted Control Sphere, CWE915: Improperly Controlled Modification of DynamicallyDetermined Object Attributes, and CWE502: Deserialization of Untrusted Data.

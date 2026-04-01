@@ -1,0 +1,7 @@
+Permits brute force or other automated, scripted attacks that are not quickly blocked.
+
+ Permits default, weak, or wellknown passwords, such as "Password1" or "admin" username with an "admin" password.
+
+ Allows users to create new accounts with already knownbreached credentials.
+
+ Allows use of weak or ineffective credential recovery and forgotpassword processes, such as "knowledgebased answers," which cannot be made safe.

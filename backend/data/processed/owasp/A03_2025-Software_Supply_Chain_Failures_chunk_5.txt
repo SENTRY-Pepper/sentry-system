@@ -1,0 +1,5 @@
+Description.
+
+Software supply chain failures are breakdowns or other compromises in the process of building, distributing, or updating software. They are often caused by vulnerabilities or malicious changes in thirdparty code, tools, or other dependencies that the system relies on.
+
+You are likely vulnerable if:

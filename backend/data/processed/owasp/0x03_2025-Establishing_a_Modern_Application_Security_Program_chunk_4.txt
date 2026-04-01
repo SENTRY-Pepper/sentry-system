@@ -1,0 +1,7 @@
+Establish a common risk rating model with a consistent set of likelihood and impact factors reflective of your organization’s tolerance for risk.
+
+ Accordingly measure and prioritize all your applications and APIs. Add the results to your Configuration Management Database (CMDB).
+
+ Establish assurance guidelines to properly define coverage and level of rigor required.
+
+ 2. Enable with a Strong Foundation:

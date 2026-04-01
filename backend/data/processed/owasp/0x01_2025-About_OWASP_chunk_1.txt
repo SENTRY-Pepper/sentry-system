@@ -1,0 +1,13 @@
+At OWASP, you'll find free and open:
+
+ Application security tools and standards
+ Cutting edge research
+ Standard security controls and libraries
+ Complete books on application security testing, secure code development, and secure code review
+ Presentations and videos
+ Cheat sheets on many common topics
+ Chapters meetings held worldwide and online
+ Events, training, and conferences.
+ Google Groups
+
+Learn more at: https://owasp.org.

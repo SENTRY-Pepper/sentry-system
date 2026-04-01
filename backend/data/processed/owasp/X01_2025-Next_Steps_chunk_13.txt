@@ -1,0 +1,5 @@
+Example attack scenarios. 
+
+Scenario 1: Attackers intentionally consume application resources to trigger failures within the system, resulting in denial of service. This could be memory exhaustion, filling up disk space, CPU saturation, or opening endless connections.
+
+Scenario 2: Input fuzzing that leads to crafted responses that break application business logic.

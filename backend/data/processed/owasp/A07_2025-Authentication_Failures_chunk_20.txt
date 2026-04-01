@@ -1,0 +1,17 @@
+CWE300 Channel Accessible by NonEndpoint
+
+ CWE302 Authentication Bypass by AssumedImmutable Data
+
+ CWE303 Incorrect Implementation of Authentication Algorithm
+
+ CWE304 Missing Critical Step in Authentication
+
+ CWE305 Authentication Bypass by Primary Weakness
+
+ CWE306 Missing Authentication for Critical Function
+
+ CWE307 Improper Restriction of Excessive Authentication Attempts
+
+ CWE308 Use of Singlefactor Authentication
+
+ CWE309 Use of Password System for Primary Authentication

@@ -1,0 +1,1 @@
+A08:2025  Software or Data Integrity Failures continues at 8 in the list. This category is focused on the failure to maintain trust boundaries and verify the integrity of software, code, and data artifacts at a lower level than Software Supply Chain Failures.

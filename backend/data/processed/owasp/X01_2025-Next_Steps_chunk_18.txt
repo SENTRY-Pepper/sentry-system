@@ -1,0 +1,8 @@
+CWE451 User Interface (UI) Misrepresentation of Critical Information
+ CWE454 External Initialization of Trusted Variables or Data Stores
+ CWE472 External Control of AssumedImmutable Web Parameter
+ CWE501 Trust Boundary Violation
+ CWE522 Insufficiently Protected Credentials
+ CWE525 Use of Web Browser Cache Containing Sensitive Information
+ CWE539 Use of Persistent Cookies Containing Sensitive Information
+ CWE598 Use of GET Request Method With Sensitive Query Strings

@@ -1,0 +1,17 @@
+CWE353 Missing Support for Integrity Check
+
+ CWE426 Untrusted Search Path
+
+ CWE427 Uncontrolled Search Path Element
+
+ CWE494 Download of Code Without Integrity Check
+
+ CWE502 Deserialization of Untrusted Data
+
+ CWE506 Embedded Malicious Code
+
+ CWE509 Replicating Malicious Code (Virus or Worm)
+
+ CWE565 Reliance on Cookies without Validation and Integrity Checking
+
+ CWE784 Reliance on Cookies without Validation and Integrity Checking in a Security Decision

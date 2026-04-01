@@ -1,0 +1,17 @@
+CWE104 Struts: Form Bean Does Not Extend Validation Class
+
+ CWE112 Missing XML Validation
+
+ CWE113 Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting')
+
+ CWE114 Process Control
+
+ CWE115 Misinterpretation of Output
+
+ CWE116 Improper Encoding or Escaping of Output
+
+ CWE129 Improper Validation of Array Index
+
+ CWE159 Improper Handling of Invalid Use of Special Elements
+
+ CWE470 Use of ExternallyControlled Input to Select Classes or Code ('Unsafe Reflection')

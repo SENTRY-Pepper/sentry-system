@@ -1,0 +1,19 @@
+CWE309 Use of Password System for Primary Authentication
+
+ CWE346 Origin Validation Error
+
+ CWE350 Reliance on Reverse DNS Resolution for a SecurityCritical Action
+
+ CWE384 Session Fixation
+
+ CWE521 Weak Password Requirements
+
+ CWE613 Insufficient Session Expiration
+
+ CWE620 Unverified Password Change
+
+ CWE640 Weak Password Recovery Mechanism for Forgotten Password
+
+ CWE798 Use of Hardcoded Credentials
+
+ CWE940 Improper Verification of Source of a Communication Channel

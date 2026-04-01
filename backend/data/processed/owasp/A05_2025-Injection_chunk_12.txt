@@ -1,0 +1,3 @@
+Use positive serverside input validation. This is not a complete defense as many applications require special characters, such as text areas or APIs for mobile applications.
+ For any residual dynamic queries, escape special characters using the specific escape syntax for that interpreter. 
+Note: SQL structures such as table names, column names, and so on cannot be escaped, and thus usersupplied structure names are dangerous. This is a common issue in reportwriting software.

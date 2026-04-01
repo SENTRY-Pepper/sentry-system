@@ -1,0 +1,4 @@
+Except for public resources, deny by default.
+ Implement access control mechanisms once and reuse them throughout the application, including minimizing CrossOrigin Resource Sharing (CORS) usage.
+ Model access controls should enforce record ownership rather than allowing users to create, read, update, or delete any record.
+ Unique application business limit requirements should be enforced by domain models.

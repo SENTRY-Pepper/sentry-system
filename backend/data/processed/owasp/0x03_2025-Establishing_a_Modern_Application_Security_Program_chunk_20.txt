@@ -1,0 +1,3 @@
+Rather than retrofitting security into your applications and APIs, it is far more cost effective to design the security in from the start. OWASP recommends the OWASP Cheat Sheets and the OWASP Proactive Controls as a good starting point for guidance on how to design security included from the beginning.
+
+  Perform threat modelling, see OWASP Cheat Sheet: Threat Modeling.

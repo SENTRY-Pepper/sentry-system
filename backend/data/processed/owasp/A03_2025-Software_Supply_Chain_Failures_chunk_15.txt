@@ -1,0 +1,2 @@
+Only obtain components from official (trusted) sources over secure links. Prefer signed packages to reduce the chance of including a modified, malicious component (see A08:2025Software and Data Integrity Failures).
+ Deliberately choose which version of a dependency you use and upgrade only when there is need.

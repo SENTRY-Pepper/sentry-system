@@ -1,0 +1,9 @@
+CWE78 Improper Neutralization of Special Elements used in an OS Command ('OS Command Injection')
+
+ CWE79 Improper Neutralization of Input During Web Page Generation ('Crosssite Scripting')
+
+ CWE80 Improper Neutralization of ScriptRelated HTML Tags in a Web Page (Basic XSS)
+
+ CWE83 Improper Neutralization of Script in Attributes in a Web Page
+
+ CWE86 Improper Neutralization of Invalid Characters in Identifiers in Web Pages

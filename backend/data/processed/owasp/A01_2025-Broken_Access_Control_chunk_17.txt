@@ -1,0 +1,13 @@
+CWE379 Creation of Temporary File in Directory with Insecure Permissions
+
+ CWE402 Transmission of Private Resources into a New Sphere ('Resource Leak')
+
+ CWE424 Improper Protection of Alternate Path
+
+ CWE425 Direct Request ('Forced Browsing')
+
+ CWE441 Unintended Proxy or Intermediary ('Confused Deputy')
+
+ CWE497 Exposure of Sensitive System Information to an Unauthorized Control Sphere
+
+ CWE538 Insertion of Sensitive Information into ExternallyAccessible File or Directory

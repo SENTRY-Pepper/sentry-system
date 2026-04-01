@@ -1,0 +1,5 @@
+A related class of injection vulnerabilities has become common in LLMs. These are discussed separately in the OWASP LLM Top 10, specifically LLM01:2025 Prompt Injection.
+
+ How to prevent. 
+
+The best means to prevent injection requires keeping data separate from commands and queries:

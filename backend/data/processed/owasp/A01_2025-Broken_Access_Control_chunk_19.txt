@@ -1,0 +1,19 @@
+CWE615 Inclusion of Sensitive Information in Source Code Comments
+
+ CWE639 Authorization Bypass Through UserControlled Key
+
+ CWE668 Exposure of Resource to Wrong Sphere
+
+ CWE732 Incorrect Permission Assignment for Critical Resource
+
+ CWE749 Exposed Dangerous Method or Function
+
+ CWE862 Missing Authorization
+
+ CWE863 Incorrect Authorization
+
+ CWE918 ServerSide Request Forgery (SSRF)
+
+ CWE922 Insecure Storage of Sensitive Information
+
+ CWE1275 Sensitive Cookie with Improper SameSite Attribute

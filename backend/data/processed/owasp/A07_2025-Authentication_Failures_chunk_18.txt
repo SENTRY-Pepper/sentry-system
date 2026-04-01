@@ -1,0 +1,23 @@
+References.
+
+ OWASP Authentication Cheat Sheet
+
+ OWASP Secure Coding Practices
+
+ List of Mapped CWEs
+
+ CWE258 Empty Password in Configuration File
+
+ CWE259 Use of Hardcoded Password
+
+ CWE287 Improper Authentication
+
+ CWE288 Authentication Bypass Using an Alternate Path or Channel
+
+ CWE289 Authentication Bypass by Alternate Name
+
+ CWE290 Authentication Bypass by Spoofing
+
+ CWE291 Reliance on IP Address for Authentication
+
+ CWE293 Using Referer Field for Authentication

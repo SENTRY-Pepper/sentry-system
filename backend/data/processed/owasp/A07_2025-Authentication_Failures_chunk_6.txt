@@ -1,0 +1,9 @@
+Uses plain text, encrypted, or weakly hashed passwords data stores (see A04:2025Cryptographic Failures).
+
+ Has missing or ineffective multifactor authentication.
+
+ Allows use of weak or ineffective fallbacks if multifactor authentication is not available. 
+
+ Exposes session identifier in the URL, a hidden field, or another insecure location that is accessible to the client.
+
+ Reuses the same session identifier after successful login.

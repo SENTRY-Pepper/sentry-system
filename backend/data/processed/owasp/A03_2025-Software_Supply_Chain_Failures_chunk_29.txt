@@ -1,0 +1,13 @@
+List of Mapped CWEs
+
+ CWE447 Use of Obsolete Function
+
+ CWE1035 2017 Top 10 A9: Using Components with Known Vulnerabilities
+
+ CWE1104 Use of Unmaintained Third Party Components
+
+ CWE1329 Reliance on Component That is Not Updateable
+
+ CWE1357 Reliance on Insufficiently Trustworthy Component
+
+ CWE1395 Dependency on Vulnerable ThirdParty Component

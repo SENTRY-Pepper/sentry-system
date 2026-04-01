@@ -1,0 +1,9 @@
+Provide a way for employees (and ideally also your customers) to report bugs.
+
+  Establish a trained incident response team that understands what software attacks look like, observability tooling.
+
+  Run blocking or shielding tools to stop automated attacks.
+
+  Annual (or more often) hardening of configurations.
+
+  At least annual penetration testing (depending upon the level assurance required for your app).

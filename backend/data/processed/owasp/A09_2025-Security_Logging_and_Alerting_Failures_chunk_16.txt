@@ -1,0 +1,2 @@
+Behavior analysis and AI support could be optionally an additional technique to support low rates of false positives for alerts.
+ Establish or adopt an incident response and recovery plan, such as National Institute of Standards and Technology (NIST) 80061r2 or later. Teach your software developers what application attacks and incidents look like, so they can report them.

@@ -1,0 +1,3 @@
+Example attack scenarios. 
+
+Scenario 1: A credential recovery workflow might include “questions and answers,” which is prohibited by NIST 80063b, the OWASP ASVS, and the OWASP Top 10. Questions and answers cannot be trusted as evidence of identity, as more than one person can know the answers. Such functionality should be removed and replaced with a more secure design.

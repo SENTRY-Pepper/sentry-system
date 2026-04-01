@@ -1,0 +1,1 @@
+raise the baseline and awareness of the different types of weaknesses that may occur under a common category name. In this edition of the Top Ten 2025, there are 248 CWEs within the 10 categories. There are a total of 968 CWEs in the downloadable dictionary from MITRE at the time of this release.

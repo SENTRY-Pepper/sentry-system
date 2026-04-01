@@ -1,0 +1,7 @@
+You do not allocate enough memory for a variable
+ You do not validate input, causing an overflow of the heap, the stack, a buffer
+ You store a data value that is larger than the type of the variable can hold 
+ You attempt to use unallocated memory or address spaces
+ You create offbyone errors (counting from 1 instead of zero)
+ You try to access an object after its been freed
+ You use uninitialized variables

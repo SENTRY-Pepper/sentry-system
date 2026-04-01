@@ -1,0 +1,2 @@
+Limit server side session time based on inactivity and a final timeout
+ Limit session bound information storage

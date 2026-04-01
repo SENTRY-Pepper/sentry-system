@@ -1,0 +1,7 @@
+2. Enable with a Strong Foundation:
+
+ Establish a set of focused policies and standards that provide an application security baseline for all development teams to adhere to.
+
+ Define a common set of reusable security controls that complement these policies and standards and provide design and development guidance on their use.
+
+ Establish an application security training curriculum that is required and targeted to different development roles and topics.

@@ -1,0 +1,1 @@
+own memory. Representative CWEs are CWE120 Buffer Copy without Checking Size of Input ('Classic Buffer Overflow') and CWE121 Stackbased Buffer Overflow.

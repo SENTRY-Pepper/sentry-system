@@ -1,0 +1,3 @@
+Enable the following server features that make memory management errors harder to exploit: address space layout randomization (ASLR), Data Execution Protection (DEP), and Structured Exception Handling Overwrite Protection (SEHOP).
+ Monitor your application for memory leaks.
+ Validate all input to your system very carefully, and reject all input that does not meet expectations.

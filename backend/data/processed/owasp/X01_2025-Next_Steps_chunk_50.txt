@@ -1,0 +1,2 @@
+You should be able to read and fully understand all code you submit, even if it is written by an AI or copied from an online forum. You are responsible for all code that you commit.
+ You should review all AIassisted code thoroughly for vulnerabilities, ideally with your own eyes and also with security tooling made for this purpose (such as static analysis). Consider using classic code review techniques as described in OWASP Cheat Sheet Series: Secure Code Review.

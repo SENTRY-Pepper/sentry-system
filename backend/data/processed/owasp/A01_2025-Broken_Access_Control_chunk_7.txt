@@ -1,0 +1,3 @@
+Metadata manipulation, such as replaying or tampering with a JSON Web Token (JWT) access control token, a cookie or hidden field manipulated to elevate privileges, or abusing JWT invalidation.
+ CORS misconfiguration allows API access from unauthorized or untrusted origins.
+ Force browsing (guessing URLs) to authenticated pages as an unauthenticated user or to privileged pages as a standard user.

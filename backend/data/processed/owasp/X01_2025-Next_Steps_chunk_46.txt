@@ -1,0 +1,12 @@
+CWE190 Integer Overflow or Wraparound
+ CWE191 Integer Underflow (Wrap or Wraparound)
+ CWE196 Unsigned to Signed Conversion Error
+ CWE367 Timeofcheck Timeofuse (TOCTOU) Race Condition
+ CWE415 Double Free
+ CWE416 Use After Free
+ CWE457 Use of Uninitialized Variable
+ CWE459 Incomplete Cleanup
+ CWE467 Use of sizeof() on a Pointer Type
+ CWE787 Outofbounds Write
+ CWE788 Access of Memory Location After End of Buffer
+ CWE824 Access of Uninitialized Pointer

@@ -1,0 +1,9 @@
+CWE93 Improper Neutralization of CRLF Sequences ('CRLF Injection')
+
+ CWE94 Improper Control of Generation of Code ('Code Injection')
+
+ CWE95 Improper Neutralization of Directives in Dynamically Evaluated Code ('Eval Injection')
+
+ CWE96 Improper Neutralization of Directives in Statically Saved Code ('Static Code Injection')
+
+ CWE97 Improper Neutralization of ServerSide Includes (SSI) Within a Web Page

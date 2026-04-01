@@ -1,0 +1,1 @@
+and has minimal representation in the CVE/CVSS data (only 723 CVEs); but can be very impactful for visibility and incident alerting and forensics. This category includes issues with properly handling output encoding to log files (CWE117), inserting sensitive data into log files (CWE532), and insufficient logging (CWE778).

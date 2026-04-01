@@ -1,0 +1,5 @@
+Give your developers securityrelated IDE plugins and encourage them to use them.
+
+  Provide them a secret management tool, licenses, and documentation on how to use it.
+
+  Provide them a private AI to use, ideally set up with a RAG server full of useful security documentation, prompts your team has written for better outcomes, and an MCP server that calls the security tooling of choice for your org. Teach them how to use AI safely, because they are going to do it whether you like it or not.

@@ -1,0 +1,3 @@
+OWASP is a different kind of organization. Our freedom from commercial pressures allows us to provide unbiased, practical, and costeffective information about application security.
+
+OWASP is not affiliated with any technology company, although we support the informed use of commercial security technology. OWASP produces many types of materials in a collaborative, transparent, and open way.

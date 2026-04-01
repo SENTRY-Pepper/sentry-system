@@ -1,0 +1,3 @@
+Consider purchasing tooling that implements guardrails for privacy and security for use with your AI(s) of choice.
+ Consider purchasing a private AI, ideally with a contract agreement (including a privacy agreement) that the AI is not to be trained on your organization’s data, queries, code or any other sensitive information.
+ Consider implementing an Model Context Protocol (MCP) server inbetween your IDE and AI, then set it up to enforce the use of your security tooling of choice.

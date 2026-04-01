@@ -1,0 +1,19 @@
+References.
+
+OWASP MASVS‑RESILIENCE
+
+ OWASP Cheat Sheet: Logging
+
+ OWASP Cheat Sheet: Error Handling
+
+ OWASP Application Security Verification Standard (ASVS): V16.5 Error Handling
+
+ OWASP Testing Guide: 4.8.1 Testing for Error Handling
+
+ Best practices for exceptions (Microsoft, .Net)
+
+ Clean Code and the Art of Exception Handling (Toptal)
+
+ General error handling rules (Google for Developers)
+
+ Example of realworld mishandling of an exceptional condition

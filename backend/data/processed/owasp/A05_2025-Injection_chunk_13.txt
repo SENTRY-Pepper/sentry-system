@@ -1,0 +1,7 @@
+Warning these techniques involve parsing and escaping complex strings, making them errorprone and not robust in the face of minor changes to the underlying system. 
+
+ Example attack scenarios.
+
+Scenario 1: An application uses untrusted data in the construction of the following vulnerable SQL call:
+
+An attacker modifies the 'id' parameter value in their browser to send: . For example:

@@ -1,0 +1,5 @@
+If you are starting a program from scratch, or you find OWASP SAMM or DSOMM ‘too much’ for your team right now, please review the following advice.
+
+ 1. Establish a Risk Based Portfolio Approach:
+
+ Identify the protection needs of your application portfolio from a business perspective. This should be driven in part by privacy laws and other regulations relevant to the data asset being protected.

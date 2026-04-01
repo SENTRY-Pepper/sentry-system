@@ -1,0 +1,4 @@
+CVE20175638, a Struts 2 remote code execution vulnerability that enables the execution of arbitrary code on the server, has been blamed for significant breaches.
+ CVE202144228 ("Log4Shell"), an Apache Log4j remote code execution zeroday vulnerability, has been blamed for ransomware, cryptomining, and other attack campaigns.
+
+ References

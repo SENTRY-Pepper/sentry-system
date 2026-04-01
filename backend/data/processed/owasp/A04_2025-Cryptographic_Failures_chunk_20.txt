@@ -1,0 +1,3 @@
+Avoid deprecated cryptographic functions, block building methods and padding schemes, such as MD5, SHA1, Cipher Block Chaining Mode (CBC), PKCS number 1 v1.5.
+ Ensure settings and configurations meet security requirements by having them reviewed by security specialists, tools designed for this purpose, or both.
+ You need to prepare now for post quantum cryptography (PQC), see reference (ENISA) so that high risk systems are safe no later than the end of 2030.

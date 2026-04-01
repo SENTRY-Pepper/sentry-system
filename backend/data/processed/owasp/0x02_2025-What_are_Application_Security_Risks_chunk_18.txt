@@ -1,0 +1,7 @@
+Weighted Impact: The Impact subscore from CVSSv2 and CVSSv3 scores assigned to CVEs mapped to CWEs, normalized, and placed on a 10pt scale.
+
+(Testing) Coverage: The percentage of applications tested by all organizations for a given CWE.
+
+Total Occurrences: Total number of applications found to have the CWEs mapped to a category.
+
+Total CVEs: Total number of CVEs in the NVD DB that were mapped to the CWEs mapped to a category.

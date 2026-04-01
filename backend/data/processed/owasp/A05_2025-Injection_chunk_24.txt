@@ -1,0 +1,3 @@
+CWE644 Improper Neutralization of HTTP Headers for Scripting Syntax
+
+ CWE917 Improper Neutralization of Special Elements used in an Expression Language Statement ('Expression Language Injection')

@@ -1,0 +1,10 @@
+OWASP Virtual Patching Best Practices
+ The Unfortunate Reality of Insecure Libraries
+ MITRE Common Vulnerabilities and Exposures (CVE) search
+ National Vulnerability Database (NVD)
+ Retire.js for detecting known vulnerable JavaScript libraries
+ GitHub Advisory Database
+ Ruby Libraries Security Advisory Database and Tools
+ SAFECode Software Integrity Controls (PDF)
+ Glassworm supply chain attack
+ PhantomRaven supply chain attack campaign

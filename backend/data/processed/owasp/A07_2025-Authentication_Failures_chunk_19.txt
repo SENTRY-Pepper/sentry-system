@@ -1,0 +1,17 @@
+CWE291 Reliance on IP Address for Authentication
+
+ CWE293 Using Referer Field for Authentication
+
+ CWE294 Authentication Bypass by Capturereplay
+
+ CWE295 Improper Certificate Validation
+
+ CWE297 Improper Validation of Certificate with Host Mismatch
+
+ CWE298 Improper Validation of Certificate with Host Mismatch
+
+ CWE299 Improper Validation of Certificate with Host Mismatch
+
+ CWE300 Channel Accessible by NonEndpoint
+
+ CWE302 Authentication Bypass by AssumedImmutable Data

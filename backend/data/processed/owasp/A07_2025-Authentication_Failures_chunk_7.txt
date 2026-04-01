@@ -1,0 +1,9 @@
+Reuses the same session identifier after successful login.
+
+ Does not correctly invalidate user sessions or authentication tokens (mainly single signon (SSO) tokens) during logout or a period of inactivity.
+
+ Does not correctly assert the scope and intended audience of the provided credentials.
+
+ How to prevent. 
+
+ Where possible, implement and enforce use of multifactor authentication to prevent automated credential stuffing, brute force, and stolen credential reuse attacks.

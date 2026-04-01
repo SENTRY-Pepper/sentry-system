@@ -1,0 +1,7 @@
+X03:2025 Inappropriate Trust in AI Generated Code ('Vibe Coding')
+
+ Background.
+
+Currently the entire world is talking about and using AI, and this includes software developers. Although there are currently no CVEs or CWEs related to AI generated code, it is well known and documented that AI generated code often contains more vulnerabilities than code written by human beings.
+
+ Description.

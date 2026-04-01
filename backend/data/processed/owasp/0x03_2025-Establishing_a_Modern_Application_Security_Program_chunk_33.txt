@@ -1,0 +1,7 @@
+Any required data should be archived. All other data should be securely wiped.
+
+ Securely retire the application, including deleting unused accounts and roles and permissions.
+
+ Set your application’s state to retired in the CMDB.
+
+ Using the OWASP Top 10 as a standard

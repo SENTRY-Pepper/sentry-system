@@ -1,0 +1,3 @@
+Excessive prioritization of backward compatibility leading to insecure configuration.
+ The security settings in the application servers, application frameworks (e.g., Struts, Spring, ASP.NET), libraries, databases, etc., are not set to secure values.
+ The server does not send security headers or directives, or they are not set to secure values.

@@ -1,0 +1,7 @@
+Developers and QA staff should include functional access control in their unit and integration tests.
+
+ Example attack scenarios. 
+
+Scenario 1: The application uses unverified data in an SQL call that is accessing account information:
+
+An attacker can simply modify the browser's 'acct' parameter to send any desired account number. If not correctly verified, the attacker can access any user's account.

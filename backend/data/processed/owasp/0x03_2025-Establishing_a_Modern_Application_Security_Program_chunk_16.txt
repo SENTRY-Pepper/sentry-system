@@ -1,0 +1,3 @@
+Compile the technical requirements including functional and nonfunctional security requirements. OWASP recommends you use the OWASP Application Security Verification Standard (ASVS)(https://owasp.org/wwwprojectapplicationsecurityverificationstandard/) as a guide for setting the security requirements for your application(s).
+
+ Plan and negotiate the budget that covers all aspects of design, build, testing and operation, including security activities.

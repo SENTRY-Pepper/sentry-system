@@ -1,0 +1,21 @@
+List of Mapped CWEs
+
+ CWE261 Weak Encoding for Password
+
+ CWE296 Improper Following of a Certificate's Chain of Trust
+
+ CWE319 Cleartext Transmission of Sensitive Information
+
+ CWE320 Key Management Errors (Prohibited)
+
+ CWE321 Use of Hardcoded Cryptographic Key
+
+ CWE322 Key Exchange without Entity Authentication
+
+ CWE323 Reusing a Nonce, Key Pair in Encryption
+
+ CWE324 Use of a Key Past its Expiration Date
+
+ CWE325 Missing Required Cryptographic Step
+
+ CWE326 Inadequate Encryption Strength

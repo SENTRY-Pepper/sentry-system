@@ -1,0 +1,3 @@
+Memory management failures can lead to failure of the application or even the entire system, see also X01:2025 Lack of Application Resilience
+
+ How to prevent.
