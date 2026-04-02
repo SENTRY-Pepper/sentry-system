@@ -1,0 +1,19 @@
+(b) determine the harm to the economy that would result from damage or
+unauthorized access to critical infrastructure;
+(c) measure the overall preparedness of each sector against damage
+or unauthorized access to critical infrastructure including the
+effectiveness of market forces driving security innovation and secure
+practices.
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+(d) identify any other risk-based security factors appropriate and
+necessary to protect public health and safety, or national socio-
+economic security; and
+(e) recommend to the owners of systems designated as critical
+infrastructure, methods of securing their systems against cyber
+threats.
+11. Reports on critical information infrastructure
+(1) The owner or operator of a system designated as critical infrastructure shall
+report to the Committee any incidents likely to constitute a threat in the nature of
+an attack that amounts to a computer and cybercrime and the action the owner or

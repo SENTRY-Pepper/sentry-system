@@ -1,0 +1,13 @@
+designated for several such public bodies, taking into account their organisational structures.
+(5) A person may be designated or appointed as a data protection officer, if that person has relevant
+academic or professional qualifications which may include knowledge and technical skills in
+matters relating to data protection.
+(6) A data controller or data processor shall publish the contact details of the data protection officer
+on the website and communicate them to the Data Commissioner who shall ensure that the same
+information is available on the official website.
+(7) A data protection officer shall—
+(a) advise the data controller or data processor and their employees on data processing
+requirements provided under this Act or any other written law;
+(b) ensure on behalf of the data controller or data processor that this Act is complied with;
+(c) facilitate capacity building of staff involved in data processing operations;
+(d) provide advice on data protection impact assessment; and

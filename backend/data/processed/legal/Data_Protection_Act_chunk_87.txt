@@ -1,0 +1,15 @@
+(3) Personal data which is processed only for research purposes is exempt from the provisions of this
+Act if—
+(a) data is processed in compliance with the relevant conditions; and
+(b) results of the research or resulting statistics are not made available in a form which identifies
+the data subject or any of them.
+(4) The Data Commissioner shall prepare a code of practice containing practical guidance in relation to
+the processing of personal data for purposes of Research, History and Statistics.
+54. Exemptions by the Data Commissioner
+The Data Commissioner may prescribe other instances where compliance with certain provisions of this
+Act may be exempted.
+55. Data-sharing code
+(1) The Data Commissioner may issue a data sharing code which shall contain—
+(a) practical guidance in relation to the sharing of personal data in accordance with the
+requirements of the data protection legislation; and
+(b) such other guidance as the Commissioner considers appropriate to promote good practice in

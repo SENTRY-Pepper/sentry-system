@@ -1,0 +1,19 @@
+computer system, program or data;
+"mobile money" means electronic transfer of funds between banks or
+accounts' deposit or withdrawal of funds or payment of bills by mobile phone;
+"national critical information infrastructure" means a vital virtual
+asset, facility, system, network or process whose incapacity, destruction or
+modification would have —
+(a) a debilitating impact on the availability, integrity or delivery of
+essential services including those services, whose integrity, if
+compromised, could result in significant loss of life or casualties; or
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+(b) significant impact on national security, national defense, or the
+functioning of the state;
+"network" means a collection of hardware components and computers
+interconnected by communications channels that allow sharing of resources
+and information;
+"password" means any data by which a computer service or a computer
+system is capable of being obtained or used;

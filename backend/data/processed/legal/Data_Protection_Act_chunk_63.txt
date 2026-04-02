@@ -1,0 +1,15 @@
+(a) necessary for entering into, or performing, a contract between the data subject and a data
+controller;
+(b) authorised by a law to which the data controller is subject and which lays down suitable
+measures to safeguard the data subject's rights, freedoms and legitimate interests; or
+(c) based on the data subject's consent.
+(3) Where a data controller or data processor takes a decision, which produces legal effects or
+significantly affects the data subject based solely on automated processing—
+(a) the data controller or data processor must, as soon as reasonably practicable, notify the data
+subject in writing that a decision has been taken based solely on automated processing; and
+(b) the data subject may, after a reasonable period of receipt of the notification, request the data
+controller or data processor to—
+(i) reconsider the decision; or
+(ii) take a new decision that is not based solely on automated processing.
+13
+Data Protection Act (Cap. 411C) Kenya

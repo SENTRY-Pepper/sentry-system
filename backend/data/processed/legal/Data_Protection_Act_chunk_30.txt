@@ -1,0 +1,16 @@
+names of the person's children, parents, spouse or spouses, sex or the sexual orientation of the data
+subject; and
+"third Party" means natural or legal person, public authority, agency or other body, other than the data
+subject, data controller, data processor or persons who, under the direct authority of the data controller or
+data processor, are authorised to process personal data.
+3. Object and purpose of this Act
+The object and purpose of this Act is—
+(a) to regulate the processing of personal data;
+(b) to ensure that the processing of personal data of a data subject is guided by the principles set out in
+section 25;
+(c) to protect the privacy of individuals;
+(d) to establish the legal and institutional mechanism to protect personal data; and
+(e) to provide data subjects with rights and remedies to protect their personal data from processing
+that is not in accordance with this Act.
+4. Application
+This Act applies to the processing of personal data—

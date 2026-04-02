@@ -1,0 +1,16 @@
+50. Processing through a data server or data centre in Kenya
+The Cabinet Secretary may prescribe, based on grounds of strategic interests of the state or protection of
+revenue, certain nature of processing that shall only be effected through a server or a data centre located
+in Kenya.
+Part VII – EXEMPTIONS
+51. General exemptions
+(1) Nothing in this Part shall exempt any data controller or data processor from complying with data
+protection principles relating to lawful processing, minimisation of collection, data quality, and
+adopting security safeguards to protect personal data.
+19
+Data Protection Act (Cap. 411C) Kenya
+(2) The processing of personal data is exempt from the provisions of this Act if—
+(a) it relates to processing of personal data by an individual in the course of a purely personal or
+household activity;
+(b) if it is necessary for national security or public interest; or
+(c) disclosure is required by or under any written law or by an order of the court.

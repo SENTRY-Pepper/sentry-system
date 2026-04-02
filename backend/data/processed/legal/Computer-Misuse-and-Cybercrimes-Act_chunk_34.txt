@@ -1,0 +1,15 @@
+(a) any particular program or data;
+(b) a program or data of any kind; or
+(c) a program or data held in any particular computer system.
+15. Access with intent to commit further offence
+(1) A person who commits an offence under section 14 with intent to commit a
+further offence under any law, or to facilitate the commission of a further offence by
+that person or any other person, commits an offence and is liable, on conviction, to
+a fine not exceeding ten million shillings or to imprisonment for a term not exceeding
+ten years, or to both.
+(2) For the purposes of subsection (1), it is immaterial that the further offence
+to which this section applies is committed at the same time when the access is
+secured or at any other time.
+16. Unauthorised interference
+(1) A person who intentionally and without authorisation does any act which
+causes an unauthorised interference, to a computer system, program or data,

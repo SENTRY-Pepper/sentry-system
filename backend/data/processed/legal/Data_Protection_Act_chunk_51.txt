@@ -1,0 +1,15 @@
+(c) to object to the processing of all or part of their personal data;
+(d) to correction of false or misleading data; and
+(e) to deletion of false or misleading data about them.
+27. Exercise of rights of data subjects
+A right conferred on a data subject may be exercised—
+(a) where the data subject is a minor, by a person who has parental authority or by a guardian;
+(b) where the data subject has a mental or other disability, by a person duly authorised to act as their
+guardian or administrator; or
+(c) in any other case, by a person duly authorised by the data subject.
+28. Collection of personal data
+(1) A data controller or data processor shall collect personal data directly from the data subject.
+(2) Despite subsection (1), personal data may be collected indirectly where—
+(a) the data is contained in a public record;
+(b) the data subject has deliberately made the data public;
+(c) the data subject has consented to the collection from another source;

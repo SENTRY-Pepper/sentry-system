@@ -1,0 +1,14 @@
+(b) is carried out by another person who in the circumstances owes a duty of confidentiality
+under any law.
+47. Further categories of sensitive personal data
+(1) The Data Commissioner may prescribe further categories of personal data which may be classified
+as sensitive personal data.
+(2) Where categories of personal data have been specified as sensitive personal data under subsection
+(1), the Data Commissioner may specify any further grounds on which such specified categories
+may be processed, having regard—
+(a) to the risk of significant harm that may be caused to a data subject by the processing of such
+category of personal data;
+(b) to the expectation of confidentiality attached to such category of personal data;
+(c) to whether a significantly discernible class of data subjects may suffer significant harm from
+the processing of such category of personal data; and
+(d) to the adequacy of protection afforded by ordinary provisions applicable to personal data.

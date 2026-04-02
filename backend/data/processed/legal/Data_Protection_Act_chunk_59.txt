@@ -1,0 +1,14 @@
+the performance of a contract, including the provision of a service, is conditional on consent to the
+processing of personal data that is not necessary for the performance of that contract.
+33. Processing of personal data relating to a child
+(1) Every data controller or data processor shall not process personal data relating to a child unless—
+(a) consent is given by the child's parent or guardian; and
+(b) the processing is in such a manner that protects and advances the rights and best interests of
+the child.
+(2) A data controller or data processor shall incorporate appropriate mechanisms for age verification
+and consent in order to process personal data of a child.
+(3) Mechanisms contemplated under subsection (2) shall be determined on the basis of—
+(a) available technology;
+(b) volume of personal data processed;
+(c) proportion of such personal data likely to be that of a child;
+(d) possibility of harm to a child arising out of processing of personal data; and

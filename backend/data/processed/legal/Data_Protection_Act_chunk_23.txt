@@ -1,0 +1,15 @@
+data; to provide for the rights of data subjects and obligations of data controllers and processors; and for
+connected purposes
+Part I – PRELIMINARY
+1. Short title
+This Act may be cited as the Data Protection Act.
+2. Interpretation
+In this Act, unless the context otherwise requires—
+"anonymisation" means the removal of personal identifiers from personal data so that the data subject is
+no longer identifiable;
+"biometric data" means personal data resulting from specific technical processing based on physical,
+physiological or behavioural characterisation including blood typing, fingerprinting, deoxyribonucleic acid
+analysis, earlobe geometry, retinal scanning and voice recognition;
+"Cabinet Secretary" means the Cabinet Secretary responsible for matters relating to information,
+communication and technology;
+"consent" means any manifestation of express, unequivocal, free, specific and informed indication of

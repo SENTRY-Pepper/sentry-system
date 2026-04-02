@@ -1,0 +1,12 @@
+(vi) for the purpose of compelling legitimate interests pursued by the data controller or data
+processor which are not overridden by the interests, rights and freedoms of the data subjects.
+49. Safeguards prior to transfer of personal data out of Kenya
+(1) The processing of sensitive personal data out of Kenya shall only be effected upon obtaining
+consent of a data subject and on obtaining confirmation of appropriate safeguards.
+(2) The Data Commissioner may request a person who transfers data to another country to
+demonstrate the effectiveness of the security safeguards or the existence of compelling legitimate
+interests.
+(3) The Data Commissioner may, in order to protect the rights and fundamental freedoms of data
+subjects, prohibit, suspend or subject the transfer to such conditions as may be determined.
+50. Processing through a data server or data centre in Kenya
+The Cabinet Secretary may prescribe, based on grounds of strategic interests of the state or protection of

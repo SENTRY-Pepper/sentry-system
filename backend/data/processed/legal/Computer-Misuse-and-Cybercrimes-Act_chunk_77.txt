@@ -1,0 +1,17 @@
+medium is in the possession or control of a person in its territory; and
+(b) specified subscriber information relating to services offered by a
+service provider in Kenya are in that service provider's possession
+or control and is necessary or desirable for the purposes of the
+investigation, the police officer or the authorised person may apply to
+court for an order.
+(2) The Court shall issue an order directing —
+(a) a specified person to submit specified computer data that is in that
+person's possession or control, and is stored in a computer system or
+a computer data storage medium; or
+(b) a specified service provider offering its services in Kenya to submit
+subscriber information relating to such services in that service
+provider's possession or control.
+51. Expedited preservation and partial disclosure of traffic data
+(1) Where a police officer or an authorised person has reasonable grounds to
+believe that —
+(a) any specified traffic data stored in any computer system or computer

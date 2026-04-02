@@ -1,0 +1,15 @@
+requirements of the data protection legislation; and
+(b) such other guidance as the Commissioner considers appropriate to promote good practice in
+the sharing of personal data.
+20
+Data Protection Act (Cap. 411C) Kenya
+(2) The data sharing code under subsection (1) shall specify on the lawful exchange of personal data
+between government departments or public sector agencies.
+Part VIII – ENFORCEMENT PROVISIONS
+56. Complaints to the Data Commissioner
+(1) A data subject who is aggrieved by a decision of any person under this Act may lodge a complaint
+with the Data Commissioner in accordance with this Act.
+(2) A person who intends to lodge a complaint under this Act shall do so orally or in writing.
+(3) Where a complaint made under subclause (1) is made orally, the Data Commissioner shall cause the
+complaint to be recorded in writing and the complaint shall be dealt with in accordance with such
+procedures as the Data Commissioner may prescribe.

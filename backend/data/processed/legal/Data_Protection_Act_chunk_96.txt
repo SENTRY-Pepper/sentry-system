@@ -1,0 +1,15 @@
+63. Administrative fines
+In relation to an infringement of a provision of this Act, the maximum amount of the penalty that may
+be imposed by the Data Commissioner in a penalty notice is up to five million shillings, or in the case of
+an undertaking, up to one per centum of its annual turnover of the preceding financial year, whichever is
+lower.
+64. Right of appeal
+A person against whom any administrative action is taken by the Data Commissioner, including in
+enforcement and penalty notices, may appeal to the High Court.
+65. Compensation to a data subject
+(1) A person who suffers damage by reason of a contravention of a requirement of this Act is entitled to
+compensation for that damage from the data controller or the data processor.
+(2) Subject to subsection (1)—
+(a) a data controller involved in processing of personal data is liable for any damage caused by
+the processing; and
+(b) a data processor involved in processing of personal data is liable for damage caused by the

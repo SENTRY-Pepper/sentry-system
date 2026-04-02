@@ -1,0 +1,19 @@
+time collection of traffic data associated with specified communications to the
+requesting State.
+64. Mutual assistance regarding the interception of content data
+(1) Subject to section 57, a requesting State may request the Central Authority
+to provide assistance in the real-time collection or recording of content data of
+specified communications in the territory of Kenya transmitted by means of a
+computer system.
+(2) When making a request under subsection (1), a requesting State shall
+specify —
+(a) the authority seeking the use of powers under this section;
+(b) the offence that is the subject of a criminal investigation or
+proceedings and a brief summary of the related facts;
+(c) the name of the authority with access to the relevant communication;
+(d) the location at which or nature of the communication;
+(e) the intended purpose for the required communication;
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+(f) sufficient information to identify the communications;

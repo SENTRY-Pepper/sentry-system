@@ -1,0 +1,14 @@
+communication and technology;
+"consent" means any manifestation of express, unequivocal, free, specific and informed indication of
+the data subject's wishes by a statement or by a clear affirmative action, signifying agreement to the
+processing of personal data relating to the data subject;
+"data" means information which—
+(a) is processed by means of equipment operating automatically in response to instructions given for
+that purpose;
+(b) is recorded with intention that it should be processed by means of such equipment;
+(c) is recorded as part of a relevant filing system;
+(d) where it does not fall under paragraphs (a), (b) or (c), forms part of an accessible record; or
+(e) is recorded information which is held by a public entity and does not fall within any of paragraphs
+(a) to (d).
+"Data Commissioner" means the person appointed under section 6;
+"data controller" means a natural or legal person, public authority, agency or other body which, alone or

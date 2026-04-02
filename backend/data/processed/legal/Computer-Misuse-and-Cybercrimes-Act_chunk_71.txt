@@ -1,0 +1,17 @@
+PART IV – INVESTIGATION PROCEDURES
+47. Scope of procedural provisions
+(1) All powers and procedures under this Act are applicable to and may be
+exercised with respect to any —
+(a) criminal offences provided under this Act;
+(b) other criminal offences committed by means of a computer system
+established under any other law; and
+(c) the collection of evidence in electronic form of a criminal offence under
+this Act or any other law.
+(2) In any proceedings related to any offence, under any law of Kenya, the fact
+that evidence has been generated, transmitted or seized from, or identified in a
+search of a computer system, shall not of itself prevent that evidence from being
+presented, relied upon or admitted.
+(3) The powers and procedures provided under this Part are without prejudice
+to the powers granted under —
+(a) the National Intelligence Service Act, 2012 (No. 28 of 2012);
+(b) the National Police Service Act, 2011 (No. 30 of 2011);

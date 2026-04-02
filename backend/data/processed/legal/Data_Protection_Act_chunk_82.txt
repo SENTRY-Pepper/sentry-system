@@ -1,0 +1,13 @@
+safeguards with respect to the security and protection of personal data, and the appropriate
+safeguards including jurisdictions with commensurate data protection laws;
+(c) the transfer is necessary—
+(i) for the performance of a contract between the data subject and the data controller or data
+processor or implementation of pre-contractual measures taken at the data subject's request;
+(ii) for the conclusion or performance of a contract concluded in the interest of the data subject
+between the controller and another person;
+(iii) for any matter of public interest;
+(iv) for the establishment, exercise or defence of a legal claim;
+(v) in order to protect the vital interests of the data subject or of other persons, where the data
+subject is physically or legally incapable of giving consent; or
+(vi) for the purpose of compelling legitimate interests pursued by the data controller or data
+processor which are not overridden by the interests, rights and freedoms of the data subjects.

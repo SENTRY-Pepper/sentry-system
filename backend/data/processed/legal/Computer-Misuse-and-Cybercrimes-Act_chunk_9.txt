@@ -1,0 +1,14 @@
+"data" means any representation of facts, information or concepts in a form
+suitable for processing in a computer system, including a program suitable to
+cause a computer system to perform a function;
+"interception" means the monitoring, modifying, viewing or recording
+of non-public transmissions of data to or from a computer system over a
+telecommunications system, and includes, in relation to a function of a computer
+system, listening to or recording a function of a computer system or acquiring
+the substance, its meaning or purport of such function;
+"interference" means any impairment to the confidentiality, integrity or
+availability of a computer system, or any program or data on a computer system,
+or any act in relation to the computer system which impairs the operation of the
+computer system, program or data;
+"mobile money" means electronic transfer of funds between banks or
+accounts' deposit or withdrawal of funds or payment of bills by mobile phone;

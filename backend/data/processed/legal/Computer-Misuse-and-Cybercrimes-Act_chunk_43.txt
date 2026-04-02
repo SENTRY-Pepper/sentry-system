@@ -1,0 +1,17 @@
+(e) the provision of national registration systems; or
+(f) such other systems as may be designated relating to the security,
+defence or international relations of Kenya, critical information,
+communications, business or transport infrastructure and protection
+of public safety and public services as may be designated by the
+Cabinet Secretary responsible for matters relating to information,
+communication and technology.
+21. Cyber espionage
+(1) A person who unlawfully and intentionally performs or authorizes or allows
+another person to perform a prohibited act envisaged in this Act, in order to —
+(a) gain access, as provided under section 14, to critical data, a critical
+database or a national critical information infrastructure; or
+(b) intercept data, as provided under section 17, to, from or within a
+critical database or a national critical information infrastructure, with
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes

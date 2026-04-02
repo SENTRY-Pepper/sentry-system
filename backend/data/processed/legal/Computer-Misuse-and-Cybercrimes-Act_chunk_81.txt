@@ -1,0 +1,16 @@
+data to enable a police officer or an authorised person to identify any
+other telecommunications providers involved in the transmission of
+the communication.
+(6) The powers of the police officer or an authorised person under subsection
+(1) shall apply whether there is one or more service providers involved in the
+transmission of communication which is subject to exercise of powers under this
+section.
+52. Real-time collection of traffic data
+(1) Where a police officer or an authorised person has reasonable grounds to
+believe that traffic data associated with specified communications and related to
+the person under investigation is required for the purposes of a specific criminal
+investigation, the police officer or authorised person may apply to the court for an
+order to —
+(a) permit the police officer or authorised person to collect or record
+through the application of technical means traffic data, in real-time;
+(b) compel a service provider, within its existing technical capability —

@@ -1,0 +1,14 @@
+(a) to (d).
+"Data Commissioner" means the person appointed under section 6;
+"data controller" means a natural or legal person, public authority, agency or other body which, alone or
+jointly with others, determines the purpose and means of processing of personal data;
+1
+Data Protection Act (Cap. 411C) Kenya
+"data processor" means a natural or legal person, public authority, agency or other body which processes
+personal data on behalf of the data controller;
+"data subject" means an identified or identifiable natural person who is the subject of personal data;
+"encryption" means the process of converting the content of any readable data using technical means into
+coded form;
+"filing system" means any structured set of personal data which is readily accessible by reference to a data
+subject or according to specific criteria, whether centralised, decentralised or dispersed on a functional or
+geographical basis;

@@ -1,0 +1,15 @@
+(2) A police officer or an authorised person who misuses the exercise of
+powers under this Part commits an offence and is liable, on conviction, to a fine not
+exceeding five million shillings or to imprisonment for a term not exceeding three
+years, or to both.
+55. Appeal
+Any person aggrieved by any decision or order of the Court made under this
+Part, may appeal to the High Court or Court of Appeal as the case may be within
+thirty days from the date of the decision or order.
+56. Confidentiality and limitation of liability
+(1) A service provider shall not be subject to any civil or criminal liability, unless
+it is established that the service provider had actual notice, actual knowledge, or
+willful and malicious intent, and not merely through omission or failure to act, had
+thereby facilitated, aided or abetted the use by any person of any computer system
+controlled or managed by a service provider in connection with a contravention of
+this Act or any other written law.

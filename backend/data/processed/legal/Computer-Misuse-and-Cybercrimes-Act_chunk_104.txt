@@ -1,0 +1,18 @@
+62. Trans-border access to stored computer data with consent or where
+publicly available
+A police officer or authorised person may, subject to any applicable provisions
+of this Act —
+(a) access publicly available stored computer data, regardless of where
+the data is located geographically; or
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+(b) access or receive, through a computer system in Kenya, stored
+computer data located in another territory, if such police officer or
+authorised person obtains the lawful and voluntary consent of the
+person who has the lawful authority to disclose the data through that
+computer system.
+63. Mutual assistance in the real-time collection of traffic data
+(1) Subject to section 57, a requesting State may request the Central Authority
+to provide assistance in real-time collection of traffic data associated with specified
+communications in Kenya transmitted by means of a computer system.

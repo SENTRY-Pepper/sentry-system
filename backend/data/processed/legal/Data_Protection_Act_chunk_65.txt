@@ -1,0 +1,14 @@
+the taking of decisions based solely on automated processing.
+36. Objecting to processing
+A data subject has a right to object to the processing of their personal data, unless the data controller or
+data processor demonstrates compelling legitimate interest for the processing which overrides the data
+subject's interests, or for the establishment, exercise or defence of a legal claim.
+37. Commercial use of data
+(1) A person shall not use, for commercial purposes, personal data obtained pursuant to the provisions
+of this Act unless the person—
+(a) has sought and obtained express consent from a data subject; or
+(b) is authorised to do so under any written law and the data subject has been informed of such
+use when collecting the data from the data subject.
+(2) A data controller or data processor that uses personal data for commercial purposes shall, where
+possible, anonymise the data in such a manner as to ensure that the data subject is no longer
+identifiable.

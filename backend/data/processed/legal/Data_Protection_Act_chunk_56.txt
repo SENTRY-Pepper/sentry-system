@@ -1,0 +1,14 @@
+(3) A data controller who contravenes the provisions of subsection (1) commits an offence.
+31. Data protection impact assessment
+(1) Where a processing operation is likely to result in high risk to the rights and freedoms of a data
+subject, by virtue of its nature, scope, context and purposes, a data controller or data processor
+shall, prior to the processing, carry out a data protection impact assessment.
+(2) A data protection impact assessment shall include the following—
+(a) a systematic description of the envisaged processing operations and the purposes of
+the processing, including, where applicable, the legitimate interest pursued by the data
+controller or data processor;
+(b) an assessment of the necessity and proportionality of the processing operations in relation
+to the purposes;
+11
+Data Protection Act (Cap. 411C) Kenya
+(c) an assessment of the risks to the rights and freedoms of data subjects;

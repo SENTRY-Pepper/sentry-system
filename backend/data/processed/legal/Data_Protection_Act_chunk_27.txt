@@ -1,0 +1,14 @@
+identity;
+"national security organs" has the meaning assigned to it under Article 239 of the Constitution;
+"Office" means the office of the Data Protection Commissioner;
+"person" has the meaning assigned to it under Article 260 of the Constitution;
+"personal data" means any information relating to an identified or identifiable natural person;
+"personal data breach" means a breach of security leading to the accidental or unlawful destruction,
+loss, alteration, unauthorised disclosure of, or access to, personal data transmitted, stored or otherwise
+processed;
+"processing" means any operation or sets of operations which is performed on personal data or on sets of
+personal data whether or not by automated means, such as
+(a) collection, recording, organisation, structuring;
+(b) storage, adaptation or alteration;
+(c) retrieval, consultation or use;
+(d) disclosure by transmission, dissemination, or otherwise making available; or

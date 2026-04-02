@@ -1,0 +1,16 @@
+point from whom more information could be obtained.
+(6) The communication of a breach to the data subject shall not be required where the data controller
+or data processor has implemented appropriate security safeguards which may include encryption
+of affected personal data.
+(7) Where and to the extent that it is not possible to provide all the information mentioned in
+subsection (5) at the same time, the information may be provided in phases without undue delay.
+(8) The data controller shall record the following information in relation to a personal data breach—
+(a) the facts relating to the breach;
+(b) its effects; and
+(c) the remedial action taken.
+Part V – GROUNDS FOR PROCESSING OF SENSITIVE PERSONAL DATA
+44. Processing of sensitive personal data
+No category of sensitive personal data shall be processed unless section 25 applies to that processing.
+17
+Data Protection Act (Cap. 411C) Kenya
+45. Permitted grounds for processing sensitive personal data

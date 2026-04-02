@@ -1,0 +1,13 @@
+of the rights of another person or for reasons of public interest; and
+(b) the data controller shall inform the data subject before withdrawing the restriction on
+processing of the personal data.
+(3) The data controller or data processor shall implement mechanisms to ensure that time limits
+established for the rectification, erasure or restriction of processing of personal data, or for a
+periodic review of the need for the storage of the personal data, is observed.
+35. Automated individual decision making
+(1) Every data subject has a right not to be subject to a decision based solely on automated processing,
+including profiling, which produces legal effects concerning or significantly affects the data subject.
+(2) subsection (1) shall not apply where the decision is—
+(a) necessary for entering into, or performing, a contract between the data subject and a data
+controller;
+(b) authorised by a law to which the data controller is subject and which lays down suitable

@@ -1,0 +1,18 @@
+(b) any other entity that processes or stores computer data on behalf
+of that entity or its users;
+"subscriber information" means any information contained in the form of
+data or any form that is held by a service provider, relating to subscribers of its
+services, other than traffic data or content data, by which can be established —
+(a) the type of communication service used, the technical provisions
+taken thereto and the period of service;
+(b) the subscriber's identity, postal, geographic location, electronic
+mail address, telephone and other access number, billing and
+payment information, available on the basis of the service
+agreement or arrangement; or
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+(c) any other information on the site of the installation of
+telecommunication apparatus, available on the basis of the service
+agreement or arrangement;
+"telecommunication apparatus" means an apparatus constructed or

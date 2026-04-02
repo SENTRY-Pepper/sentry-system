@@ -1,0 +1,14 @@
+(c) a program or data of any kind; or
+(d) a program or data held in any particular computer system.
+(4) For the purposes of this section, it is immaterial whether an unauthorised
+interception or any intended effect of it is permanent or temporary.
+18. Illegal devices and access codes
+(1) A person who knowingly manufactures, adapts, sells, procures for use,
+imports, offers to supply, distributes or otherwise makes available a device,
+program, computer password, access code or similar data designed or adapted
+primarily for the purpose of committing any offence under this Part, commits an
+offence and is liable, on conviction, to a fine not exceeding twenty million shillings
+or to imprisonment for a term not exceeding ten years, or to both.
+(2) A person who knowingly receives, or is in possession of, a program or a
+computer password, device, access code, or similar data from any action specified
+under subsection (1) and intends that it be used to commit or assist in commission

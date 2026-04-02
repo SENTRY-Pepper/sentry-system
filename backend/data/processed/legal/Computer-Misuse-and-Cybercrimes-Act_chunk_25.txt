@@ -1,0 +1,16 @@
+(g) any other relevant matter which is necessary or expedient in order
+to promote cyber security in respect of the critical information
+infrastructure.
+10. Protection of critical information infrastructure
+(1) The Committee shall within reasonable time and in consultation with the
+owner or a person in control of an identified critical information infrastructure,
+submit to the National Security Council its recommendations of entities to be
+gazetted as critical information infrastructures.
+(2) The Committee shall, after the gazettement under subsection (1),
+in consultation with a person that owns or operates the critical information
+infrastructure—
+(a) conduct an assessment of the threats, vulnerabilities, risks, and
+probability of a cyberattack across all critical infrastructure sectors;
+(b) determine the harm to the economy that would result from damage or
+unauthorized access to critical infrastructure;
+(c) measure the overall preparedness of each sector against damage

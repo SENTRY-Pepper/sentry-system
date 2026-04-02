@@ -1,0 +1,16 @@
+18. Registration of data controllers and data processors
+(1) Subject to subsection (2), no person shall act as a data controller or data processor unless registered
+with the Data Commissioner.
+(2) The Data Commissioner shall prescribe thresholds required for mandatory registration of data
+controllers and data processors, and in making such determination, the Data Commissioner shall
+consider—
+(a) the nature of industry;
+(b) the volumes of data processed;
+(c) whether sensitive personal data is being processed; and
+(d) any other criteria the Data Commissioner may specify.
+19. Application for registration
+(1) A data controller or data processor required to register under section 18 shall apply to the Data
+Commissioner.
+(2) An application under subsection (1) shall provide the following particulars—
+(a) a description of the personal data to be processed by the data controller or data processor;
+(b) a description of the purpose for which the personal data is to be processed;

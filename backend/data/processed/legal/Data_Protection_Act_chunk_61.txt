@@ -1,0 +1,13 @@
+(b) personal data is no longer required for the purpose of the processing, unless the data
+controller or data processor requires the personal data for the establishment, exercise or
+defence of a legal claim;
+(c) processing is unlawful and the data subject opposes the erasure of the personal data and
+requests the restriction of their use instead; or
+(d) data subject has objected to the processing, pending verification as to whether the legitimate
+interests of the data controller or data processor overrides those of the data subject.
+(2) Where processing of personal data is restricted under this section—
+(a) the personal data shall, unless the data is being stored, only be processed with the data
+subject's consent or for the establishment, exercise or defence of a legal claim, the protection
+of the rights of another person or for reasons of public interest; and
+(b) the data controller shall inform the data subject before withdrawing the restriction on
+processing of the personal data.

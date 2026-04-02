@@ -1,0 +1,13 @@
+impact of the envisaged processing operations on the protection of personal data.
+(5) The data impact assessment reports shall be submitted sixty days prior to the processing of data.
+(6) The Data Commissioner shall set out guidelines for carrying out an impact assessment under this
+section.
+32. Conditions of consent
+(1) A data controller or data processor shall bear the burden of proof for establishing a data subject's
+consent to the processing of their personal data for a specified purpose.
+(2) Unless otherwise provided under this Act, a data subject shall have the right to withdraw consent at
+any time.
+(3) The withdrawal of consent under subsection (2) shall not affect the lawfulness of processing based
+on prior consent before its withdrawal.
+(4) In determining whether consent was freely given, account shall be taken of whether, among others,
+the performance of a contract, including the provision of a service, is conditional on consent to the

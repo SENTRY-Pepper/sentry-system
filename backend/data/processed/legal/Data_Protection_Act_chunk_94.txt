@@ -1,0 +1,14 @@
+Data Commissioner an amount specified in the notice.
+(2) In deciding whether to give a penalty notice to a person and determining the amount of the penalty,
+the Data Commissioner shall, so far as relevant, have regard—
+(a) to the nature, gravity and duration of the failure;
+(b) to the intentional or negligent character of the failure;
+(c) to any action taken by the data controller or data processor to mitigate the damage or
+distress suffered by data subjects;
+(d) to the degree of responsibility of the data controller or data processor, taking into account
+technical and organisational measures;
+(e) to any relevant previous failures by the data controller or data processor;
+(f) to the degree of co-operation with the Data Commissioner, in order to remedy the failure and
+mitigate the possible adverse effects of the failure;
+(g) to the categories of personal data affected by the failure;
+(h) to the manner in which the infringement became known to the Data Commissioner,

@@ -1,0 +1,17 @@
+the processing; and
+(b) a data processor involved in processing of personal data is liable for damage caused by the
+processing only if the processor—
+(i) has not complied with an obligation under the Act specifically directed at data
+processors; or
+(ii) has acted outside, or contrary to, the data controller's lawful instructions.
+(3) A data controller or data processor is not liable in the manner specified in subsection (2) if the data
+controller or data processor proves that they are not in any way responsible for the event giving rise
+to the damage.
+(4) In this section, "damage" includes financial loss and damage not involving financial loss, including
+distress.
+66. Preservation Order
+The Data Commissioner may apply to a court for a preservation order for the expeditious preservation of
+personal data including traffic data, where there is reasonable ground to believe that the data is vulnerable
+to loss or modification.
+Part IX – FINANCIAL PROVISIONS
+67. Funds of the Office

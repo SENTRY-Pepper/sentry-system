@@ -1,0 +1,14 @@
+(iv) for the performance of a task carried out in the public interest or in the exercise of
+official authority vested in the controller;
+(v) the performance of any task carried out by a public authority;
+(vi) for the exercise, by any person in the public interest, of any other functions of a public
+nature;
+(vii) for the legitimate interests pursued by the data controller or data processor by a third
+party to whom the data is disclosed, except if the processing is unwarranted in any
+particular case having regard to the harm and prejudice to the rights and freedoms or
+legitimate interests of the data subject; or
+(viii) for the purpose of historical, statistical, journalistic, literature and art or scientific
+research.
+(2) Further processing of personal data shall be in accordance with the purpose of collection.
+(3) A data controller who contravenes the provisions of subsection (1) commits an offence.
+31. Data protection impact assessment

@@ -1,0 +1,16 @@
+person's possession or control;
+(b) to establish and maintain appropriate safeguards against the identified risks;
+(c) to the pseudonymisation and encryption of personal data;
+(d) to the ability to restore the availability and access to personal data in a timely manner in the
+event of a physical or technical incident;
+(e) to verify that the safeguards are effectively implemented; and
+(f) to ensure that the safeguards are continually updated in response to new risks or
+deficiencies.
+42. Particulars of determining organisational measures
+(1) In determining the appropriate measures referred to in section 41, in particular, where the
+processing involves the transmission of data over an information and communication network, a
+data controller shall have regard to—
+(a) the state of technological development available;
+(b) the cost of implementing any of the security measures;
+(c) the special risks that exist in the processing of the data; and
+(d) the nature of the data being processed.

@@ -1,0 +1,13 @@
+such breach; and
+(b) subject to subsection (3), communicate to the data subject in writing within a reasonably
+practical period, unless the identity of the data subject cannot be established.
+(2) Where the notification to the Data Commissioner is not made within seventy-two hours, the
+notification shall be accompanied by reasons for the delay.
+(3) Where a data processor becomes aware of a personal data breach, the data processor shall notify
+the data controller without delay and where reasonably practicable, within forty-eight hours of
+becoming aware of such breach.
+(4) The data controller may delay or restrict communication referred to under subsection (1)(b) as
+necessary and proportionate for purposes of prevention, detection or investigation of an offence by
+the concerned relevant body.
+(5) The notification and communication referred to under subsection (1) shall provide sufficient
+information to allow the data subject to take protective measures against the potential

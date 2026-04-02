@@ -1,0 +1,19 @@
+PART VII – PROVISIONS ON DELEGATED POWERS
+70. Regulations
+(1) The Cabinet Secretary may make regulations generally for the better
+carrying into effect of any provisions under this Act.
+(2) Without prejudice to the foregoing, regulations made under this section may
+provide for —
+(a) designation of computer systems, networks, programs, data as
+national critical information infrastructure;
+(b) protection, preservation and management of critical information
+infrastructure;
+(c) access to, transfer and control of data in any critical information
+infrastructure;
+(d) storage and archiving of critical data or information;
+(e) audit and inspection of national critical information infrastructure;
+(f) recovery plans in the event of disaster, breach or loss of national
+critical information infrastructure or any part of it;
+(g) standard operating procedures for the conduct, search, seizure and
+collection of electronic evidence; and
+(h) mutual legal assistance.

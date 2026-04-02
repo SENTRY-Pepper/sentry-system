@@ -1,0 +1,13 @@
+(i) the terms for the use and disclosure of the traffic data to third parties.
+(3) Upon receiving the request under this section, the Central Authority shall
+take all appropriate measures to obtain necessary authorisation including any
+warrants to execute upon the request in accordance with the procedures and
+powers provided under this Act and any other relevant law.
+(4) Where the Central Authority obtains the necessary authorisation including
+any warrants to execute upon the request, the Central Authority may seek the
+support and cooperation of the requesting State during the search and seizure.
+(5) Upon conducting the measures under this section the Central Authority
+shall, subject to section 57, provide the results of such measures as well as real-
+time collection of traffic data associated with specified communications to the
+requesting State.
+64. Mutual assistance regarding the interception of content data

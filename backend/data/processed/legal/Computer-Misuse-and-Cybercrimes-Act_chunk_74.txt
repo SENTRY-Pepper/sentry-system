@@ -1,0 +1,16 @@
+to a person against whom it is issued.
+(5) A person who —
+(a) obstructs the lawful exercise of the powers under this section;
+(b) compromises the integrity or confidentiality of a computer system,
+data, or information accessed or retained under this section; or
+(c) misuses the powers granted under this section,
+commits an offence and is liable on conviction to a fine not exceeding five million
+shillings or to a term of imprisonment not exceeding three years or to both.
+49. Record of and access to seized data
+(1) Where a computer system or data has been removed or rendered
+inaccessible, following a search or a seizure under section 48, the person who
+made the search shall, at the time of the search or as soon as practicable after
+the search —
+(a) make a list of what has been seized or rendered inaccessible, and
+shall specify the date and time of seizure; and
+(b) provide a copy of the list to the occupier of the premises or the person

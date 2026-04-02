@@ -1,0 +1,15 @@
+of electronic instructions as they relate to sending of electronic debit and credit
+messages or confirmation of electronic fund transfer, issues false electronic
+instructions, commits an offence and is liable, on conviction, a fine not exceeding
+two hundred thousand shillings or imprisonment for a term not exceeding two years,
+or to both.
+40. Reporting of cyber threat
+(1) A person who operates a computer system or a computer network, whether
+public or private, shall immediately inform the Committee of any attacks, intrusions
+and other disruptions to the functioning of another computer system or network
+within twenty four hours of such attack, intrusion or disruption.
+(2) A report made under subsection (1) shall include—
+(a) information about the breach, including a summary of any information
+that the agency knows on how the breach occurred;
+(b) an estimate of the number of people affected by the breach;
+(c) an assessment of the risk of harm to the affected individuals; and

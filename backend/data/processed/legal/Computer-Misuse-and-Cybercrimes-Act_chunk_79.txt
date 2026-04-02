@@ -1,0 +1,18 @@
+(ii) disclose sufficient traffic data concerning any communication
+in order to identify the service providers and the path through
+which communication was transmitted.
+(2) The data specified in the notice shall be preserved and its integrity shall be
+maintained for a period not exceeding thirty days.
+(3) The period of preservation and maintenance of integrity may be extended for
+a period exceeding thirty days if, on an application by the police officer or authorised
+person, the court is satisfied that —
+(a) an extension of preservation is reasonably required for the purposes
+of an investigation or prosecution;
+(b) there is a risk or vulnerability that the traffic data may be modified,
+lost, destroyed or rendered inaccessible; and
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+(c) the cost of the preservation is not overly burdensome on the person
+in control of the computer system.
+(4) The person in possession or control of the computer system shall be

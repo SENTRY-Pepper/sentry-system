@@ -1,0 +1,16 @@
+respect to a national critical information infrastructure;
+"critical infrastructure" means the processes, systems, facilities,
+technologies, networks, assets and services essentials to the health, safety,
+security or economic well-being of Kenyans and the effective functioning of
+Government;
+"cybersquatting" means the acquisition of a domain name over the internet
+in bad faith to profit, mislead, destroy reputation, or deprive another from
+registering the same, if the domain name is —
+(a) similar, identical or confusingly similar to an existing trademark
+registered with the appropriate government agency at the time of
+registration;
+(b) identical or in any way similar with the name of a person other than
+the registrant, in case of a personal name; or
+(c) acquired without right or intellectual property interests in it;
+"data" means any representation of facts, information or concepts in a form
+suitable for processing in a computer system, including a program suitable to

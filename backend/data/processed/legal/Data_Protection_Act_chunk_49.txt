@@ -1,0 +1,14 @@
+(c) facilitate capacity building of staff involved in data processing operations;
+(d) provide advice on data protection impact assessment; and
+(e) co-operate with the Data Commissioner and any other authority on matters relating to data
+protection.
+Part IV – PRINCIPLES AND OBLIGATIONS OF PERSONAL DATA PROTECTION
+25. Principles of data protection
+Every data controller or data processor shall ensure that personal data is—
+(a) processed in accordance with the right to privacy of the data subject;
+(b) processed lawfully, fairly and in a transparent manner in relation to any data subject;
+(c) collected for explicit, specified and legitimate purposes and not further processed in a manner
+incompatible with those purposes;
+(d) adequate, relevant, limited to what is necessary in relation to the purposes for which it is processed;
+(e) collected only where a valid explanation is provided whenever information relating to family or
+private affairs is required;

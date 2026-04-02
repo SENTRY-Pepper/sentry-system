@@ -1,0 +1,15 @@
+the processing of such category of personal data; and
+(d) to the adequacy of protection afforded by ordinary provisions applicable to personal data.
+(3) The Data Commissioner may specify other categories of personal data, which may require
+additional safeguards or restrictions.
+18
+Data Protection Act (Cap. 411C) Kenya
+Part VI – TRANSFER OF PERSONAL DATA OUTSIDE KENYA
+48. Conditions for transfer out of Kenya
+A data controller or data processor may transfer personal data to another country only where—
+(a) the data controller or data processor has given proof to the Data Commissioner on the appropriate
+safeguards with respect to the security and protection of the personal data;
+(b) the data controller or data processor has given proof to the Data Commissioner of the appropriate
+safeguards with respect to the security and protection of personal data, and the appropriate
+safeguards including jurisdictions with commensurate data protection laws;
+(c) the transfer is necessary—

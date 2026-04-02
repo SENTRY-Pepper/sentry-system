@@ -1,0 +1,13 @@
+household activity;
+(b) if it is necessary for national security or public interest; or
+(c) disclosure is required by or under any written law or by an order of the court.
+52. Journalism, literature and art
+(1) The principles of processing personal data shall not apply where—
+(a) processing is undertaken by a person for the publication of a literary or artistic material;
+(b) data controller reasonably believes that publication would be in the public interest; and
+(c) data controller reasonably believes that, in all the circumstances, compliance with the
+provision is incompatible with the special purposes.
+(2) Subsection (1)(b) shall only apply where it can be demonstrated that the processing is in
+compliance with any self-regulatory or issued code of ethics in practice and relevant to the
+publication in question.
+(3) The Data Commissioner shall prepare a code of practice containing practical guidance in relation to

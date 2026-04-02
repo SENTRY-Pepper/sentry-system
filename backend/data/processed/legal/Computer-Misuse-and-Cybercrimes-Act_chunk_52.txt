@@ -1,0 +1,17 @@
+26. Computer fraud
+(1) A person who, with fraudulent or dishonest intent—
+(a) unlawfully gains;
+(b) occasions unlawful loss to another person; or
+(c) obtains an economic benefit for oneself or for another person, through
+any of the means described in subsection (2),
+commits an offence and is liable, on conviction, to a fine not exceeding twenty
+million shillings or imprisonment term for a term not exceeding ten years, or to both.
+(2) For purposes of subsection (1) the word "means" refers to —
+(a) an unauthorised access to a computer system, program or data;
+(b) any input, alteration, modification, deletion, suppression or generation
+of any program or data;
+(c) any interference, hindrance, impairment or obstruction with the
+functioning of a computer system;
+(d) copying, transferring or moving any data or program to any computer
+system, data or computer data storage medium other than that in
+which it is held or to a different location in any other computer system,

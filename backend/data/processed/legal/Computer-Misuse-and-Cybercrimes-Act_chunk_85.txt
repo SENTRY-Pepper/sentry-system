@@ -1,0 +1,16 @@
+other users, customers and third parties and without the disclosure of
+information and data of any party not part of the investigation;
+(e) the investigation may be frustrated or seriously prejudiced unless the
+real-time collection or recording of traffic data is permitted; and
+(f) the cost of such preservation is not overly burdensome upon the
+person in control of the computer system.
+(6) A court may, in addition to the requirement specified under subsection (3)
+require the service provider to keep confidential the order and execution of any
+power provided under this section.
+(7) A service provider who fails to comply with an order under this section
+commits an offence and is liable on conviction —
+(a) where the service provider is a corporation, to a fine not exceeding
+ten million shillings; or
+(b) in case of a principal officer of the service provider, to a fine not
+exceeding five million shillings or to imprisonment for a term not
+exceeding three years, or to both.

@@ -1,0 +1,14 @@
+be for a period of not less one hundred and twenty days, in order to enable the
+requesting State to submit a request for the search or access, seizure or securing,
+or the disclosure of the data.
+(5) Upon receipt for a request under this section, the data shall continue to be
+preserved pending the final decision being made with regard to that request.
+60. Expedited disclosure of preserved traffic data
+Where during the course of executing a request under section 57 with respect
+to a specified communication, the investigating agency discovers that a service
+provider in another State was involved in the transmission of the communication,
+the Central Authority shall expeditiously disclose to the requesting State a sufficient
+amount of traffic data to identify that service provider and the path through which
+the communication was transmitted.
+61. Mutual assistance regarding accessing of stored computer data
+(1) Subject to section 57, a requesting State may request the Central Authority

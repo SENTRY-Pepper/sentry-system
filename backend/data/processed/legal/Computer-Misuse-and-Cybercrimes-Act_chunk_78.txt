@@ -1,0 +1,15 @@
+(1) Where a police officer or an authorised person has reasonable grounds to
+believe that —
+(a) any specified traffic data stored in any computer system or computer
+data storage medium or by means of a computer system is reasonably
+required for the purposes of a criminal investigation; and
+(b) there is a risk or vulnerability that the traffic data may be modified, lost,
+destroyed or rendered inaccessible, the police officer or an authorised
+person shall serve a notice on the person who is in possession or
+control of the computer system, requiring the person to —
+(i) undertake expeditious preservation of such available traffic
+data regardless of whether one or more service providers were
+involved in the transmission of that communication; or
+(ii) disclose sufficient traffic data concerning any communication
+in order to identify the service providers and the path through
+which communication was transmitted.

@@ -1,0 +1,17 @@
+(a) make a list of what has been seized or rendered inaccessible, and
+shall specify the date and time of seizure; and
+(b) provide a copy of the list to the occupier of the premises or the person
+in control of the computer system referred to under paragraph (a).
+(2) Subject to subsection (3), a police officer or an authorised person shall, on
+request, permit a person who —
+(a) had the custody or control of the computer system;
+(b) has a right to any data or information seized or secured; or
+(c) has been acting on behalf of a person under subsection (1)(a) or (b),
+to access and copy computer data on the system or give the person
+a copy of the computer data.
+(3) The police officer or authorised person may refuse to give access or provide
+copies under subsection (2), if they have reasonable grounds for believing that
+giving the access or providing the copies, may —
+(a) constitute a criminal offence; or
+(b) prejudice —
+(i) the investigation in connection with the search that was carried

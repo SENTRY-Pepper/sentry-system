@@ -1,0 +1,16 @@
+periodically to the National Security Council.
+12. Information sharing agreements
+(1) A private entity may enter into an information sharing agreement with a
+public entity on critical information infrastructure.
+(2) An agreement under subsection (1) shall only be entered into for the
+following purposes and in line with a critical infrastructure framework—
+(a) to ensure cyber security;
+(b) for the investigation and prosecution of crimes related to cyber
+security;
+(c) for the protection of life or property of an individual; and
+(d) to protect the national security of the country.
+(3) Prior to the sharing of information under subsection (1), a party to an
+agreement shall review the information and ascertain whether the information
+contains personal details that may identify a specific person not directly related to
+a threat that amounts to a computer and cybercrime and remove such information.
+(4) A person shall not, under this Part, share information relating to the health

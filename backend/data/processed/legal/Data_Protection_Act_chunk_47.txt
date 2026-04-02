@@ -1,0 +1,14 @@
+which, by virtue of their nature, their scope or their purposes, require regular and systematic
+monitoring of data subjects; or
+8
+Data Protection Act (Cap. 411C) Kenya
+(c) the core activities of the data controller or the data processor consist of processing of
+sensitive categories of personal data.
+(2) A data protection officer may be a staff member of the data controller or data processor and may
+fulfil other tasks and duties provided that any such tasks and duties do not result in a conflict of
+interest.
+(3) A group of entities may appoint a single data protection officer provided that such officer is
+accessible by each entity.
+(4) Where a data controller or a data processor is a public body, a single data protection officer may be
+designated for several such public bodies, taking into account their organisational structures.
+(5) A person may be designated or appointed as a data protection officer, if that person has relevant

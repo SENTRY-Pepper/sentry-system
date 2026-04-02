@@ -1,0 +1,15 @@
+computer password, device, access code, or similar data from any action specified
+under subsection (1) and intends that it be used to commit or assist in commission
+of an offence under this Part commits an offence and is liable on conviction, to a
+fine not exceeding ten million shillings or to imprisonment for a term not exceeding
+five years, or to both.
+(3) Despite subsections (1) and (2), the activities described under the
+subsections do not constitute an offence if —
+(a) any act intended for the authorised training, testing or protection of a
+computer system; or
+(b) the use of a program or a computer password, access code, or similar
+data is undertaken in compliance of and in accordance with the terms
+of a judicial order issued or in exercise of any power under this Act
+or any law.
+(4) For the purposes of subsections (1) and (2), possession of any program or
+a computer password, access code, or similar data includes having —

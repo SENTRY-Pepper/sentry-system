@@ -1,0 +1,15 @@
+(c) processing is necessary for—
+(i) the establishment, exercise or defence of a legal claim;
+(ii) the purpose of carrying out the obligations and exercising specific rights of the controller or
+of the data subject; or
+(iii) protecting the vital interests of the data subject or another person where the data subject is
+physically or legally incapable of giving consent.
+46. Personal data relating to health
+(1) Personal data relating to the health of a data subject may only be processed—
+(a) by or under the responsibility of a health care provider; or
+(b) by a person subject to the obligation of professional secrecy under any law.
+(2) The condition under subsection (1) is met if the processing—
+(a) is necessary for reasons of public interest in the area of public health; or
+(b) is carried out by another person who in the circumstances owes a duty of confidentiality
+under any law.
+47. Further categories of sensitive personal data

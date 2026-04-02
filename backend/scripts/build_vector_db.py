@@ -3,7 +3,7 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 
 # Define paths relative to the 'backend' directory
-PROCESSED_DIR = "data/processed/owasp"
+BASE_PROCESSED_DIR = "data/processed"
 DB_DIR = "data/chroma_db"
 
 def build_database():
@@ -22,25 +22,20 @@ def build_database():
     metadatas = []
     ids = []
     
-    print(f"📂 Reading chunked files from {PROCESSED_DIR}...")
+    print(f"📂 Reading chunked files from all subfolders in {BASE_PROCESSED_DIR}...")
     
-    # Ensure the directory exists to avoid errors
-    if not os.path.exists(PROCESSED_DIR):
-        print(f"❌ Error: Could not find {PROCESSED_DIR}")
-        return
-
-    # Loop through all the processed text chunks
-    for filename in os.listdir(PROCESSED_DIR):
-        if filename.endswith(".txt"):
-            file_path = os.path.join(PROCESSED_DIR, filename)
-            
-            with open(file_path, 'r', encoding='utf-8') as file:
-                content = file.read()
+    # Walk through the directory tree (this will catch 'owasp' and 'legal' folders)
+    for root, _, files in os.walk(BASE_PROCESSED_DIR):
+        for filename in files:
+            if filename.endswith(".txt"):
+                file_path = os.path.join(root, filename)
                 
-            documents.append(content)
-            # Store the source file name. The LLM will use this to say "According to A01..."
-            metadatas.append({"source": filename}) 
-            ids.append(filename) # Using filename as a unique ID for the chunk
+                with open(file_path, 'r', encoding='utf-8') as file:
+                    content = file.read()
+                    
+                documents.append(content)
+                metadatas.append({"source": filename}) 
+                ids.append(filename)
 
     if not documents:
         print("⚠️ No text files found to embed. Check your processed data folder.")

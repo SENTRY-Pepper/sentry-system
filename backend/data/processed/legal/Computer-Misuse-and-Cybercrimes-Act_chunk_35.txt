@@ -1,0 +1,16 @@
+16. Unauthorised interference
+(1) A person who intentionally and without authorisation does any act which
+causes an unauthorised interference, to a computer system, program or data,
+commits an offence and is liable on conviction, to a fine not exceeding ten million
+shillings or to imprisonment for a term not exceeding five years, or to both.
+(2) For the purposes of this section, an interference is unauthorised, if the
+person whose act causes the interference —
+(a) is not entitled to cause that interference;
+(b) does not have consent to interfere from a person who is so entitled.
+(3) A person who commits an offence under subsection (1) which—
+(a) results in a significant financial loss to any person;
+(b) threatens national security;
+(c) causes physical injury or death to any person; or
+(d) threatens public health or public safety, is liable, on conviction, to a
+fine not exceeding twenty million shillings or to imprisonment for a
+term not exceeding ten years, or to both.

@@ -1,0 +1,14 @@
+data processor shall be deemed to be a data controller in respect of that processing.
+(4) A data controller or data processor shall take all reasonable steps to ensure that any person
+employed by or acting under the authority of the data controller or data processor, complies with
+the relevant security measures.
+16
+Data Protection Act (Cap. 411C) Kenya
+43. Notification and communication of breach
+(1) Where personal data has been accessed or acquired by an unauthorised person, and there is a real
+risk of harm to the data subject whose personal data has been subjected to the unauthorised access,
+a data controller shall—
+(a) notify the Data Commissioner without delay, within seventy-two hours of becoming aware of
+such breach; and
+(b) subject to subsection (3), communicate to the data subject in writing within a reasonably
+practical period, unless the identity of the data subject cannot be established.

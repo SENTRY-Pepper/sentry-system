@@ -1,0 +1,16 @@
+Computer Misuse and Cybercrimes
+(a) the interruption of a life sustaining service including the supply of
+water, health services and energy;
+(b) an adverse effect on the economy of the Republic;
+(c) an event that would result in massive casualties or fatalities;
+(d) failure or substantial disruption of the money market of the Republic;
+and
+(e) adverse and severe effect of the security of the Republic including
+intelligence and military services.
+(3) The Director shall, within a reasonable time of designating a system as
+critical infrastructure, inform the owner or operator of the system the reasons for
+the designation of the system as a critical infrastructure.
+(4) The Director shall, within a reasonable time of the declaration of any
+information infrastructure, or category or class of information infrastructure or
+any part thereof, as a critical information infrastructure, in line with a critical
+infrastructure framework issue directives to regulate —

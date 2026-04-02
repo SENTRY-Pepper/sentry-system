@@ -1,0 +1,16 @@
+proceedings and a brief summary of the related facts;
+(c) the stored computer data to be preserved and its connection to the
+offence;
+(d) any available information identifying the custodian of the stored
+computer data or the location of the computer system;
+(e) the necessity of the preservation; and
+(f) the intention to submit a request for mutual assistance for the search
+or similar access, seizure or similar securing or the disclosure of the
+stored computer data.
+(3) Upon receiving the request under this section, the Central Authority shall
+take the appropriate measures to preserve the specified data in accordance with
+the procedures and powers provided under this Act and any other relevant law.
+(4) A preservation of stored computer data effected under this section, shall
+be for a period of not less one hundred and twenty days, in order to enable the
+requesting State to submit a request for the search or access, seizure or securing,
+or the disclosure of the data.

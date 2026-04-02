@@ -1,0 +1,18 @@
+"requested State" means a state being requested to provide legal
+assistance under the terms of this Act;
+"requesting State" means a state requesting for legal assistance and may
+for the purposes of this Act include an international entity to which Kenya is
+obligated;
+"seize" with respect to a program or data includes to —
+(a) secure a computer system or part of it or a device;
+(b) make and retain a digital image or secure a copy of any program
+or data, including using an on-site equipment;
+(c) render the computer system inaccessible;
+(d) remove data in the accessed computer system; or
+(e) obtain output of data from a computer system;
+"service provider" means —
+(a) a public or private entity that provides to users of its services the
+means to communicate by use of a computer system; and
+(b) any other entity that processes or stores computer data on behalf
+of that entity or its users;
+"subscriber information" means any information contained in the form of

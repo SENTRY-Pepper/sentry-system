@@ -1,0 +1,14 @@
+report to the Committee any incidents likely to constitute a threat in the nature of
+an attack that amounts to a computer and cybercrime and the action the owner or
+operator intends to take to prevent the threat.
+(2) Upon receipt of a report by the Committee, under subsection (1), the
+National Security Council shall provide technical assistance to the owner or
+operator of a critical infrastructure to mitigate the threat.
+(3) The Director may institute an investigation of a computer and cybercrime
+attack on his or her own volition and may take necessary steps to secure any critical
+infrastructure without reference to the entity.
+(4) The Director shall submit a report on any threat in the nature of a computer
+and cybercrime reported by the owners or operators of critical infrastructure
+periodically to the National Security Council.
+12. Information sharing agreements
+(1) A private entity may enter into an information sharing agreement with a

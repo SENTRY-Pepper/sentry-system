@@ -1,0 +1,19 @@
+determine whether to provide such information or not.
+(5) Where the foreign State accepts the information subject to the conditions
+specified by the Central Authority, that State shall be bound by them.
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+59. Expedited preservation of stored computer data
+(1) Subject to section 57, a requesting State which has the intention to make
+a request for mutual legal assistance for the search or similar access, seizure or
+similar securing or the disclosure of data, may request the Central Authority to
+obtain the expeditious preservation of data stored by means of a computer system,
+located within the territory of Kenya.
+(2) When making a request under subsection (1), the requesting State shall
+specify —
+(a) the authority seeking the preservation;
+(b) the offence that is the subject of a criminal investigation or
+proceedings and a brief summary of the related facts;
+(c) the stored computer data to be preserved and its connection to the
+offence;

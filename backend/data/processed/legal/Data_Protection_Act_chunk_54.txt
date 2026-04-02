@@ -1,0 +1,14 @@
+and confidentiality of the data;
+(g) the data being collected pursuant to any law and whether such collection is voluntary or
+mandatory; and
+(h) the consequences if any, where the data subject fails to provide all or any part of the requested data.
+30. Lawful processing of personal data
+(1) A data controller or data processor shall not process personal data, unless—
+(a) the data subject consents to the processing for one or more specified purposes; or
+(b) the processing is necessary—
+(i) for the performance of a contract to which the data subject is a party or in order to
+take steps at the request of the data subject before entering into a contract;
+(ii) for compliance with any legal obligation to which the controller is subject;
+(iii) in order to protect the vital interests of the data subject or another natural person;
+(iv) for the performance of a task carried out in the public interest or in the exercise of
+official authority vested in the controller;

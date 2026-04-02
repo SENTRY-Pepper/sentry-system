@@ -1,0 +1,15 @@
+Data Commissioner may make a determination on the technical capacity of the data controller or
+data processor.
+(5) The right under this section shall not apply in circumstances where—
+(a) processing may be necessary for the performance of a task carried out in the public interest
+or in the exercise of an official authority; or
+(b) it may adversely affect the rights and freedoms of others.
+14
+Data Protection Act (Cap. 411C) Kenya
+(6) A data controller or data processor shall comply with data portability requests, at reasonable cost
+and within a period of thirty days.
+(7) Where the portability request is complex or numerous, the period under subsection (6) may be
+extended for a further period as may be determined in consultation with the Data Commissioner.
+39. Limitation to retention of personal data
+(1) A data controller or data processor shall retain personal data only as long as may be reasonably
+necessary to satisfy the purpose for which it is processed unless the retention is—

@@ -1,0 +1,15 @@
+the certificate after expiry of the certificate.
+21. Register of data controllers and data processors
+(1) The Data Commissioner shall keep and maintain a register of the registered data controllers and
+data processors.
+(2) The Data Commissioner may, at the request of a data controller or data processor, remove any entry
+in the register which has ceased to be applicable.
+(3) The register shall be a public document and available for inspection by any person.
+(4) A person may request the Data Commissioner for a certified copy of any entry in the register.
+22. Cancellation or variation of the certificate
+The Data Commissioner may, on issuance of a notice to show cause, vary terms and conditions of the
+certificate of registration or cancel the registration where—
+(a) any information given by the applicant is false or misleading; or
+(b) the holder of the registration certificate, without lawful excuse, fails to comply with any
+requirement of this Act.
+23. Compliance and audit

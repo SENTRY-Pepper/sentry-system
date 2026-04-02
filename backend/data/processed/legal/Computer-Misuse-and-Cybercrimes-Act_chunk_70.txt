@@ -1,0 +1,21 @@
+computer system commits an offence and shall be liable on conviction to a penalty
+similar to the penalty provided under that law.
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+(2) A Court shall, in determining whether to sentence a person convicted of
+an offence under this section, consider —
+(a) the manner in which the use of a computer system enhanced the
+impact of the offence;
+(b) whether the offence resulted in a commercial advantage or financial
+gain;
+(c) the value involved, whether of the consequential loss or damage
+caused, or the profit gained from commission of the offence through
+the use of a computer system;
+(d) whether there was a breach of trust or responsibility;
+(e) the number of victims or persons affected by the offence;
+(f) the conduct of the accused; and
+(g) any other matter that the court deems fit to consider.
+PART IV – INVESTIGATION PROCEDURES
+47. Scope of procedural provisions
+(1) All powers and procedures under this Act are applicable to and may be

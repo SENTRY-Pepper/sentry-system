@@ -1,0 +1,13 @@
+publication in question.
+(3) The Data Commissioner shall prepare a code of practice containing practical guidance in relation to
+the processing of personal data for purposes of Journalism, Literature and Art.
+53. Research, history and statistics
+(1) The further processing of personal data shall be compatible with the purpose of collection if the
+data is used for historical, statistical or research purposes and the data controller or data processor
+shall ensure that the further processing is carried out solely for such purposes and will not be
+published in an identifiable form.
+(2) The data controller or data processor shall take measures to establish appropriate safeguards
+against the records being used for any other purposes.
+(3) Personal data which is processed only for research purposes is exempt from the provisions of this
+Act if—
+(a) data is processed in compliance with the relevant conditions; and

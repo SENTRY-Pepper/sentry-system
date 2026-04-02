@@ -1,0 +1,17 @@
+(e) collected only where a valid explanation is provided whenever information relating to family or
+private affairs is required;
+(f) accurate and, where necessary, kept up to date, with every reasonable step being taken to ensure
+that any inaccurate personal data is erased or rectified without delay;
+(g) kept in a form which identifies the data subjects for no longer than is necessary for the purposes
+which it was collected; and
+(h) not transferred outside Kenya, unless there is proof of adequate data protection safeguards or
+consent from the data subject.
+9
+Data Protection Act (Cap. 411C) Kenya
+26. Rights of a data subject
+A data subject has a right—
+(a) to be informed of the use to which their personal data is to be put;
+(b) to access their personal data in custody of data controller or data processor;
+(c) to object to the processing of all or part of their personal data;
+(d) to correction of false or misleading data; and
+(e) to deletion of false or misleading data about them.

@@ -1,0 +1,15 @@
+(a) a description of the personal data to be processed by the data controller or data processor;
+(b) a description of the purpose for which the personal data is to be processed;
+(c) the category of data subjects, to which the personal data relates;
+(d) contact details of the data controller or data processor;
+(e) a general description of the risks, safeguards, security measures and mechanisms to ensure
+the protection of personal data;
+(f) any measures to indemnify the data subject from unlawful use of data by the data processor
+or data controller; and
+(g) any other details as may be prescribed by the Data Commissioner.
+7
+Data Protection Act (Cap. 411C) Kenya
+(3) A data controller or data processor who knowingly supplies any false or misleading detail under
+subsection (1) commits an offence.
+(4) The Data Commissioner shall issue a certificate of registration where a data controller or data
+processor meets the requirements for registration.

@@ -1,0 +1,14 @@
+(1) A data controller or data processor shall retain personal data only as long as may be reasonably
+necessary to satisfy the purpose for which it is processed unless the retention is—
+(a) required or authorised by law;
+(b) reasonably necessary for a lawful purpose;
+(c) authorised or consented by the data subject; or
+(d) for historical, statistical, journalistic literature and art or research purposes.
+(2) A data controller or data processor shall delete, erase, anonymise or pseudonymise personal data
+not necessary to be retained under subsection (1) in a manner as may be specified at the expiry of
+the retention period.
+40. Right of rectification and erasure
+(1) A data subject may request a data controller or data processor—
+(a) to rectify without undue delay personal data in its possession or under its control that is
+inaccurate, out-dated, incomplete or misleading; or
+(b) to erase or destroy without undue delay personal data that the data controller or data

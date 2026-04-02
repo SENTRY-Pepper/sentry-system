@@ -1,0 +1,12 @@
+inaccurate, out-dated, incomplete or misleading; or
+(b) to erase or destroy without undue delay personal data that the data controller or data
+processor is no longer authorised to retain, irrelevant, excessive or obtained unlawfully.
+(2) Where the data controller has shared the personal data with a third party for processing purposes,
+the data controller or data processor shall take all reasonable steps to inform third parties
+processing such data, that the data subject has requested—
+(a) the rectification of such personal data in their possession or under their control that is
+inaccurate, out-dated, incomplete or misleading; or
+(b) the erasure or destruction of such personal data that the data controller is no longer
+authorised to retain, irrelevant, excessive or obtained unlawfully.
+(3) Where a data controller or data processor is required to rectify or erase personal data under
+subsection (1), but the personal data is required for the purposes of evidence, the data controller

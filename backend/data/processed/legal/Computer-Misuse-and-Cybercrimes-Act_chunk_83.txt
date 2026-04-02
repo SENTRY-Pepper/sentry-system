@@ -1,0 +1,21 @@
+such computer system;
+(c) identify and explain the subscribers, users or unique identifier the
+subject of an investigation or prosecution suspected as may be found
+on such computer system;
+(d) identify and explain the offences identified in respect of which the
+warrant is sought; and
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+(e) explain the measures to be taken to prepare and ensure that the traffic
+data shall be sought —
+(i) while maintaining the privacy of other users, customers and
+third parties; and
+(ii) without the disclosure of data to any party not part of the
+investigation.
+(3) Where the court is satisfied with the explanations provided under subsection
+(2), the court shall issue the order provided for under subsection (1).
+(4) For purposes of subsection (1), real-time collection or recording of traffic
+data shall be ordered for a period not exceeding six months.
+(5) The court may authorize an extension of time under subsection (4), if it is
+satisfied that—

@@ -1,0 +1,17 @@
+lawful, specific and explicitly defined.
+29. Duty to notify
+A data controller or data processor shall, before collecting personal data, in so far as practicable, inform
+the data subject of—
+(a) the rights of data subject specified under section 26;
+(b) the fact that personal data is being collected;
+(c) the purpose for which the personal data is being collected;
+10
+Data Protection Act (Cap. 411C) Kenya
+(d) the third parties whose personal data has been or will be transferred to, including details of
+safeguards adopted;
+(e) the contacts of the data controller or data processor and on whether any other entity may receive
+the collected personal data;
+(f) a description of the technical and organizational security measures taken to ensure the integrity
+and confidentiality of the data;
+(g) the data being collected pursuant to any law and whether such collection is voluntary or
+mandatory; and

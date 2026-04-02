@@ -1,0 +1,14 @@
+(c) the general rules of international law as specified under Article 2(5) of the Constitution; and
+(d) any treaty and convention ratified by Kenya under Article 2(6) of the Constitution.
+Part XI – MISCELLANEOUS PROVISIONS
+72. Offences of unlawful disclosure of personal data
+(1) A data controller who, without lawful excuse, discloses personal data in any manner that is
+incompatible with the purpose for which such data has been collected commits an offence.
+(2) A data processor who, without lawful excuse, discloses personal data processed by the data
+processor without the prior authority of the data controller commits an offence.
+25
+Data Protection Act (Cap. 411C) Kenya
+(3) Subject to subsection (4), a person who—
+(a) obtains access to personal data, or obtains any information constituting such data, without
+prior authority of the data controller or data processor by whom the data is kept; or
+(b) discloses personal data to third party, commit an offence.

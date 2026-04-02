@@ -1,0 +1,17 @@
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+storage of data, whether available in a single or distributed form for use by a
+computer, and from which data is capable of being reproduced;
+"computer system" means a physical or virtual device, or a set of
+associated physical or virtual devices, which use electronic, magnetic, optical
+or other technology, to perform logical, arithmetic storage and communication
+functions on data or which perform control functions on physical or virtual
+devices including mobile devices and reference to a computer system includes
+a reference to part of a computer system;
+"content data" means the substance, its meaning or purport of a specified
+communication;
+"critical information infrastructure system or data" means an
+information system, program or data that supports or performs a function with
+respect to a national critical information infrastructure;
+"critical infrastructure" means the processes, systems, facilities,

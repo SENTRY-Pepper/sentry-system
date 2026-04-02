@@ -1,0 +1,12 @@
+(b) the cost of implementing any of the security measures;
+(c) the special risks that exist in the processing of the data; and
+(d) the nature of the data being processed.
+(2) Where a data controller is using the services of a data processor—
+(a) the data controller shall opt for a data processor who provides sufficient guarantees in
+respect of organisational measures for the purpose of complying with section 41(1); and
+(b) the data controller and the data processor shall enter into a written contract which shall
+provide that the data processor shall act only on instructions received from the data
+controller and shall be bound by obligations of the data controller.
+(3) Where a data processor processes personal data other than as instructed by the data controller, the
+data processor shall be deemed to be a data controller in respect of that processing.
+(4) A data controller or data processor shall take all reasonable steps to ensure that any person

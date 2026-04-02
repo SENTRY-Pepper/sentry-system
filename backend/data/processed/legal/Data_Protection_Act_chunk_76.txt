@@ -1,0 +1,13 @@
+(5) The notification and communication referred to under subsection (1) shall provide sufficient
+information to allow the data subject to take protective measures against the potential
+consequences of the data breach, including—
+(a) description of the nature of the data breach;
+(b) description of the measures that the data controller or data processor intends to take or has
+taken to address the data breach;
+(c) recommendation on the measures to be taken by the data subject to mitigate the adverse
+effects of the security compromise;
+(d) where applicable, the identity of the unauthorised person who may have accessed or
+acquired the personal data; and
+(e) the name and contact details of the data protection officer where applicable or other contact
+point from whom more information could be obtained.
+(6) The communication of a breach to the data subject shall not be required where the data controller

@@ -1,0 +1,16 @@
+that the agency knows on how the breach occurred;
+(b) an estimate of the number of people affected by the breach;
+(c) an assessment of the risk of harm to the affected individuals; and
+(d) an explanation of any circumstances that would delay or prevent the
+affected persons from being informed of the breach.
+(3) The Committee may propose the isolation of any computer systems or
+network suspected to have been attacked or disrupted pending the resolution of
+the issues.
+(4) A person who contravenes the provisions of subsection (1) commits an
+offence and is liable upon conviction a fine not exceeding two hundred thousand
+shillings or imprisonment for a term not exceeding two years, or to both.
+41. Employee responsibility to relinquish access codes
+(1) An employee shall, subject to any contractual agreement between
+the employer and the employee, relinquish all codes and access rights to
+their employer's computer network or system immediately upon termination of
+employment.

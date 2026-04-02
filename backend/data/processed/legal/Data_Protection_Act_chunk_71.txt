@@ -1,0 +1,16 @@
+processing the data and at the time of the processing.
+15
+Data Protection Act (Cap. 411C) Kenya
+(3) A data controller or data processor shall implement appropriate technical and organisational
+measures for ensuring that, by default, only personal data which is necessary for each specific
+purpose is processed, taking into consideration—
+(a) the amount of personal data collected;
+(b) the extent of its processing;
+(c) the period of its storage;
+(d) its accessibility; and
+(e) the cost of processing data and the technologies and tools used.
+(4) To give effect to this section, the data controller or data processor shall consider measures such as—
+(a) to identify reasonably foreseeable internal and external risks to personal data under the
+person's possession or control;
+(b) to establish and maintain appropriate safeguards against the identified risks;
+(c) to the pseudonymisation and encryption of personal data;

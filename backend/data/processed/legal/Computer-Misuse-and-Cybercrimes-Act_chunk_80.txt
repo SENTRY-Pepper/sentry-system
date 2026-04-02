@@ -1,0 +1,16 @@
+(c) the cost of the preservation is not overly burdensome on the person
+in control of the computer system.
+(4) The person in possession or control of the computer system shall be
+responsible to preserve the data specified —
+(a) for the period of notice for preservation and maintenance of integrity
+or for any extension thereof permitted by the court; and
+(b) for the period of the preservation to keep confidential any preservation
+ordered under this section.
+(5) Where the person in possession or control of the computer system is a
+service provider, the service provider shall be required to —
+(a) respond expeditiously to a request for assistance, whether to facilitate
+requests for police assistance, or mutual assistance requests; and
+(b) disclose as soon as practicable, a sufficient amount of the non-content
+data to enable a police officer or an authorised person to identify any
+other telecommunications providers involved in the transmission of
+the communication.

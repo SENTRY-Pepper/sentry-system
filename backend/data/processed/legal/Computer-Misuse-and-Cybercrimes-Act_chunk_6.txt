@@ -1,0 +1,19 @@
+"authorised person" means an officer in a law enforcement agency or
+a cybersecurity expert designated by the Cabinet Secretary responsible for
+matters relating to national security by notice in the Gazette for the purposes
+of Part III of this Act;
+"blockchain technology" means a digitized, decentralized, public ledger
+of all crypto currency transactions;
+"Cabinet Secretary" means the Cabinet Secretary responsible for matters
+relating to internal security;
+"Central Authority" means the Office of the Attorney General and
+Department of Justice;
+"Committee" means the National Computer and Cybercrimes Co-
+ordination Committee established under section 4;
+"computer data storage medium" means a device, whether physical or
+virtual, containing or designed to contain, or enabling or designed to enable
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+storage of data, whether available in a single or distributed form for use by a
+computer, and from which data is capable of being reproduced;

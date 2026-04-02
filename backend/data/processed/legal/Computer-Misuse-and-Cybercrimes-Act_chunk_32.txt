@@ -1,0 +1,17 @@
+(d) hinders, obstructs or improperly attempts to influence any person
+authorized to carry out an audit;
+(e) fails to co-operate with any person authorized to carry out an audit; or
+(f) fails to assist or provide technical assistance and support to a person
+authorized to carry out an audit.
+(6) A person shall not perform an audit on a critical information infrastructure
+unless he or she —
+(a) has been authorized in writing by the Director to perform such audit; or
+(b) is in possession of a certificate of appointment, in the prescribed form,
+issued by the Director, which certificate must be submitted to the
+owner or person in control of a critical information infrastructure at the
+commencement of the audit.
+PART III – OFFENCES
+14. Unauthorised access
+(1) A person who causes, whether temporarily or permanently, a computer
+system to perform a function, by infringing security measures, with intent to gain
+access, and knowing such access is unauthorised, commits an offence and is liable

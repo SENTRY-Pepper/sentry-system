@@ -1,0 +1,17 @@
+In this Act, unless the context otherwise requires —
+"access" means gaining entry into or intent to gain entry by a person to a
+program or data stored in a computer system and the person either—
+(a) alters, modifies or erases a program or data or any aspect related
+to the program or data in the computer system;
+(b) copies, transfers or moves a program or data to—
+(i) any computer system, device or storage medium other than
+that in which it is stored; or
+(ii) to a different location in the same computer system, device
+or storage medium in which it is stored;
+(c) causes it to be output from the computer in which it is held, whether
+by having it displayed or in any other manner; or
+(d) uses it by causing the computer to execute a program or is itself
+a function of the program;
+"Authority" means the Communications Authority of Kenya (Cap. 411A);
+"authorised person" means an officer in a law enforcement agency or
+a cybersecurity expert designated by the Cabinet Secretary responsible for

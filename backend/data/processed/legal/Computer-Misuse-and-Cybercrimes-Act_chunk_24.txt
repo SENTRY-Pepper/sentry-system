@@ -1,0 +1,16 @@
+any part thereof, as a critical information infrastructure, in line with a critical
+infrastructure framework issue directives to regulate —
+(a) the classification of data held by the critical information infrastructure;
+(b) the protection of, the storing of and archiving of data held by the critical
+information infrastructure;
+(c) cyber security incident management by the critical information
+infrastructure;
+(d) disaster contingency and recovery measures, which must be put in
+place by the critical information infrastructure;
+(e) minimum physical and technical security measures that must be
+implemented in order to protect the critical information infrastructure;
+(f) the period within which the owner, or person in control of a critical
+information infrastructure must comply with the directives; and
+(g) any other relevant matter which is necessary or expedient in order
+to promote cyber security in respect of the critical information
+infrastructure.

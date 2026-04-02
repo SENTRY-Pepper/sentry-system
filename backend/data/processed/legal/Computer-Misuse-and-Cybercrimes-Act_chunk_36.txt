@@ -1,0 +1,18 @@
+(d) threatens public health or public safety, is liable, on conviction, to a
+fine not exceeding twenty million shillings or to imprisonment for a
+term not exceeding ten years, or to both.
+(4) For the purposes of this section, it is immaterial whether or not the
+unauthorised interference is directed at —
+(a) any particular computer system, program or data;
+(b) a program or data of any kind; or
+(c) a program or data held in any particular computer system.
+(5) For the purposes of this section, it is immaterial whether an unauthorised
+modification or any intended effect of it is permanent or temporary.
+17. Unauthorised interception
+(1) A person who intentionally and without authorisation does any act which
+intercepts or causes to be intercepted, directly or indirectly and causes the
+transmission of data to or from a computer system over a telecommunication
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+system commits an offence and is liable, on conviction, to a fine not exceeding ten

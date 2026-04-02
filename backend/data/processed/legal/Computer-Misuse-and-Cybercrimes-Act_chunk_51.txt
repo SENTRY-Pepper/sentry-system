@@ -1,0 +1,19 @@
+data, resulting in inauthentic data with the intent that it be considered or acted upon
+for legal purposes as if it were authentic, regardless of whether or not the data is
+directly readable and intelligible commits an offence and is liable, on conviction, to
+fine not exceeding ten million shillings or to imprisonment for a term not exceeding
+five years, or to both.
+.
+No. 5 of 2018
+Computer Misuse and Cybercrimes
+(2) A person who commits an offence under subsection (1), dishonestly or with
+similar intent —
+(a) for wrongful gain;
+(b) for wrongful loss to another person; or
+(c) for any economic benefit for oneself or for another person,
+is liable, on conviction, to a fine not exceeding twenty million shillings or to
+imprisonment for a term not exceeding ten years, or to both.
+26. Computer fraud
+(1) A person who, with fraudulent or dishonest intent—
+(a) unlawfully gains;
+(b) occasions unlawful loss to another person; or

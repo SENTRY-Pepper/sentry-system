@@ -1,0 +1,15 @@
+(a) the data is contained in a public record;
+(b) the data subject has deliberately made the data public;
+(c) the data subject has consented to the collection from another source;
+(d) the data subject has an incapacity, the guardian appointed has consented to the collection
+from another source;
+(e) the collection from another source would not prejudice the interests of the data subject;
+(f) collection of data from another source is necessary—
+(i) for the prevention, detection, investigation, prosecution and punishment of crime;
+(ii) for the enforcement of a law which imposes a pecuniary penalty; or
+(iii) for the protection of the interests of the data subject or another person.
+(3) A data controller or data processor shall collect, store or use personal data for a purpose which is
+lawful, specific and explicitly defined.
+29. Duty to notify
+A data controller or data processor shall, before collecting personal data, in so far as practicable, inform
+the data subject of—

@@ -1,0 +1,15 @@
+(b) volume of personal data processed;
+(c) proportion of such personal data likely to be that of a child;
+(d) possibility of harm to a child arising out of processing of personal data; and
+(e) such other factors as may be specified by the Data Commissioner.
+(4) A data controller or data processor that exclusively provides counselling or child protection services
+to a child may not be required to obtain parental consent as set out under subsection (1).
+12
+Data Protection Act (Cap. 411C) Kenya
+34. Restrictions on processing
+(1) A data controller or data processor shall, at the request of a data subject, restrict the processing of
+personal data where—
+(a) accuracy of the personal data is contested by the data subject, for a period enabling the data
+controller to verify the accuracy of the data;
+(b) personal data is no longer required for the purpose of the processing, unless the data
+controller or data processor requires the personal data for the establishment, exercise or

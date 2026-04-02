@@ -1,0 +1,14 @@
+subsection (1) commits an offence.
+(4) The Data Commissioner shall issue a certificate of registration where a data controller or data
+processor meets the requirements for registration.
+(5) A data controller or data processor shall notify the Data Commissioner of a change in any particular
+outlined under subsection (2).
+(6) On receipt of a notification under subsection (5), the Data Commissioner shall amend the respective
+entry in the Register.
+(7) A data controller or data processor who fails to comply with the provisions of this section commits
+an offence.
+20. Duration of the registration certificate
+A registration certificate issued under section 19 shall be valid for a period determined at the time of the
+application after taking into account the need for the certificate, and the holder may apply for a renewal of
+the certificate after expiry of the certificate.
+21. Register of data controllers and data processors
