@@ -4,3 +4,4 @@ data/raw_documents/
 data/processed/ 
 .env 
 backend/data/chroma_db/
+backend/.env
