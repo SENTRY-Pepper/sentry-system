@@ -48,4 +48,4 @@ for file in os.listdir(INPUT_FOLDER):
             with open(out_path, "w", encoding="utf-8") as out:
                 out.write(chunk)
 
-print("✅ OWASP preprocessing complete.")
+print(">> OWASP preprocessing complete.")

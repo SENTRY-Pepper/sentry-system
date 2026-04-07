@@ -13,7 +13,7 @@ DB_DIR = "data/chroma_db"
 
 class SentryBrain:
     def __init__(self):
-        print("🧠 Waking up SENTRY...")
+        print("<<..>> Waking up SENTRY...")
         # 1. Connect to Memory (ChromaDB)
         self.db_client = chromadb.PersistentClient(path=DB_DIR)
         self.collection = self.db_client.get_collection(name="owasp_knowledge_base")
@@ -38,7 +38,7 @@ class SentryBrain:
         query_embedding = self.embedding_model.encode(user_query).tolist()
         
         # Step 2: Retrieve relevant documents
-        print(f"\n🔍 Searching memory for: '{user_query}'")
+        print(f"\n?? Searching memory for: '{user_query}'")
         results = self.collection.query(
             query_embeddings=[query_embedding],
             n_results=3
@@ -61,9 +61,9 @@ class SentryBrain:
         ]
         
         # Step 5: Generate the response
-        print("💬 Generating grounded response...")
+        print("> Generating grounded response...")
         response = client.chat.completions.create(
-            model="gpt-4o-mini", # Using a smaller model to save your budget
+            model="gpt-4o-mini", 
             messages=messages,
             temperature=0.2 # Low temperature reduces hallucination
         )
@@ -74,11 +74,11 @@ class SentryBrain:
 if __name__ == "__main__":
     sentry = SentryBrain()
     
-    # Let's test a question that should pull from your newly added legal PDFs
+    # Test a question that should pull from your newly added legal PDFs
     test_question = "What happens if I unlawfully access a computer system according to Kenyan law?"
     
     answer = sentry.ask(test_question)
     
     print("\n" + "="*50)
-    print(f"🤖 SENTRY SAYS:\n{answer}")
+    print(f">>> SENTRY SAYS:\n{answer}")
     print("="*50)
