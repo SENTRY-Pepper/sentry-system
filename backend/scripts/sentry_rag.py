@@ -1,4 +1,8 @@
 import os
+
+os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
+os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import chromadb
 from sentence_transformers import SentenceTransformer
 from openai import OpenAI
