@@ -1,36 +1,63 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel
-import os
+from sqlalchemy.orm import Session
 
-# Siliconing the HuggingFace warnings
-os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
-os.environ["TRANSFORMERS_VERBOSITY"] = "error"
+# Import our new database files
+import models
+from database import engine, get_db
 
-# Import your existing Brain logic
-from scripts.sentry_rag import SentryBrain
+# Assuming your RAG logic is wrapped in a class or function here:
+# from scripts.sentry_rag import SentryRAG 
+# rag_engine = SentryRAG()
 
-# Initialize FastAPI
-app = FastAPI(title="SENTRY AI Backend")
+# Create the database tables automatically when the app starts
+models.Base.metadata.create_all(bind=engine)
 
-# Initialize the Brain (This happens ONCE when the server starts)
-print("<<..>> SENTRY is warming up its memory...")
-sentry = SentryBrain()
-print("✅ SENTRY is online and ready!")
+app = FastAPI(title="SENTRY API Middleware")
 
-# Define what a request looks like
-class Query(BaseModel):
-    text: str
-
-@app.get("/")
-def health_check():
-    return {"status": "online", "message": "SENTRY AI Backend is running"}
+# We define what incoming data should look like
+class QueryRequest(BaseModel):
+    session_id: str
+    question: str
 
 @app.post("/ask")
-def ask_sentry(query: Query):
+def ask_sentry(request: QueryRequest, db: Session = Depends(get_db)):
     try:
-        answer = sentry.ask(query.text)
-        return {"answer": answer}
+        # 1. Run your RAG logic (Replace with your actual function call)
+        # We need the answer, the citation, and the similarity score from ChromaDB
+        # Example: answer, citation, score = rag_engine.ask(request.question)
+        
+        # --- PLACEHOLDER FOR YOUR RAG LOGIC ---
+        answer = "Phishing is a fraudulent attempt to obtain sensitive information."
+        citation = "[Source: Computer Misuse and Cybercrimes Act, 2018]"
+        score = 0.85 
+        blocked = False
+        if score < 0.7:
+            answer = "I do not have verified information on that."
+            citation = "None"
+            blocked = True
+        # --------------------------------------
+
+        # 2. Log the interaction to the Database
+        new_log = models.InteractionLog(
+            session_id=request.session_id,
+            user_query=request.question,
+            grounded_response=answer,
+            source_citation=citation,
+            similarity_score=score,
+            hallucination_blocked=blocked
+        )
+        db.add(new_log)
+        db.commit()
+        db.refresh(new_log)
+
+        # 3. Return the JSON to Timothy's robot code
+        return {
+            "status": "success",
+            "answer": answer,
+            "source": citation,
+            "log_id": new_log.log_id
+        }
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-# To run this, use the command: uvicorn main:app --reload
