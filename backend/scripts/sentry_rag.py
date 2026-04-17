@@ -1,88 +1,57 @@
-import os
-
-os.environ["HF_HUB_DISABLE_SYMLINKS_WARNING"] = "1"
-os.environ["TRANSFORMERS_VERBOSITY"] = "error"
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
 import chromadb
 from sentence_transformers import SentenceTransformer
-from openai import OpenAI
-from dotenv import load_dotenv
+import openai
+import os
 
-# Load API key from .env file
-load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+class SentryRAG:
+    def __init__(self, db_path="./chroma_db", model_name="all-MiniLM-L6-v2"):
+        # 1. Load the Embedding Model (Local)
+        self.model = SentenceTransformer(model_name)
+        
+        # 2. Connect to ChromaDB
+        self.client = chromadb.PersistentClient(path=db_path)
+        self.collection = self.client.get_or_create_collection("cyber_laws")
+        
+        # 3. Set OpenAI Key (Ensure this is in your Environment Variables)
+        openai.api_key = os.getenv("OPENAI_API_KEY")
 
-# Paths
-DB_DIR = "data/chroma_db"
+    def query(self, user_input: str, threshold: float = 0.7):
+        # A. Embed the user's question
+        query_vector = self.model.encode(user_input).tolist()
 
-class SentryBrain:
-    def __init__(self):
-        print("<<..>> Waking up SENTRY...")
-        # 1. Connect to Memory (ChromaDB)
-        self.db_client = chromadb.PersistentClient(path=DB_DIR)
-        self.collection = self.db_client.get_collection(name="owasp_knowledge_base")
+        # B. Search ChromaDB
+        results = self.collection.query(
+            query_embeddings=[query_vector],
+            n_results=3,
+            include=["documents", "metadatas", "distances"]
+        )
+
+        # C. Check Similarity (Grounding Gate)
+        # Note: ChromaDB distances are often L2; a smaller distance means higher similarity.
+        # If your distance is too high (e.g., > 1.0), the content is irrelevant.
+        if not results['documents'][0] or results['distances'][0][0] > 1.0:
+            return "I'm sorry, I don't have verified information on that in the Kenyan Cybersecurity framework.", "None", 0.0, True
+
+        # D. Construct the Grounded Prompt
+        context = "\n".join(results['documents'][0])
+        sources = ", ".join(set([m.get("source", "Unknown") for m in results['metadatas'][0]]))
         
-        # 2. Load Embedding Model
-        self.embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+        prompt = f"""
+        You are SENTRY, a cybersecurity trainer robot. Use ONLY the following legal context to answer.
+        If the answer isn't in the context, say you don't know.
         
-        # System Prompt enforces SENTRY's persona and strict grounding rules
-        self.system_prompt = """
-        You are SENTRY, a cybersecurity training robot for SMEs in Kenya. 
-        Your goal is to educate employees on cybersecurity threats safely and accurately.
-        
-        RULES:
-        1. You MUST answer the user's question using ONLY the provided context.
-        2. If the answer is not in the context, say "I don't have enough verified information to answer that." Do NOT guess.
-        3. Keep your answers conversational, concise, and easy to understand.
-        4. ALWAYS cite the source document name at the end of your response (e.g., "[Source: Data Protection Act]").
+        Context: {context}
+        User Question: {user_input}
         """
 
-    def ask(self, user_query):
-        # Step 1: Embed the user's question
-        query_embedding = self.embedding_model.encode(user_query).tolist()
-        
-        # Step 2: Retrieve relevant documents
-        print(f"\n?? Searching memory for: '{user_query}'")
-        results = self.collection.query(
-            query_embeddings=[query_embedding],
-            n_results=3
+        # E. Get Response from GPT-4o-mini
+        response = openai.ChatCompletion.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "system", "content": "You are a precise cybersecurity assistant."},
+                      {"role": "user", "content": prompt}]
         )
-        
-        # Step 3: Format the context
-        context_texts = []
-        sources = set()
-        
-        for i in range(len(results['documents'][0])):
-            context_texts.append(results['documents'][0][i])
-            sources.add(results['metadatas'][0][i]['source'])
-            
-        context_block = "\n\n---\n\n".join(context_texts)
-        
-        # Step 4: Construct the prompt for OpenAI
-        messages = [
-            {"role": "system", "content": self.system_prompt},
-            {"role": "user", "content": f"Context Information:\n{context_block}\n\nUser Question: {user_query}"}
-        ]
-        
-        # Step 5: Generate the response
-        print("> Generating grounded response...")
-        response = client.chat.completions.create(
-            model="gpt-4o-mini", 
-            messages=messages,
-            temperature=0.2 # Low temperature reduces hallucination
-        )
-        
-        return response.choices[0].message.content
 
-# Test the Engine
-if __name__ == "__main__":
-    sentry = SentryBrain()
-    
-    # Test a question that should pull from your newly added legal PDFs
-    test_question = "What happens if I unlawfully access a computer system according to Kenyan law?"
-    
-    answer = sentry.ask(test_question)
-    
-    print("\n" + "="*50)
-    print(f">>> SENTRY SAYS:\n{answer}")
-    print("="*50)
+        answer = response.choices[0].message.content
+        score = 1 - results['distances'][0][0] # Simple conversion to a 'similarity score'
+        
+        return answer, sources, score, False
