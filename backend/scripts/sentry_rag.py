@@ -12,7 +12,7 @@ class SentryRAG:
         self.client = chromadb.PersistentClient(path=db_path)
         self.collection = self.client.get_or_create_collection("cyber_laws")
         
-        # 3. Set OpenAI Key (Ensure this is in your Environment Variables)
+        # 3. Set OpenAI Key
         openai.api_key = os.getenv("OPENAI_API_KEY")
 
     def query(self, user_input: str, threshold: float = 0.7):
