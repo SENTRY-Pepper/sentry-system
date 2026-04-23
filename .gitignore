@@ -1,0 +1,38 @@
+# Environment
+.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Vector store (large binary files — regenerate from source)
+knowledge_base/vector_store/
+
+# Logs and evaluation outputs
+evaluation/logs/
+evaluation/reports/*.json
+evaluation/reports/*.csv
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
