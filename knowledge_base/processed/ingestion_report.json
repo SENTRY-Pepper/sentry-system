@@ -1,0 +1,100 @@
+{
+  "collection": "sentry_knowledge",
+  "total_documents": 18,
+  "total_chunks": 175,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "chunk_size_tokens": 512,
+  "chunk_overlap_tokens": 64,
+  "documents": [
+    {
+      "source": "0x00_2025-Introduction.md",
+      "doc_type": "owasp",
+      "chunks_added": 8
+    },
+    {
+      "source": "0x01_2025-About_OWASP.md",
+      "doc_type": "owasp",
+      "chunks_added": 1
+    },
+    {
+      "source": "0x02_2025-What_are_Application_Security_Risks.md",
+      "doc_type": "owasp",
+      "chunks_added": 4
+    },
+    {
+      "source": "0x03_2025-Establishing_a_Modern_Application_Security_Program.md",
+      "doc_type": "owasp",
+      "chunks_added": 8
+    },
+    {
+      "source": "A01_2025-Broken_Access_Control.md",
+      "doc_type": "owasp",
+      "chunks_added": 6
+    },
+    {
+      "source": "A02_2025-Security_Misconfiguration.md",
+      "doc_type": "owasp",
+      "chunks_added": 4
+    },
+    {
+      "source": "A03_2025-Software_Supply_Chain_Failures.md",
+      "doc_type": "owasp",
+      "chunks_added": 6
+    },
+    {
+      "source": "A04_2025-Cryptographic_Failures.md",
+      "doc_type": "owasp",
+      "chunks_added": 7
+    },
+    {
+      "source": "A05_2025-Injection.md",
+      "doc_type": "owasp",
+      "chunks_added": 7
+    },
+    {
+      "source": "A06_2025-Insecure_Design.md",
+      "doc_type": "owasp",
+      "chunks_added": 7
+    },
+    {
+      "source": "A07_2025-Authentication_Failures.md",
+      "doc_type": "owasp",
+      "chunks_added": 6
+    },
+    {
+      "source": "A08_2025-Software_or_Data_Integrity_Failures.md",
+      "doc_type": "owasp",
+      "chunks_added": 4
+    },
+    {
+      "source": "A09_2025-Security_Logging_and_Alerting_Failures.md",
+      "doc_type": "owasp",
+      "chunks_added": 5
+    },
+    {
+      "source": "A10_2025-Mishandling_of_Exceptional_Conditions.md",
+      "doc_type": "owasp",
+      "chunks_added": 6
+    },
+    {
+      "source": "index.md",
+      "doc_type": "owasp",
+      "chunks_added": 2
+    },
+    {
+      "source": "X01_2025-Next_Steps.md",
+      "doc_type": "owasp",
+      "chunks_added": 12
+    },
+    {
+      "source": "Computer-Misuse-and-Cybercrimes-Act.pdf",
+      "doc_type": "legal",
+      "chunks_added": 46
+    },
+    {
+      "source": "Data Protection Act.pdf",
+      "doc_type": "legal",
+      "chunks_added": 36
+    }
+  ]
+}
