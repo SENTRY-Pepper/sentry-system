@@ -12,7 +12,7 @@ BCT 2406 Final Year Project | 2025–2026
 | Derick Richard Tsumah | SCT212-0192/2022 | Generative AI Grounding & RAG Integration |
 | Timothy Wachira | SCT212-0178/2021 | Human-Robot Interaction, Scenarios & Analytics |
 
-**Supervisors:** Dr. Eunice Njeri · Prof. Waweru Mwangi
+**Supervisors:** Dr. Eunice Njeri · Dr. Richard Rimiru
 
 ---
 
