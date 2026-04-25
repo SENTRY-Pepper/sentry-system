@@ -88,6 +88,16 @@ class Settings:
     EVAL_REPORT_DIR: Path = PROJECT_ROOT / "evaluation" / "reports"
 
     # ------------------------------------------------------------------
+    # PostgreSQL Database
+    # Used by: backend/database/connection.py
+    # ------------------------------------------------------------------
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "")
+    DATABASE_URL_SYNC: str = os.getenv("DATABASE_URL_SYNC", "")
+
+    # Network
+    LAPTOP_LOCAL_IP: str = os.getenv("LAPTOP_LOCAL_IP", "localhost")
+
+    # ------------------------------------------------------------------
     # Tokenizer (tiktoken) — for chunk sizing and prompt cost estimation
     # Used by: ai_engine/embeddings/chunker.py
     # ------------------------------------------------------------------
@@ -105,8 +115,12 @@ class Settings:
                 "OPENAI_API_KEY is not set. Add it to your .env file.\n"
                 f"Expected location: {PROJECT_ROOT / '.env'}"
             )
+        if not self.DATABASE_URL:
+            print(
+                "[SENTRY WARNING] DATABASE_URL is not set. "
+                "Session logging will not work."
+            )
         if not self.PEPPER_IP:
-            # Non-fatal — warn only, Pepper may not be connected during dev
             print(
                 "[SENTRY WARNING] PEPPER_IP is not set. "
                 "Middleware will run but cannot reach the robot."
