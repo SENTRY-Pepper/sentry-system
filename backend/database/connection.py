@@ -32,7 +32,8 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 from config.settings import settings
-
+from typing import AsyncGenerator
+from sqlalchemy.ext.asyncio import AsyncSession
 
 # ------------------------------------------------------------------
 # SQLAlchemy async engine
@@ -72,7 +73,7 @@ class Base(DeclarativeBase):
 # FastAPI dependency — injected into route handlers
 # ------------------------------------------------------------------
 
-async def get_db() -> AsyncSession:
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
     Yields an async database session for use in a single request.
     Automatically closes the session when the request completes,
@@ -92,7 +93,6 @@ async def get_db() -> AsyncSession:
         except Exception:
             await session.rollback()
             raise
-
 
 # ------------------------------------------------------------------
 # Table initialisation — called at server startup
