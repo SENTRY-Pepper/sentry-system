@@ -21,6 +21,9 @@ Dependencies used:
     chromadb    — vector store persistence
 """
 
+import os
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+
 import sys
 import json
 from pathlib import Path
