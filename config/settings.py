@@ -13,8 +13,8 @@ import os
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
 os.environ["CHROMA_TELEMETRY"] = "False"
 
-from pathlib import Path
-from dotenv import load_dotenv
+from pathlib import Path  # noqa: E402
+from dotenv import load_dotenv  # noqa: E402
 
 # Resolve project root (one level above this file) and load .env
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
