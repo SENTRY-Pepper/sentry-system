@@ -16,17 +16,17 @@ Used by: ai_engine/rag/pipeline.py
 """
 
 import os
+
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
 os.environ["CHROMA_TELEMETRY"] = "False"
 
-from typing import List, Dict, Any
-from pathlib import Path
+from typing import List, Dict, Any  # noqa: E402
+from pathlib import Path  # noqa: E402
 
-import chromadb
+import chromadb  # noqa: E402
 
-from config.settings import settings
-from ai_engine.embeddings.embedder import Embedder
-
+from config.settings import settings  # noqa: E402
+from ai_engine.embeddings.embedder import Embedder  # noqa: E402
 
 class Retriever:
     """

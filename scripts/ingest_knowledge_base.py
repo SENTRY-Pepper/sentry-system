@@ -20,24 +20,23 @@ Dependencies used:
     Embedder    — sentence-transformer vector generation
     chromadb    — vector store persistence
 """
-
-import os
-os.environ["ANONYMIZED_TELEMETRY"] = "False"
-
 import sys
 import json
 from pathlib import Path
 
-# Add project root to path before importing project modules
+# Project root must be on path before project modules can be imported
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-import pdfplumber
-import chromadb
+import os
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
-from config.settings import settings
-from ai_engine.embeddings.chunker import Chunker
-from ai_engine.embeddings.embedder import Embedder
+import pdfplumber  # noqa: E402
+import chromadb  # noqa: E402
+
+from config.settings import settings  # noqa: E402
+from ai_engine.embeddings.chunker import Chunker  # noqa: E402
+from ai_engine.embeddings.embedder import Embedder  # noqa: E402
 
 # ------------------------------------------------------------------
 # Document readers
