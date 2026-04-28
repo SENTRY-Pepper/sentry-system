@@ -37,7 +37,6 @@ async def test_table_creation():
 
 async def test_insert_and_query():
     print("\n=== Test 3: Insert and Query ===")
-    from sqlalchemy.ext.asyncio import AsyncSession
     from backend.database.connection import AsyncSessionLocal
 
     async with AsyncSessionLocal() as db:

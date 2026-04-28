@@ -9,10 +9,10 @@ Every module imports `settings` from here — nothing reads .env directly.
 """
 
 import os
+
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
 os.environ["CHROMA_TELEMETRY"] = "False"
 
-import os
 from pathlib import Path
 from dotenv import load_dotenv
 

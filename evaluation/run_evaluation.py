@@ -42,7 +42,6 @@ import httpx
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from ai_engine.rag.pipeline import RAGPipeline
-from evaluation.metrics.hallucination_scorer import HallucinationScorer
 from evaluation.metrics.grounding_scorer import GroundingScorer
 from config.settings import settings
 
@@ -186,7 +185,6 @@ async def run_evaluation(
     print("\n[Setup] Initialising RAG pipeline...")
     pipeline = RAGPipeline()
 
-    hallucination_scorer = HallucinationScorer()
     grounding_session = GroundingScorer(
         participant_id=participant_id,
         condition=condition,
@@ -216,7 +214,6 @@ async def run_evaluation(
         for i, item in enumerate(EVALUATION_QUERIES, start=1):
             query = item["query"]
             scenario_id = item["scenario_id"]
-            scenario_type = item["scenario_type"]
 
             print(f"--- Query {i}/{len(EVALUATION_QUERIES)}: {scenario_id} ---")
             print(f"    {query}")

@@ -10,7 +10,7 @@ Used by:
     middleware/routes/analytics_routes.py
 """
 
-from typing import Optional, List
+from typing import Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
 

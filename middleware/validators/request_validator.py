@@ -86,10 +86,10 @@ class QueryResponse(BaseModel):
     query: str = Field(description="The original question.")
     mode: str = Field(description="'grounded' or 'baseline'.")
     response: str = Field(description="The generated cybersecurity answer.")
-    sources: List[str] = Field(
+    sources: list[str] = Field(
         description="Source documents used to ground the response."
     )
-    retrieved_chunks: List[RetrievedChunk] = Field(
+    retrieved_chunks: list[RetrievedChunk] = Field(
         default=[],
         description="Chunks retrieved from ChromaDB (grounded mode only).",
     )
