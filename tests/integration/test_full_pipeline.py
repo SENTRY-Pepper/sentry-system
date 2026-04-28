@@ -17,7 +17,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from ai_engine.rag.pipeline import RAGPipeline
-from evaluation.metrics.hallucination_scorer import HallucinationScorer
 from evaluation.metrics.grounding_scorer import GroundingScorer
 
 
@@ -51,7 +50,6 @@ def run_integration_test():
         participant_id="INTEGRATION_TEST",
         condition="grounded",
     )
-    hallucination_scorer = HallucinationScorer()
 
     print(f"\n[Test] Running {len(EVALUATION_QUERIES)} query pair(s)...\n")
 

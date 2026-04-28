@@ -44,7 +44,7 @@ class GroundingScorer:
         self,
         participant_id: str,
         condition: str,
-        scenario_ids: Optional[List[str]] = None,
+        scenario_ids: Optional[list[str]] = None,
     ) -> None:
         """
         Args:

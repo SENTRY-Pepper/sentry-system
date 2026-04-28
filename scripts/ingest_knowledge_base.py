@@ -28,17 +28,16 @@ import sys
 import json
 from pathlib import Path
 
-import pdfplumber
-import chromadb
-
-# Ensure project root is on the path when running as a script
+# Add project root to path before importing project modules
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
+
+import pdfplumber
+import chromadb
 
 from config.settings import settings
 from ai_engine.embeddings.chunker import Chunker
 from ai_engine.embeddings.embedder import Embedder
-
 
 # ------------------------------------------------------------------
 # Document readers

@@ -17,6 +17,7 @@ Used by: ai_engine/rag/pipeline.py
 
 import os
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["CHROMA_TELEMETRY"] = "False"
 
 from typing import List, Dict, Any
 from pathlib import Path

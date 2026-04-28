@@ -13,7 +13,7 @@ Used by:
     - ai_engine/rag/retriever.py        (embed user query at retrieval time)
 """
 
-from typing import List, Union
+from typing import List
 from sentence_transformers import SentenceTransformer
 from config.settings import settings
 

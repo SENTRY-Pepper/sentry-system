@@ -25,6 +25,8 @@ Used by:
     middleware/routes/analytics_routes.py
 """
 
+from typing import AsyncGenerator
+
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -32,8 +34,6 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import DeclarativeBase
 from config.settings import settings
-from typing import AsyncGenerator
-from sqlalchemy.ext.asyncio import AsyncSession
 
 # ------------------------------------------------------------------
 # SQLAlchemy async engine
@@ -85,7 +85,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
         async def my_route(db: AsyncSession = Depends(get_db)):
             result = await db.execute(select(MyModel))
-    """
+    """  
     async with AsyncSessionLocal() as session:
         try:
             yield session

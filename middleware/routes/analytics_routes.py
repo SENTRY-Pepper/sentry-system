@@ -26,7 +26,6 @@ from backend.database.connection import get_db
 from backend.database.models import (
     TrainingSession,
     EvaluationLog,
-    ScenarioInteraction,
 )
 from middleware.validators.session_validator import (
     SessionSummary,
@@ -94,13 +93,13 @@ async def get_study_analytics(db: AsyncSession = Depends(get_db)):
     grounded_gain = await db.scalar(
         select(func.avg(TrainingSession.knowledge_gain)).where(
             TrainingSession.condition == "grounded",
-            TrainingSession.is_complete == True,
+            TrainingSession.is_complete.is_(True),
         )
     )
     baseline_gain = await db.scalar(
         select(func.avg(TrainingSession.knowledge_gain)).where(
             TrainingSession.condition == "baseline",
-            TrainingSession.is_complete == True,
+            TrainingSession.is_complete.is_(True),
         )
     )
 
@@ -188,7 +187,7 @@ async def get_organisation_analytics(
     completed = await db.scalar(
         select(func.count(TrainingSession.id)).where(
             TrainingSession.organisation_id == organisation_id,
-            TrainingSession.is_complete == True,
+            TrainingSession.is_complete.is_(True),
         )
     )
     mean_pre = await db.scalar(
