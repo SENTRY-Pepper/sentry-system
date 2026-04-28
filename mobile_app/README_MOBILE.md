@@ -30,6 +30,24 @@ Android App
 
 ---
 
+## Current Backend Status
+
+The FastAPI middleware is fully built and running. Before starting Android development,
+confirm you can reach the server:
+
+```bash
+curl http://YOUR_LAPTOP_IP:8000/health
+# Expected: {"status":"healthy","pipeline_ready":true,...}
+```
+
+All endpoints Timothy's app needs are live. The full API contract is documented at:
+- Interactive: `http://localhost:8000/docs`
+- JSON spec: `docs/api_specs/sentry_api_spec.json`
+
+The exact request/response shapes for Kotlin data classes are defined in
+`middleware/validators/session_validator.py` and `middleware/validators/request_validator.py`.
+
+
 ## Prerequisites
 
 | Tool | Version | Download |
