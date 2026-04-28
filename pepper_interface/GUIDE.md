@@ -1,3 +1,18 @@
+## Current Integration Status
+
+| Component | Status |
+|---|---|
+| FastAPI middleware server | Complete — running on port 8000 |
+| `/api/v1/query` endpoint | Complete — grounded RAG responses |
+| `/api/v1/query/baseline` endpoint | Complete — control condition |
+| `/api/v1/sessions/*` endpoints | Complete — full session lifecycle |
+| `/api/v1/analytics/*` endpoints | Complete — study + org analytics |
+| PostgreSQL database | Complete — 4 tables initialised |
+| API documentation | `http://localhost:8000/docs` |
+| OpenAPI spec | `docs/api_specs/sentry_api_spec.json` |
+| Android app | Your workstream — see `mobile_app/README_MOBILE.md` |
+| NAOqi Pepper layer | Your workstream — this guide |
+
 sentry-system/
 │
 ├── ai_engine/                      # DERICK — RAG + LLM (unchanged)
