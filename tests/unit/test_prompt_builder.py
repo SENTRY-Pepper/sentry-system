@@ -5,6 +5,7 @@ Run: python tests/unit/test_prompt_builder.py
 
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from ai_engine.rag.prompt_builder import PromptBuilder
@@ -67,9 +68,7 @@ def test_baseline_prompt():
     print("\n=== Test 2: Baseline Prompt Assembly ===")
     builder = PromptBuilder()
 
-    result = builder.build_baseline_prompt(
-        "What is SQL injection?"
-    )
+    result = builder.build_baseline_prompt("What is SQL injection?")
 
     print(f"Query tokens:   {result['query_tokens']}")
     print(f"User message:   {result['user_message']}")

@@ -14,6 +14,7 @@ Run: python tests/integration/test_full_pipeline.py
 
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from ai_engine.rag.pipeline import RAGPipeline
@@ -67,13 +68,19 @@ def run_integration_test():
         # Score
         comparison = session.record(grounded, baseline, scenario_id=scenario_id)
 
-        print(f"    Grounded  | accuracy={comparison['grounded']['grounding_accuracy']} "
-              f"| hallucination={comparison['grounded']['hallucination_rate']} "
-              f"| latency={grounded['total_ms']}ms")
-        print(f"    Baseline  | accuracy={comparison['baseline']['grounding_accuracy']} "
-              f"| hallucination={comparison['baseline']['hallucination_rate']} "
-              f"| latency={baseline['total_ms']}ms")
-        print(f"    Improvement: +{comparison['grounding_improvement']} grounding accuracy")
+        print(
+            f"    Grounded  | accuracy={comparison['grounded']['grounding_accuracy']} "
+            f"| hallucination={comparison['grounded']['hallucination_rate']} "
+            f"| latency={grounded['total_ms']}ms"
+        )
+        print(
+            f"    Baseline  | accuracy={comparison['baseline']['grounding_accuracy']} "
+            f"| hallucination={comparison['baseline']['hallucination_rate']} "
+            f"| latency={baseline['total_ms']}ms"
+        )
+        print(
+            f"    Improvement: +{comparison['grounding_improvement']} grounding accuracy"
+        )
         print()
 
     # Generate and display report
@@ -84,8 +91,12 @@ def run_integration_test():
     agg = report["aggregate"]
     print(f"  Total queries evaluated:        {report['total_queries']}")
     print(f"  Mean grounding accuracy (RAG):  {agg['mean_grounding_accuracy']}")
-    print(f"  Mean hallucination rate (RAG):  {agg['mean_hallucination_rate_grounded']}")
-    print(f"  Mean hallucination rate (base): {agg['mean_hallucination_rate_baseline']}")
+    print(
+        f"  Mean hallucination rate (RAG):  {agg['mean_hallucination_rate_grounded']}"
+    )
+    print(
+        f"  Mean hallucination rate (base): {agg['mean_hallucination_rate_baseline']}"
+    )
     print(f"  Mean grounding improvement:     {agg['mean_grounding_improvement']}")
     print(f"  Mean latency cost (RAG vs base):{agg['mean_latency_cost_ms']} ms")
 
@@ -96,14 +107,23 @@ def run_integration_test():
     # Export DataFrame
     df = session.to_dataframe()
     print(f"\n  DataFrame ({df.shape[0]} rows × {df.shape[1]} cols):")
-    print(df[["scenario_id", "grounding_accuracy",
-              "hallucination_rate_grounded",
-              "hallucination_rate_baseline",
-              "grounding_improvement"]].to_string(index=False))
+    print(
+        df[
+            [
+                "scenario_id",
+                "grounding_accuracy",
+                "hallucination_rate_grounded",
+                "hallucination_rate_baseline",
+                "grounding_improvement",
+            ]
+        ].to_string(index=False)
+    )
 
     # Assertions
     assert report["total_queries"] == len(EVALUATION_QUERIES)
-    assert agg["mean_grounding_accuracy"] > agg["mean_hallucination_rate_baseline"] or True
+    assert (
+        agg["mean_grounding_accuracy"] > agg["mean_hallucination_rate_baseline"] or True
+    )
     assert log_path.exists()
     assert len(df) == len(EVALUATION_QUERIES)
 

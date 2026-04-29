@@ -19,11 +19,13 @@ from pydantic import BaseModel, Field, field_validator
 # Request models (Pepper → Middleware)
 # ------------------------------------------------------------------
 
+
 class QueryRequest(BaseModel):
     """
     Incoming query from the Pepper robot.
     Sent as a POST body to /api/v1/query or /api/v1/query/baseline.
     """
+
     query: str = Field(
         ...,
         min_length=3,
@@ -51,9 +53,7 @@ class QueryRequest(BaseModel):
     @classmethod
     def validate_doc_type(cls, v):
         if v is not None and v not in ("owasp", "legal"):
-            raise ValueError(
-                "doc_type_filter must be 'owasp', 'legal', or null."
-            )
+            raise ValueError("doc_type_filter must be 'owasp', 'legal', or null.")
         return v
 
     @field_validator("query")
@@ -69,8 +69,10 @@ class QueryRequest(BaseModel):
 # Response models (Middleware → Pepper)
 # ------------------------------------------------------------------
 
+
 class RetrievedChunk(BaseModel):
     """A single retrieved document chunk returned for transparency."""
+
     source: str
     doc_type: str
     score: float
@@ -83,6 +85,7 @@ class QueryResponse(BaseModel):
     Contains the generated answer plus full traceability metadata
     for the evaluation study.
     """
+
     query: str = Field(description="The original question.")
     mode: str = Field(description="'grounded' or 'baseline'.")
     response: str = Field(description="The generated cybersecurity answer.")
@@ -109,6 +112,7 @@ class QueryResponse(BaseModel):
 
 class HealthResponse(BaseModel):
     """Response shape for /health endpoint."""
+
     status: str
     pipeline_ready: bool
     knowledge_base: Dict[str, Any]
@@ -116,5 +120,6 @@ class HealthResponse(BaseModel):
 
 class ErrorResponse(BaseModel):
     """Returned when a request fails validation or processing."""
+
     error: str
     detail: Optional[str] = None

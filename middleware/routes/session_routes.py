@@ -48,6 +48,7 @@ router = APIRouter()
 # Session lifecycle
 # ------------------------------------------------------------------
 
+
 @router.post(
     "/sessions/start",
     response_model=SessionStartResponse,
@@ -126,6 +127,7 @@ async def end_session(
 
     # Update session record
     from datetime import datetime, timezone
+
     session.completed_at = datetime.now(timezone.utc)
     session.duration_seconds = body.duration_seconds
     session.pre_assessment_score = body.pre_assessment_score
@@ -144,8 +146,7 @@ async def end_session(
     db.add(assessment)
 
     logger.info(
-        f"[sessions/end] Closed session: {session.id} "
-        f"gain={knowledge_gain}"
+        f"[sessions/end] Closed session: {session.id} " f"gain={knowledge_gain}"
     )
 
     return SessionEndResponse(
@@ -163,6 +164,7 @@ async def end_session(
 # ------------------------------------------------------------------
 # Interaction logging
 # ------------------------------------------------------------------
+
 
 @router.post(
     "/sessions/interaction",
@@ -253,6 +255,7 @@ async def log_evaluation(
 # ------------------------------------------------------------------
 # Session retrieval
 # ------------------------------------------------------------------
+
 
 @router.get(
     "/sessions/{session_id}",

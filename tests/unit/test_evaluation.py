@@ -5,6 +5,7 @@ Run: python tests/unit/test_evaluation.py
 
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from evaluation.metrics.hallucination_scorer import HallucinationScorer
@@ -131,10 +132,18 @@ def test_grounding_scorer_session():
     print(f"  Session ID:                {report['session_id']}")
     print(f"  Participant:               {report['participant_id']}")
     print(f"  Total queries:             {report['total_queries']}")
-    print(f"  Mean grounding accuracy:   {report['aggregate']['mean_grounding_accuracy']}")
-    print(f"  Mean hallucination (RAG):  {report['aggregate']['mean_hallucination_rate_grounded']}")
-    print(f"  Mean hallucination (base): {report['aggregate']['mean_hallucination_rate_baseline']}")
-    print(f"  Mean improvement:          {report['aggregate']['mean_grounding_improvement']}")
+    print(
+        f"  Mean grounding accuracy:   {report['aggregate']['mean_grounding_accuracy']}"
+    )
+    print(
+        f"  Mean hallucination (RAG):  {report['aggregate']['mean_hallucination_rate_grounded']}"
+    )
+    print(
+        f"  Mean hallucination (base): {report['aggregate']['mean_hallucination_rate_baseline']}"
+    )
+    print(
+        f"  Mean improvement:          {report['aggregate']['mean_grounding_improvement']}"
+    )
 
     assert report["total_queries"] == 2
     assert report["aggregate"]["mean_grounding_accuracy"] > 0

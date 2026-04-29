@@ -6,6 +6,7 @@ Run: python tests/unit/test_llm_client.py
 
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from ai_engine.llm.client import LLMClient

@@ -87,6 +87,7 @@ MIDDLEWARE_BASE_URL = f"http://localhost:{settings.MIDDLEWARE_PORT}"
 # Middleware API helpers
 # ------------------------------------------------------------------
 
+
 async def start_session(
     client: httpx.AsyncClient,
     participant_id: str,
@@ -161,6 +162,7 @@ async def end_session(
 # Main evaluation runner
 # ------------------------------------------------------------------
 
+
 async def run_evaluation(
     participant_id: str,
     condition: str,
@@ -190,10 +192,7 @@ async def run_evaluation(
         condition=condition,
     )
 
-    async with httpx.AsyncClient(
-        base_url=MIDDLEWARE_BASE_URL, timeout=60
-    ) as client:
-
+    async with httpx.AsyncClient(base_url=MIDDLEWARE_BASE_URL, timeout=60) as client:
         # Verify server is ready
         health = await client.get("/health")
         if not health.json().get("pipeline_ready"):
@@ -232,9 +231,7 @@ async def run_evaluation(
             print(f"    Sources retrieved: {grounded_result.get('sources', [])}")
 
             # Log to PostgreSQL via middleware
-            await log_eval_record(
-                client, session_id, comparison, grounded_result
-            )
+            await log_eval_record(client, session_id, comparison, grounded_result)
 
             # Print per-query results
             g = comparison["grounded"]
@@ -256,9 +253,7 @@ async def run_evaluation(
             print()
 
         # Calculate session duration
-        duration_seconds = int(
-            (datetime.utcnow() - session_start_time).total_seconds()
-        )
+        duration_seconds = int((datetime.utcnow() - session_start_time).total_seconds())
 
         # Close the session
         session_summary = await end_session(
@@ -293,7 +288,9 @@ async def run_evaluation(
     print(f"  Pre-score:                     {pre_score}%")
     print(f"  Post-score:                    {post_score}%")
     print(f"  Knowledge gain:                {session_summary['knowledge_gain']}%")
-    print(f"  Relative improvement:          {session_summary['relative_improvement_pct']}%")
+    print(
+        f"  Relative improvement:          {session_summary['relative_improvement_pct']}%"
+    )
     print("=" * 60)
 
     # Save local session log
@@ -332,10 +329,9 @@ async def run_evaluation(
 # CLI entry point
 # ------------------------------------------------------------------
 
+
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="SENTRY Evaluation Session Runner"
-    )
+    parser = argparse.ArgumentParser(description="SENTRY Evaluation Session Runner")
     parser.add_argument(
         "--participant",
         required=True,

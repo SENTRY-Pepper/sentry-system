@@ -6,6 +6,7 @@ Run: python tests/unit/test_database.py
 import sys
 import asyncio
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from sqlalchemy import text
@@ -97,8 +98,12 @@ async def test_insert_and_query():
         db.add(eval_log)
         await db.commit()
 
-        print(f"  Interaction logged: {interaction.scenario_id} → {interaction.decision}")
-        print(f"  Assessment:         pre={assessment.pre_score} post={assessment.post_score}")
+        print(
+            f"  Interaction logged: {interaction.scenario_id} → {interaction.decision}"
+        )
+        print(
+            f"  Assessment:         pre={assessment.pre_score} post={assessment.post_score}"
+        )
         print(f"  Knowledge gain:     {assessment.knowledge_gain}%")
         print(f"  Eval log:           grounding={eval_log.grounding_accuracy}")
 

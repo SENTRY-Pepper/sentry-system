@@ -44,8 +44,7 @@ class Settings:
     # Used by: ai_engine/rag/retriever.py, scripts/ingest_knowledge_base.py
     # ------------------------------------------------------------------
     CHROMA_PERSIST_DIR: str = os.getenv(
-        "CHROMA_PERSIST_DIR",
-        str(PROJECT_ROOT / "knowledge_base" / "vector_store")
+        "CHROMA_PERSIST_DIR", str(PROJECT_ROOT / "knowledge_base" / "vector_store")
     )
     CHROMA_COLLECTION_NAME: str = os.getenv(
         "CHROMA_COLLECTION_NAME", "sentry_knowledge"

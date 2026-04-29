@@ -20,6 +20,7 @@ Dependencies used:
     Embedder    — sentence-transformer vector generation
     chromadb    — vector store persistence
 """
+
 import sys
 import os
 import json
@@ -43,6 +44,7 @@ from ai_engine.embeddings.embedder import Embedder  # noqa: E402
 # Document readers
 # ------------------------------------------------------------------
 
+
 def read_markdown_file(path: Path) -> str:
     """Read a .md file and return its text content."""
     return path.read_text(encoding="utf-8", errors="ignore")
@@ -60,13 +62,16 @@ def read_pdf_file(path: Path) -> str:
             if text and text.strip():
                 pages.append(text)
             else:
-                print(f"  [Warning] Page {page_num} in '{path.name}' yielded no text — skipping.")
+                print(
+                    f"  [Warning] Page {page_num} in '{path.name}' yielded no text — skipping."
+                )
     return "\n\n".join(pages)
 
 
 # ------------------------------------------------------------------
 # Document discovery
 # ------------------------------------------------------------------
+
 
 def collect_documents() -> list[dict]:
     """
@@ -84,11 +89,13 @@ def collect_documents() -> list[dict]:
         if not md_files:
             print(f"[Warning] No .md files found in {owasp_dir}")
         for path in md_files:
-            documents.append({
-                "path": path,
-                "source": path.name,
-                "doc_type": "owasp",
-            })
+            documents.append(
+                {
+                    "path": path,
+                    "source": path.name,
+                    "doc_type": "owasp",
+                }
+            )
         print(f"[Ingest] Found {len(md_files)} OWASP markdown file(s).")
 
     # Legal PDF files
@@ -100,11 +107,13 @@ def collect_documents() -> list[dict]:
         if not pdf_files:
             print(f"[Warning] No .pdf files found in {legal_dir}")
         for path in pdf_files:
-            documents.append({
-                "path": path,
-                "source": path.name,
-                "doc_type": "legal",
-            })
+            documents.append(
+                {
+                    "path": path,
+                    "source": path.name,
+                    "doc_type": "legal",
+                }
+            )
         print(f"[Ingest] Found {len(pdf_files)} legal PDF file(s).")
 
     return documents
@@ -113,6 +122,7 @@ def collect_documents() -> list[dict]:
 # ------------------------------------------------------------------
 # ChromaDB setup
 # ------------------------------------------------------------------
+
 
 def get_or_create_collection(client: chromadb.PersistentClient):
     """
@@ -139,6 +149,7 @@ def get_or_create_collection(client: chromadb.PersistentClient):
 # ------------------------------------------------------------------
 # Core ingestion
 # ------------------------------------------------------------------
+
 
 def ingest_document(
     doc: dict,
@@ -187,8 +198,10 @@ def ingest_document(
         source=source,
         doc_type=doc_type,
     )
-    print(f"  Produced {len(chunks)} chunk(s) "
-          f"(size={settings.RAG_CHUNK_SIZE}, overlap={settings.RAG_CHUNK_OVERLAP} tokens).")
+    print(
+        f"  Produced {len(chunks)} chunk(s) "
+        f"(size={settings.RAG_CHUNK_SIZE}, overlap={settings.RAG_CHUNK_OVERLAP} tokens)."
+    )
 
     if not chunks:
         print(f"  [Skip] No chunks produced for {source}.")
@@ -206,12 +219,14 @@ def ingest_document(
     for i, chunk in enumerate(chunks):
         chunk_id = f"chunk_{chunk_id_offset + i:06d}"
         ids.append(chunk_id)
-        metadatas.append({
-            "source": chunk["source"],
-            "doc_type": chunk["doc_type"],
-            "chunk_index": chunk["chunk_index"],
-            "token_count": chunk["token_count"],
-        })
+        metadatas.append(
+            {
+                "source": chunk["source"],
+                "doc_type": chunk["doc_type"],
+                "chunk_index": chunk["chunk_index"],
+                "token_count": chunk["token_count"],
+            }
+        )
 
     # 5. Store in ChromaDB
     collection.add(
@@ -228,6 +243,7 @@ def ingest_document(
 # ------------------------------------------------------------------
 # Ingestion summary — save to processed/ for documentation
 # ------------------------------------------------------------------
+
 
 def save_ingestion_report(report: dict) -> None:
     """
@@ -246,6 +262,7 @@ def save_ingestion_report(report: dict) -> None:
 # Entry point
 # ------------------------------------------------------------------
 
+
 def main() -> None:
     print("=" * 60)
     print("SENTRY — Knowledge Base Ingestion")
@@ -254,8 +271,10 @@ def main() -> None:
     # Validate settings (checks API key etc.)
     # OPENAI not needed here but good habit to validate early
     if not settings.OPENAI_API_KEY:
-        print("[Warning] OPENAI_API_KEY not set — ingestion will continue "
-              "but the RAG pipeline will fail at query time.")
+        print(
+            "[Warning] OPENAI_API_KEY not set — ingestion will continue "
+            "but the RAG pipeline will fail at query time."
+        )
 
     # Initialise tools
     chunker = Chunker()
@@ -272,8 +291,10 @@ def main() -> None:
     # Discover documents
     documents = collect_documents()
     if not documents:
-        print("\n[Ingest] No documents found. "
-              "Check knowledge_base/raw/owasp/ and knowledge_base/raw/legal/")
+        print(
+            "\n[Ingest] No documents found. "
+            "Check knowledge_base/raw/owasp/ and knowledge_base/raw/legal/"
+        )
         sys.exit(1)
 
     print(f"\n[Ingest] Total documents to process: {len(documents)}")
@@ -291,11 +312,13 @@ def main() -> None:
             chunk_id_offset=total_chunks,
         )
         total_chunks += chunks_added
-        report_entries.append({
-            "source": doc["source"],
-            "doc_type": doc["doc_type"],
-            "chunks_added": chunks_added,
-        })
+        report_entries.append(
+            {
+                "source": doc["source"],
+                "doc_type": doc["doc_type"],
+                "chunks_added": chunks_added,
+            }
+        )
 
     # Final verification — query ChromaDB for actual stored count
     stored_count = collection.count()
@@ -310,15 +333,17 @@ def main() -> None:
     print("=" * 60)
 
     # Save report
-    save_ingestion_report({
-        "collection": settings.CHROMA_COLLECTION_NAME,
-        "total_documents": len(documents),
-        "total_chunks": stored_count,
-        "embedding_model": settings.EMBEDDING_MODEL,
-        "chunk_size_tokens": settings.RAG_CHUNK_SIZE,
-        "chunk_overlap_tokens": settings.RAG_CHUNK_OVERLAP,
-        "documents": report_entries,
-    })
+    save_ingestion_report(
+        {
+            "collection": settings.CHROMA_COLLECTION_NAME,
+            "total_documents": len(documents),
+            "total_chunks": stored_count,
+            "embedding_model": settings.EMBEDDING_MODEL,
+            "chunk_size_tokens": settings.RAG_CHUNK_SIZE,
+            "chunk_overlap_tokens": settings.RAG_CHUNK_OVERLAP,
+            "documents": report_entries,
+        }
+    )
 
 
 if __name__ == "__main__":

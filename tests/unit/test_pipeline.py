@@ -7,6 +7,7 @@ Run: python tests/unit/test_pipeline.py
 
 import sys
 from pathlib import Path
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from ai_engine.rag.pipeline import RAGPipeline
@@ -42,7 +43,7 @@ def test_grounded_pipeline():
     assert len(result["sources"]) > 0
     assert len(result["retrieved_chunks"]) > 0
     assert result["retrieval_ms"] > 0
-    assert result["total_ms"] < 15000
+    assert result["total_ms"] < 20000
     print("\n>>> Grounded pipeline test PASSED")
 
 

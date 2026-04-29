@@ -139,8 +139,7 @@ class LLMClient:
         # Build the grounded prompt with injected context
         context_block = self._build_context_block(context_chunks)
         user_message = (
-            f"VERIFIED CONTEXT:\n{context_block}\n\n"
-            f"USER QUESTION:\n{query}"
+            f"VERIFIED CONTEXT:\n{context_block}\n\n" f"USER QUESTION:\n{query}"
         )
 
         messages = [
@@ -151,9 +150,7 @@ class LLMClient:
         result = self._call_api(messages=messages, mode="grounded")
 
         # Append sources metadata for traceability
-        result["sources_used"] = list({
-            c["source"] for c in context_chunks
-        })
+        result["sources_used"] = list({c["source"] for c in context_chunks})
 
         return result
 
@@ -192,9 +189,7 @@ class LLMClient:
             "completion_tokens": usage.completion_tokens,
         }
 
-    def _build_context_block(
-        self, chunks: List[Dict[str, Any]]
-    ) -> str:
+    def _build_context_block(self, chunks: List[Dict[str, Any]]) -> str:
         """
         Format retrieved chunks into a numbered context block
         for injection into the grounded prompt.
@@ -211,8 +206,7 @@ class LLMClient:
             score = chunk.get("score", 0.0)
 
             lines.append(
-                f"[{i}] Source: {source} ({doc_type}) | "
-                f"Relevance: {score}\n{text}"
+                f"[{i}] Source: {source} ({doc_type}) | " f"Relevance: {score}\n{text}"
             )
 
         return "\n\n".join(lines)

@@ -41,10 +41,10 @@ from config.settings import settings
 
 engine = create_async_engine(
     settings.DATABASE_URL,
-    echo=False,         # Set True to log all SQL queries (useful for debug)
-    pool_size=5,        # Number of persistent connections in the pool
-    max_overflow=10,    # Extra connections allowed beyond pool_size
-    pool_pre_ping=True, # Test connections before using (handles dropped conns)
+    echo=False,  # Set True to log all SQL queries (useful for debug)
+    pool_size=5,  # Number of persistent connections in the pool
+    max_overflow=10,  # Extra connections allowed beyond pool_size
+    pool_pre_ping=True,  # Test connections before using (handles dropped conns)
 )
 
 # Session factory — used by get_db() dependency
@@ -61,17 +61,20 @@ AsyncSessionLocal = async_sessionmaker(
 # Base class for all ORM models
 # ------------------------------------------------------------------
 
+
 class Base(DeclarativeBase):
     """
     All SQLAlchemy ORM models in SENTRY inherit from this class.
     Provides the metadata registry used by Alembic for migrations.
     """
+
     pass
 
 
 # ------------------------------------------------------------------
 # FastAPI dependency — injected into route handlers
 # ------------------------------------------------------------------
+
 
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """
@@ -85,7 +88,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
         async def my_route(db: AsyncSession = Depends(get_db)):
             result = await db.execute(select(MyModel))
-    """  
+    """
     async with AsyncSessionLocal() as session:
         try:
             yield session
@@ -94,9 +97,11 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
             await session.rollback()
             raise
 
+
 # ------------------------------------------------------------------
 # Table initialisation — called at server startup
 # ------------------------------------------------------------------
+
 
 async def init_db() -> None:
     """
