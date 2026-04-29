@@ -21,15 +21,16 @@ Dependencies used:
     chromadb    — vector store persistence
 """
 import sys
+import os
 import json
 from pathlib import Path
+
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["CHROMA_TELEMETRY"] = "False"
 
 # Project root must be on path before project modules can be imported
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
-
-import os
-os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
 import pdfplumber  # noqa: E402
 import chromadb  # noqa: E402

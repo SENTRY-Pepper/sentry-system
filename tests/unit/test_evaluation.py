@@ -76,7 +76,7 @@ def test_hallucination_scorer():
         response=GROUNDED_RESULT["response"],
         context_chunks=GROUNDED_RESULT["retrieved_chunks"],
     )
-    print(f"\nGrounded response scores:")
+    print("\nGrounded response scores:")
     print(f"  Grounding accuracy:   {grounded_score['grounding_accuracy']}")
     print(f"  Hallucination rate:   {grounded_score['hallucination_rate']}")
     print(f"  Total sentences:      {grounded_score['total_sentences']}")
@@ -88,7 +88,7 @@ def test_hallucination_scorer():
         response=BASELINE_RESULT["response"],
         context_chunks=[],
     )
-    print(f"\nBaseline response scores:")
+    print("\nBaseline response scores:")
     print(f"  Grounding accuracy:   {baseline_score['grounding_accuracy']}")
     print(f"  Hallucination rate:   {baseline_score['hallucination_rate']}")
 
