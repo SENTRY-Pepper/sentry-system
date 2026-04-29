@@ -105,9 +105,7 @@ class HallucinationScorer:
             }
 
         # Build the full context corpus from all retrieved chunks
-        context_text = " ".join(
-            c.get("text", "") for c in context_chunks
-        )
+        context_text = " ".join(c.get("text", "") for c in context_chunks)
         context_ngrams = self._get_ngrams(context_text)
 
         sentences = self._extract_sentences(response)
@@ -121,16 +119,16 @@ class HallucinationScorer:
             if is_grounded:
                 grounded_count += 1
 
-            sentence_scores.append({
-                "sentence": sentence,
-                "grounded": is_grounded,
-                "overlap_count": overlap,
-            })
+            sentence_scores.append(
+                {
+                    "sentence": sentence,
+                    "grounded": is_grounded,
+                    "overlap_count": overlap,
+                }
+            )
 
         total = len(sentences)
-        grounding_accuracy = (
-            round(grounded_count / total, 4) if total > 0 else 0.0
-        )
+        grounding_accuracy = round(grounded_count / total, 4) if total > 0 else 0.0
 
         return {
             "grounding_accuracy": grounding_accuracy,
@@ -169,13 +167,11 @@ class HallucinationScorer:
         )
 
         grounding_improvement = round(
-            grounded_score["grounding_accuracy"]
-            - baseline_score["grounding_accuracy"],
+            grounded_score["grounding_accuracy"] - baseline_score["grounding_accuracy"],
             4,
         )
         hallucination_reduction = round(
-            baseline_score["hallucination_rate"]
-            - grounded_score["hallucination_rate"],
+            baseline_score["hallucination_rate"] - grounded_score["hallucination_rate"],
             4,
         )
 
@@ -224,7 +220,7 @@ class HallucinationScorer:
         if len(words) < self.ngram_size:
             return set()
         return {
-            tuple(words[i: i + self.ngram_size])
+            tuple(words[i : i + self.ngram_size])
             for i in range(len(words) - self.ngram_size + 1)
         }
 

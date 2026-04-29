@@ -85,9 +85,7 @@ class PromptBuilder:
             raise ValueError("[PromptBuilder] context_chunks cannot be empty.")
 
         # Fit as many chunks as possible within the token budget
-        fitted_chunks, truncated_count = self._fit_chunks_to_budget(
-            context_chunks
-        )
+        fitted_chunks, truncated_count = self._fit_chunks_to_budget(context_chunks)
 
         # Build the formatted context block
         context_block = self._format_context_block(fitted_chunks)
@@ -189,10 +187,7 @@ class PromptBuilder:
             score = chunk.get("score", 0.0)
             text = chunk.get("text", "").strip()
 
-            header = (
-                f"[{i}] Source: {source} ({doc_type}) "
-                f"| Relevance: {score}"
-            )
+            header = f"[{i}] Source: {source} ({doc_type}) " f"| Relevance: {score}"
             lines.append(f"{header}\n{text}")
 
         return "\n\n".join(lines)

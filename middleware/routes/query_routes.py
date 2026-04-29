@@ -80,6 +80,7 @@ def _build_response(result: dict, scenario_id: str = None) -> QueryResponse:
 # Endpoints
 # ------------------------------------------------------------------
 
+
 @router.post(
     "/query",
     response_model=QueryResponse,

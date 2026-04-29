@@ -32,6 +32,7 @@ async def lifespan(app: FastAPI):
 
     # Initialise RAG pipeline
     from ai_engine.rag.pipeline import RAGPipeline
+
     app.state.pipeline = RAGPipeline()
 
     print(

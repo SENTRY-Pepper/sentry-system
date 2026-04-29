@@ -34,6 +34,7 @@ from config.settings import settings
 # Statistical helpers
 # ------------------------------------------------------------------
 
+
 def cohens_d(group1: np.ndarray, group2: np.ndarray) -> float:
     """
     Calculate Cohen's d effect size between two groups.
@@ -48,9 +49,7 @@ def cohens_d(group1: np.ndarray, group2: np.ndarray) -> float:
     if n1 < 2 or n2 < 2:
         return 0.0
     var1, var2 = np.var(group1, ddof=1), np.var(group2, ddof=1)
-    pooled_std = np.sqrt(
-        ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2)
-    )
+    pooled_std = np.sqrt(((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2))
     if pooled_std == 0:
         return 0.0
     return round(float((np.mean(group1) - np.mean(group2)) / pooled_std), 4)
@@ -82,10 +81,18 @@ def run_ttest(
     if len(grounded) < 2 or len(baseline) < 2:
         return {
             "metric": metric_name,
-            "grounded_mean": round(float(np.mean(grounded)), 4) if len(grounded) > 0 else None,
-            "grounded_std": round(float(np.std(grounded, ddof=1)), 4) if len(grounded) > 1 else None,
-            "baseline_mean": round(float(np.mean(baseline)), 4) if len(baseline) > 0 else None,
-            "baseline_std": round(float(np.std(baseline, ddof=1)), 4) if len(baseline) > 1 else None,
+            "grounded_mean": round(float(np.mean(grounded)), 4)
+            if len(grounded) > 0
+            else None,
+            "grounded_std": round(float(np.std(grounded, ddof=1)), 4)
+            if len(grounded) > 1
+            else None,
+            "baseline_mean": round(float(np.mean(baseline)), 4)
+            if len(baseline) > 0
+            else None,
+            "baseline_std": round(float(np.std(baseline, ddof=1)), 4)
+            if len(baseline) > 1
+            else None,
             "t_statistic": None,
             "p_value": None,
             "significant": False,
@@ -119,6 +126,7 @@ def run_ttest(
 # Data loading
 # ------------------------------------------------------------------
 
+
 def load_all_sessions() -> pd.DataFrame:
     """
     Load all session CSV files from evaluation/reports/ and
@@ -150,6 +158,7 @@ def load_all_sessions() -> pd.DataFrame:
 # Main analysis
 # ------------------------------------------------------------------
 
+
 def analyse(df: pd.DataFrame) -> dict:
     """
     Run the full statistical analysis on the combined dataset.
@@ -171,13 +180,33 @@ def analyse(df: pd.DataFrame) -> dict:
         )
 
     # Extract metric arrays safely
-    grounded_accuracy = grounded_df["grounding_accuracy"].values if len(grounded_df) > 0 else np.array([])
-    baseline_accuracy = baseline_df["grounding_accuracy"].values if len(baseline_df) > 0 else np.array([])
+    grounded_accuracy = (
+        grounded_df["grounding_accuracy"].values
+        if len(grounded_df) > 0
+        else np.array([])
+    )
+    baseline_accuracy = (
+        baseline_df["grounding_accuracy"].values
+        if len(baseline_df) > 0
+        else np.array([])
+    )
 
-    grounded_hallucination = grounded_df["hallucination_rate_grounded"].values if len(grounded_df) > 0 else np.array([])
-    baseline_hallucination = baseline_df["hallucination_rate_baseline"].values if len(baseline_df) > 0 else np.array([])
+    grounded_hallucination = (
+        grounded_df["hallucination_rate_grounded"].values
+        if len(grounded_df) > 0
+        else np.array([])
+    )
+    baseline_hallucination = (
+        baseline_df["hallucination_rate_baseline"].values
+        if len(baseline_df) > 0
+        else np.array([])
+    )
 
-    grounded_improvement = grounded_df["grounding_improvement"].values if len(grounded_df) > 0 else np.array([])
+    grounded_improvement = (
+        grounded_df["grounding_improvement"].values
+        if len(grounded_df) > 0
+        else np.array([])
+    )
 
     # Descriptive statistics
     def safe_mean(arr):
@@ -256,15 +285,23 @@ def print_report(report: dict) -> None:
         print(f"\n  {result['metric'].replace('_', ' ').title()}:")
         if result.get("note"):
             print(f"    Note: {result['note']}")
-            print(f"    Grounded: M={result['grounded_mean']} (n={result['n_grounded']})")
+            print(
+                f"    Grounded: M={result['grounded_mean']} (n={result['n_grounded']})"
+            )
             print(f"    Baseline: n={result['n_baseline']}")
         else:
-            print(f"    Grounded: M={result['grounded_mean']} SD={result['grounded_std']}")
-            print(f"    Baseline: M={result['baseline_mean']} SD={result['baseline_std']}")
+            print(
+                f"    Grounded: M={result['grounded_mean']} SD={result['grounded_std']}"
+            )
+            print(
+                f"    Baseline: M={result['baseline_mean']} SD={result['baseline_std']}"
+            )
             print(f"    t = {result['t_statistic']}")
             print(f"    p = {result['p_value']}")
             print(f"    Significant (p<0.05): {result['significant']}")
-            print(f"    Cohen's d = {result['cohens_d']} ({result['effect_size']} effect)")
+            print(
+                f"    Cohen's d = {result['cohens_d']} ({result['effect_size']} effect)"
+            )
 
 
 def main() -> None:
@@ -278,9 +315,7 @@ def main() -> None:
     print_report(report)
 
     # Save report — all values are now JSON-safe Python native types
-    report_path = (
-        Path(settings.EVAL_REPORT_DIR) / "final_statistical_report.json"
-    )
+    report_path = Path(settings.EVAL_REPORT_DIR) / "final_statistical_report.json"
     with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
     print(f"\n  Report saved:  {report_path}")

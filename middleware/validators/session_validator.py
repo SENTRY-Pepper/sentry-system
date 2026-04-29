@@ -19,10 +19,12 @@ from datetime import datetime
 # Session models
 # ------------------------------------------------------------------
 
+
 class SessionStartRequest(BaseModel):
     """
     Sent by the Android app when an employee begins a session.
     """
+
     participant_id: str = Field(
         ...,
         min_length=2,
@@ -50,6 +52,7 @@ class SessionStartRequest(BaseModel):
 
 class SessionStartResponse(BaseModel):
     """Returned to the app after a session is successfully created."""
+
     session_id: str
     participant_id: str
     condition: str
@@ -60,7 +63,10 @@ class SessionEndRequest(BaseModel):
     """
     Sent by the Android app when an employee completes a session.
     """
-    session_id: str = Field(..., description="The session ID from SessionStartResponse.")
+
+    session_id: str = Field(
+        ..., description="The session ID from SessionStartResponse."
+    )
     pre_assessment_score: Optional[float] = Field(
         default=None,
         ge=0.0,
@@ -82,6 +88,7 @@ class SessionEndRequest(BaseModel):
 
 class SessionEndResponse(BaseModel):
     """Returned after a session is successfully closed."""
+
     session_id: str
     participant_id: str
     duration_seconds: Optional[int]
@@ -96,11 +103,13 @@ class SessionEndResponse(BaseModel):
 # Scenario interaction models
 # ------------------------------------------------------------------
 
+
 class InteractionLogRequest(BaseModel):
     """
     Sent by the app after each scenario interaction completes.
     Logs the employee's decision and associated metrics.
     """
+
     session_id: str
     scenario_id: str = Field(
         ...,
@@ -129,6 +138,7 @@ class InteractionLogRequest(BaseModel):
 
 class InteractionLogResponse(BaseModel):
     """Confirmation of a logged interaction."""
+
     interaction_id: str
     session_id: str
     scenario_id: str
@@ -140,11 +150,13 @@ class InteractionLogResponse(BaseModel):
 # Evaluation log models
 # ------------------------------------------------------------------
 
+
 class EvaluationLogRequest(BaseModel):
     """
     Sent after each RAG query pair is scored by the evaluation module.
     Links grounding metrics to a session for the research study.
     """
+
     session_id: str
     scenario_id: Optional[str] = None
     query: str
@@ -165,8 +177,10 @@ class EvaluationLogRequest(BaseModel):
 # Analytics models
 # ------------------------------------------------------------------
 
+
 class SessionSummary(BaseModel):
     """Summary of a single session — returned in analytics responses."""
+
     session_id: str
     participant_id: str
     condition: str
@@ -180,6 +194,7 @@ class SessionSummary(BaseModel):
 
 class OrganisationAnalytics(BaseModel):
     """Aggregated analytics for an organisation's training sessions."""
+
     organisation_id: str
     total_sessions: int
     completed_sessions: int
@@ -195,6 +210,7 @@ class StudyAnalytics(BaseModel):
     Aggregated research study analytics across all participants.
     Used for the evaluation report and statistical analysis.
     """
+
     total_sessions: int
     grounded_sessions: int
     baseline_sessions: int

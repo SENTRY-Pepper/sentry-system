@@ -28,6 +28,7 @@ import chromadb  # noqa: E402
 from config.settings import settings  # noqa: E402
 from ai_engine.embeddings.embedder import Embedder  # noqa: E402
 
+
 class Retriever:
     """
     Semantic retriever backed by ChromaDB.
@@ -133,9 +134,7 @@ class Retriever:
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _format_results(
-        self, raw_results: Dict[str, Any]
-    ) -> List[Dict[str, Any]]:
+    def _format_results(self, raw_results: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
         Convert ChromaDB's raw query response into clean result dicts.
 
@@ -154,12 +153,14 @@ class Retriever:
             # Convert to similarity: 1 = identical, 0 = opposite
             similarity_score = round(1 - (distance / 2), 4)
 
-            formatted.append({
-                "text": text,
-                "source": metadata.get("source", "unknown"),
-                "doc_type": metadata.get("doc_type", "unknown"),
-                "chunk_index": metadata.get("chunk_index", -1),
-                "score": similarity_score,
-            })
+            formatted.append(
+                {
+                    "text": text,
+                    "source": metadata.get("source", "unknown"),
+                    "doc_type": metadata.get("doc_type", "unknown"),
+                    "chunk_index": metadata.get("chunk_index", -1),
+                    "score": similarity_score,
+                }
+            )
 
         return formatted

@@ -54,6 +54,7 @@ def new_uuid() -> str:
 # TrainingSession
 # ------------------------------------------------------------------
 
+
 class TrainingSession(Base):
     """
     Represents one complete training session for one employee.
@@ -64,19 +65,14 @@ class TrainingSession(Base):
     Anonymisation: participant_id is an internal code assigned by the
     organisation — SENTRY never stores names or employee IDs.
     """
+
     __tablename__ = "training_sessions"
 
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=new_uuid
-    )
-    participant_id: Mapped[str] = mapped_column(
-        String(50), nullable=False, index=True
-    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
+    participant_id: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
     # "grounded" or "baseline" — which study condition
     condition: Mapped[str] = mapped_column(String(20), nullable=False)
-    organisation_id: Mapped[Optional[str]] = mapped_column(
-        String(50), nullable=True
-    )
+    organisation_id: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     started_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=utcnow
     )
@@ -84,17 +80,12 @@ class TrainingSession(Base):
         DateTime(timezone=True), nullable=True
     )
     # Duration in seconds — computed on session end
-    duration_seconds: Mapped[Optional[int]] = mapped_column(
-        Integer, nullable=True
-    )
-    pre_assessment_score: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
-    post_assessment_score: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
+    duration_seconds: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    pre_assessment_score: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    post_assessment_score: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     knowledge_gain: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
+        Float,
+        nullable=True,
         # Computed as: post_score - pre_score
     )
     is_complete: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -122,6 +113,7 @@ class TrainingSession(Base):
 # ScenarioInteraction
 # ------------------------------------------------------------------
 
+
 class ScenarioInteraction(Base):
     """
     Records one scenario interaction within a training session.
@@ -136,40 +128,35 @@ class ScenarioInteraction(Base):
         - Correction loop count
         - Risky action frequency
     """
+
     __tablename__ = "scenario_interactions"
 
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=new_uuid
-    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
     session_id: Mapped[str] = mapped_column(
         ForeignKey("training_sessions.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
     scenario_id: Mapped[str] = mapped_column(
-        String(50), nullable=False
+        String(50),
+        nullable=False,
         # e.g. "phishing-01", "usb-drop-02"
     )
     scenario_type: Mapped[str] = mapped_column(
-        String(50), nullable=False
+        String(50),
+        nullable=False,
         # e.g. "phishing", "usb_drop", "password", "network", "social_engineering"
     )
     # "correct" or "risky"
     decision: Mapped[str] = mapped_column(String(20), nullable=False)
     # Raw text of what the employee said/selected
-    employee_response: Mapped[Optional[str]] = mapped_column(
-        Text, nullable=True
-    )
+    employee_response: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     # Milliseconds from scenario prompt to employee response
-    response_time_ms: Mapped[Optional[int]] = mapped_column(
-        Integer, nullable=True
-    )
+    response_time_ms: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     # How many times the employee was sent back to retry
     correction_loops: Mapped[int] = mapped_column(Integer, default=0)
     # AI response latency from middleware
-    ai_latency_ms: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
+    ai_latency_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     # Which documents grounded the AI response (comma-separated)
     ai_sources: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
@@ -177,9 +164,7 @@ class ScenarioInteraction(Base):
     )
 
     # Relationship
-    session: Mapped["TrainingSession"] = relationship(
-        back_populates="interactions"
-    )
+    session: Mapped["TrainingSession"] = relationship(back_populates="interactions")
 
     def __repr__(self) -> str:
         return (
@@ -192,6 +177,7 @@ class ScenarioInteraction(Base):
 # AssessmentResult
 # ------------------------------------------------------------------
 
+
 class AssessmentResult(Base):
     """
     Stores pre and post assessment scores for a session.
@@ -203,11 +189,10 @@ class AssessmentResult(Base):
     knowledge_gain = post_score - pre_score
     The main objective targets >= 30% improvement (relative gain).
     """
+
     __tablename__ = "assessment_results"
 
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=new_uuid
-    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
     session_id: Mapped[str] = mapped_column(
         ForeignKey("training_sessions.id", ondelete="CASCADE"),
         nullable=False,
@@ -216,15 +201,12 @@ class AssessmentResult(Base):
     )
     # Scores as percentages (0.0 – 100.0)
     pre_score: Mapped[float] = mapped_column(Float, nullable=False)
-    post_score: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
-    knowledge_gain: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
+    post_score: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    knowledge_gain: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     # Relative improvement percentage
     relative_improvement_pct: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
+        Float,
+        nullable=True,
         # ((post - pre) / pre) * 100
     )
     pre_taken_at: Mapped[datetime] = mapped_column(
@@ -235,9 +217,7 @@ class AssessmentResult(Base):
     )
 
     # Relationship
-    session: Mapped["TrainingSession"] = relationship(
-        back_populates="assessment"
-    )
+    session: Mapped["TrainingSession"] = relationship(back_populates="assessment")
 
     def __repr__(self) -> str:
         return (
@@ -250,6 +230,7 @@ class AssessmentResult(Base):
 # ------------------------------------------------------------------
 # EvaluationLog
 # ------------------------------------------------------------------
+
 
 class EvaluationLog(Base):
     """
@@ -265,69 +246,47 @@ class EvaluationLog(Base):
         - Aggregate statistical analysis across all participants
         - t-test and effect size computation in the final report
     """
+
     __tablename__ = "evaluation_logs"
 
-    id: Mapped[str] = mapped_column(
-        String(36), primary_key=True, default=new_uuid
-    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
     session_id: Mapped[str] = mapped_column(
         ForeignKey("training_sessions.id", ondelete="CASCADE"),
         nullable=False,
         index=True,
     )
-    scenario_id: Mapped[Optional[str]] = mapped_column(
-        String(50), nullable=True
-    )
+    scenario_id: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     query: Mapped[str] = mapped_column(Text, nullable=False)
     mode: Mapped[str] = mapped_column(
-        String(20), nullable=False
+        String(20),
+        nullable=False,
         # "grounded" or "baseline"
     )
     # AI response text
     response: Mapped[str] = mapped_column(Text, nullable=False)
     # Grounding metrics from HallucinationScorer
-    grounding_accuracy: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
-    hallucination_rate: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
-    grounding_improvement: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
+    grounding_accuracy: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    hallucination_rate: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    grounding_improvement: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     # Latency metrics
-    retrieval_ms: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
-    generation_ms: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
-    total_ms: Mapped[Optional[float]] = mapped_column(
-        Float, nullable=True
-    )
+    retrieval_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    generation_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    total_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     # Token usage
-    prompt_tokens: Mapped[Optional[int]] = mapped_column(
-        Integer, nullable=True
-    )
-    completion_tokens: Mapped[Optional[int]] = mapped_column(
-        Integer, nullable=True
-    )
+    prompt_tokens: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    completion_tokens: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     # Source documents used
     sources: Mapped[Optional[str]] = mapped_column(
-        Text, nullable=True
+        Text,
+        nullable=True,
         # Stored as comma-separated string
     )
-    logged_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=utcnow
-    )
+    logged_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
 
     # Relationship
-    session: Mapped["TrainingSession"] = relationship(
-        back_populates="eval_logs"
-    )
+    session: Mapped["TrainingSession"] = relationship(back_populates="eval_logs")
 
     def __repr__(self) -> str:
         return (
-            f"EvaluationLog(mode={self.mode}, "
-            f"grounding={self.grounding_accuracy})"
+            f"EvaluationLog(mode={self.mode}, " f"grounding={self.grounding_accuracy})"
         )

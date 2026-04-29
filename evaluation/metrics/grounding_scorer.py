@@ -54,9 +54,7 @@ class GroundingScorer:
             scenario_ids:   Optional list of scenario IDs for this session.
         """
         if condition not in ("grounded", "baseline"):
-            raise ValueError(
-                "condition must be 'grounded' or 'baseline'."
-            )
+            raise ValueError("condition must be 'grounded' or 'baseline'.")
 
         self.participant_id = participant_id
         self.condition = condition
@@ -122,12 +120,8 @@ class GroundingScorer:
         hallucination_rates_baseline = [
             r["baseline"]["hallucination_rate"] for r in self._records
         ]
-        improvements = [
-            r["grounding_improvement"] for r in self._records
-        ]
-        latency_costs = [
-            r["latency_cost_ms"] for r in self._records
-        ]
+        improvements = [r["grounding_improvement"] for r in self._records]
+        latency_costs = [r["latency_cost_ms"] for r in self._records]
 
         def mean(lst):
             return round(sum(lst) / len(lst), 4) if lst else 0.0
@@ -141,12 +135,8 @@ class GroundingScorer:
             "total_queries": len(self._records),
             "aggregate": {
                 "mean_grounding_accuracy": mean(grounding_accuracies),
-                "mean_hallucination_rate_grounded": mean(
-                    hallucination_rates_grounded
-                ),
-                "mean_hallucination_rate_baseline": mean(
-                    hallucination_rates_baseline
-                ),
+                "mean_hallucination_rate_grounded": mean(hallucination_rates_grounded),
+                "mean_hallucination_rate_baseline": mean(hallucination_rates_baseline),
                 "mean_grounding_improvement": mean(improvements),
                 "mean_latency_cost_ms": mean(latency_costs),
             },
@@ -161,9 +151,7 @@ class GroundingScorer:
         Filename includes participant ID and session ID for traceability.
         """
         report = self.generate_report()
-        filename = (
-            f"session_{self.participant_id}_{self.session_id}.json"
-        )
+        filename = f"session_{self.participant_id}_{self.session_id}.json"
         log_path = Path(settings.EVAL_LOG_DIR) / filename
 
         with open(log_path, "w", encoding="utf-8") as f:
@@ -185,17 +173,19 @@ class GroundingScorer:
         """
         rows = []
         for r in self._records:
-            rows.append({
-                "participant_id": self.participant_id,
-                "condition": self.condition,
-                "scenario_id": r.get("scenario_id", ""),
-                "query": r["query"],
-                "grounding_accuracy": r["grounded"]["grounding_accuracy"],
-                "hallucination_rate_grounded": r["grounded"]["hallucination_rate"],
-                "hallucination_rate_baseline": r["baseline"]["hallucination_rate"],
-                "grounding_improvement": r["grounding_improvement"],
-                "hallucination_reduction": r["hallucination_reduction"],
-                "latency_cost_ms": r["latency_cost_ms"],
-            })
+            rows.append(
+                {
+                    "participant_id": self.participant_id,
+                    "condition": self.condition,
+                    "scenario_id": r.get("scenario_id", ""),
+                    "query": r["query"],
+                    "grounding_accuracy": r["grounded"]["grounding_accuracy"],
+                    "hallucination_rate_grounded": r["grounded"]["hallucination_rate"],
+                    "hallucination_rate_baseline": r["baseline"]["hallucination_rate"],
+                    "grounding_improvement": r["grounding_improvement"],
+                    "hallucination_reduction": r["hallucination_reduction"],
+                    "latency_cost_ms": r["latency_cost_ms"],
+                }
+            )
 
         return pd.DataFrame(rows)

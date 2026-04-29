@@ -141,9 +141,7 @@ async def list_sessions(
     if condition:
         query = query.where(TrainingSession.condition == condition)
     if organisation_id:
-        query = query.where(
-            TrainingSession.organisation_id == organisation_id
-        )
+        query = query.where(TrainingSession.organisation_id == organisation_id)
 
     query = query.limit(limit)
     result = await db.execute(query)

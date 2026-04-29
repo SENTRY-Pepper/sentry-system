@@ -70,13 +70,15 @@ class Chunker:
             chunk_tokens = tokens[start:end]
             chunk_text = self.encoding.decode(chunk_tokens)
 
-            chunks.append({
-                "text": chunk_text,
-                "source": source,
-                "doc_type": doc_type,
-                "chunk_index": chunk_index,
-                "token_count": len(chunk_tokens),
-            })
+            chunks.append(
+                {
+                    "text": chunk_text,
+                    "source": source,
+                    "doc_type": doc_type,
+                    "chunk_index": chunk_index,
+                    "token_count": len(chunk_tokens),
+                }
+            )
 
             chunk_index += 1
 

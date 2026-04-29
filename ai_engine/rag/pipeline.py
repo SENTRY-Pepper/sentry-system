@@ -117,7 +117,7 @@ class RAGPipeline:
         generation_start = time.time()
         llm_result = self._llm.grounded_generate(
             query=query,
-            context_chunks=chunks[:prompt_data["chunks_used"]],
+            context_chunks=chunks[: prompt_data["chunks_used"]],
         )
         generation_ms = round((time.time() - generation_start) * 1000, 2)
 
@@ -198,9 +198,7 @@ class RAGPipeline:
     # Internal helpers
     # ------------------------------------------------------------------
 
-    def _no_results_response(
-        self, query: str, retrieval_ms: float
-    ) -> Dict[str, Any]:
+    def _no_results_response(self, query: str, retrieval_ms: float) -> Dict[str, Any]:
         """
         Fallback when retrieval returns no chunks.
         Returns a safe, honest response rather than hallucinating.
