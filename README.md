@@ -40,8 +40,8 @@ increasing response traceability.
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │              Employee + Android Tablet App                  │
-│         Kotlin · Retrofit · Jetpack Compose · ADB          │
-└────────────────────┬──────────────────────┬────────────────┘
+│         Kotlin · Retrofit · Jetpack Compose · ADB           │
+└────────────────────┬──────────────────────┬─────────────────┘
                      │ HTTP                 │ HTTP
           ┌──────────▼──────────┐           │
           │   Pepper Robot      │           │
@@ -50,14 +50,14 @@ increasing response traceability.
           └──────────┬──────────┘           │
                      │ HTTP                 │
 ┌────────────────────▼──────────────────────▼────────────────┐
-│              FastAPI Middleware  (port 8000)                │
+│              FastAPI Middleware  (port 8000)               │
 │   /query  /query/baseline  /sessions/*  /analytics/*       │
 └──────────────┬─────────────────────────┬───────────────────┘
                │                         │
    ┌───────────▼──────────┐  ┌───────────▼──────────┐
-   │   RAG + AI Engine    │  │  Backend + Database   │
-   │  Retriever · GPT-4   │  │  PostgreSQL 17        │
-   │  HallucinationScorer │  │  SQLAlchemy async     │
+   │   RAG + AI Engine    │  │  Backend + Database  │
+   │  Retriever · GPT-4   │  │  PostgreSQL 17       │
+   │  HallucinationScorer │  │  SQLAlchemy async    │
    └───────────┬──────────┘  └──────────────────────┘
                │
    ┌───────────▼──────────┐
