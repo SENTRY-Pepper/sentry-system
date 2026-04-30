@@ -6,12 +6,14 @@ Run: python tests/unit/test_llm_client.py
 
 import sys
 from pathlib import Path
+import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from ai_engine.llm.client import LLMClient
 
 
+@pytest.mark.live
 def test_baseline():
     print("=== Test 1: Baseline Generation ===")
     client = LLMClient()
@@ -34,6 +36,7 @@ def test_baseline():
     print(">>> Baseline test PASSED")
 
 
+@pytest.mark.live
 def test_grounded():
     print("=== Test 2: Grounded Generation ===")
     client = LLMClient()

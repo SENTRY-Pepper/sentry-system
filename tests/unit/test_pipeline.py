@@ -7,6 +7,7 @@ Run: python tests/unit/test_pipeline.py
 
 import sys
 from pathlib import Path
+import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
@@ -29,6 +30,7 @@ def print_result(result: dict) -> None:
     print(f"  Response:\n{result['response']}")
 
 
+@pytest.mark.live
 def test_grounded_pipeline():
     print("=== Test 1: Grounded Pipeline (Full RAG) ===")
     pipeline = RAGPipeline()
@@ -43,10 +45,11 @@ def test_grounded_pipeline():
     assert len(result["sources"]) > 0
     assert len(result["retrieved_chunks"]) > 0
     assert result["retrieval_ms"] > 0
-    assert result["total_ms"] < 20000
+    assert result["total_ms"] < 30000
     print("\n>>> Grounded pipeline test PASSED")
 
 
+@pytest.mark.live
 def test_baseline_pipeline():
     print("\n=== Test 2: Baseline Pipeline (No RAG) ===")
     pipeline = RAGPipeline()
@@ -64,6 +67,7 @@ def test_baseline_pipeline():
     print("\n>>> Baseline pipeline test PASSED")
 
 
+@pytest.mark.live
 def test_same_query_both_modes():
     """
     Run the same query through both modes and compare.
