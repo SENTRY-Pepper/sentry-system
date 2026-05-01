@@ -8,7 +8,6 @@ End-to-end test simulating a complete evaluation session:
     3. GroundingScorer logs the session
     4. Results are exported as a DataFrame
 
-This mirrors exactly what happens during Phase 5 (user study).
 Run: python tests/integration/test_full_pipeline.py
 """
 
