@@ -34,6 +34,7 @@ from config.settings import settings
 # Statistical helpers
 # ------------------------------------------------------------------
 
+
 def cohens_d(group1: np.ndarray, group2: np.ndarray) -> float:
     """
     Calculate Cohen's d effect size between two groups.
@@ -125,6 +126,7 @@ def run_ttest(
 # Data loading
 # ------------------------------------------------------------------
 
+
 def load_all_sessions() -> pd.DataFrame:
     """
     Load all session CSV files from evaluation/reports/ and
@@ -155,6 +157,7 @@ def load_all_sessions() -> pd.DataFrame:
 # ------------------------------------------------------------------
 # Main analysis
 # ------------------------------------------------------------------
+
 
 def analyse(df: pd.DataFrame) -> dict:
     """
