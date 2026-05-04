@@ -1,8 +1,7 @@
 """
 SENTRY — Middleware Server Entry Point
 =======================================
-FastAPI application bridging Pepper/Android app (Timothy)
-and the RAG AI engine (Derick).
+FastAPI application bridging Pepper/Android app (Timothy) and the RAG AI engine (Derick).
 
 Routers registered:
     query_routes    — /api/v1/query, /api/v1/query/baseline  (Derick)
