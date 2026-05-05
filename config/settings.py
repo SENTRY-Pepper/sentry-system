@@ -10,6 +10,7 @@ from dotenv import load_dotenv  # noqa: E402
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(PROJECT_ROOT / ".env")
 
+
 class Settings:
     # Used by: ai_engine/llm/client.py
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
@@ -19,7 +20,7 @@ class Settings:
 
     # Used by: ai_engine/embeddings/embedder.py
     EMBEDDING_MODEL: str = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")
-    EMBEDDING_DIMENSION: int = 384 
+    EMBEDDING_DIMENSION: int = 384
 
     # Used by: ai_engine/rag/retriever.py, scripts/ingest_knowledge_base.py
     CHROMA_PERSIST_DIR: str = os.getenv(
@@ -63,7 +64,6 @@ class Settings:
     TIKTOKEN_ENCODING: str = "cl100k_base"
 
     def validate(self) -> None:
-
         if not self.OPENAI_API_KEY:
             raise EnvironmentError(
                 "OPENAI_API_KEY is not set. Add it to your .env file.\n"
@@ -88,5 +88,6 @@ class Settings:
             f"chunk_size={self.RAG_CHUNK_SIZE})"
         )
 
-# Single shared instance 
+
+# Single shared instance
 settings = Settings()
