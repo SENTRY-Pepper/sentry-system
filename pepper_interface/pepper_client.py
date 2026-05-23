@@ -30,7 +30,7 @@ if _PROJECT_ROOT not in sys.path:
 
 # NAOqi SDK imports — only available on Pepper or with SDK installed
 try:
-    import qi  # noqa: F401
+    import qi  # type: ignore[import-untyped]  # noqa: F401
 
     NAOQI_AVAILABLE = True
 except ImportError:
