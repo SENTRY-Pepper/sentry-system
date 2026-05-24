@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <application
+        android:name=".SentryApplication"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SENTRY"
+        android:usesCleartextTraffic="`${usesCleartextTraffic}">
+
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SENTRY.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".auth.AuthActivity"
+            android:exported="false"
+            android:noHistory="true"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".trainee.TraineeHomeActivity"
+            android:exported="false"
+            android:clearTaskOnLaunch="true" />
+
+        <activity android:name=".trainee.SessionActivity"
+            android:exported="false"
+            android:keepScreenOn="true" />
+
+        <activity android:name=".trainee.SessionResultsActivity"
+            android:exported="false"
+            android:noHistory="true" />
+
+        <activity android:name=".admin.AdminHomeActivity"
+            android:exported="false"
+            android:clearTaskOnLaunch="true" />
+
+        <activity android:name=".admin.AnalyticsDashboardActivity"
+            android:exported="false" />
+
+        <activity android:name=".admin.ParticipantDetailActivity"
+            android:exported="false" />
+
+        <activity android:name=".chat.ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".settings.SettingsActivity"
+            android:exported="false" />
+
+    </application>
+</manifest>
