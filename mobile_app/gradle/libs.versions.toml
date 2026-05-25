@@ -23,6 +23,8 @@ material3                    = "1.3.0"
 splashscreen                 = "1.0.1"
 timber                       = "5.0.1"
 composeCharts                = "0.0.14"
+appcompat                    = "1.7.0"
+material                     = "1.12.0"
 
 [libraries]
 androidx-core-ktx            = { group = "androidx.core",        name = "core-ktx",              version.ref = "coreKtx" }
@@ -36,7 +38,6 @@ compose-ui-tooling           = { group = "androidx.compose.ui",  name = "ui-tool
 compose-ui-tooling-preview   = { group = "androidx.compose.ui",  name = "ui-tooling-preview" }
 compose-ui-test              = { group = "androidx.compose.ui",  name = "ui-test-manifest" }
 compose-material3            = { group = "androidx.compose.material3", name = "material3",       version.ref = "material3" }
-compose-material-icons       = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-navigation           = { group = "androidx.navigation",  name = "navigation-compose",    version.ref = "navigationCompose" }
 hilt-android                 = { group = "com.google.dagger",    name = "hilt-android",          version.ref = "hilt" }
 hilt-compiler                = { group = "com.google.dagger",    name = "hilt-android-compiler", version.ref = "hilt" }
@@ -55,6 +56,8 @@ compose-charts               = { group = "io.github.ehsannarmani", name = "compo
 junit                        = { group = "junit",                name = "junit",                 version.ref = "junitVersion" }
 junit-ext                    = { group = "androidx.test.ext",    name = "junit",                 version.ref = "junitExt" }
 espresso                     = { group = "androidx.test.espresso", name = "espresso-core",       version.ref = "espresso" }
+appcompat                    = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material                     = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application          = { id = "com.android.application",                    version.ref = "agp" }

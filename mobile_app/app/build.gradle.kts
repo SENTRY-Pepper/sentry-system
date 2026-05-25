@@ -77,7 +77,7 @@ dependencies {
     implementation(libs.compose.ui.graphics)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material3)
-    implementation(libs.compose.material.icons)
+    implementation("com.google.android.material:material:1.12.0")
     implementation(libs.compose.navigation)
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.compose.ui.test)
@@ -98,6 +98,8 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.timber)
     implementation(libs.compose.charts)
+    implementation(libs.appcompat)
+    implementation(libs.material)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)
