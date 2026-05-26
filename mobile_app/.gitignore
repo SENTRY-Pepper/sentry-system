@@ -1,3 +1,15 @@
+# JVM heap dumps
+*.hprof
+
+# Gradle build outputs
+.gradle/
+build/
+app/build/
+
+# Android Studio
+.idea/
+captures/
+.externalNativeBuild/
 *.iml
 .gradle
 /local.properties
@@ -13,3 +25,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Google Services (if added later)
+google-services.json
