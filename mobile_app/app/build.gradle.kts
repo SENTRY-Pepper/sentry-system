@@ -1,24 +1,23 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlin.plugin.serialization")
     kotlin("kapt")
 }
 
 android {
-    namespace   = "com.sentry.app"
-    compileSdk  = 35
+    namespace  = "com.sentry.app"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId   = "com.sentry.app"
-        minSdk          = 23
-        targetSdk       = 35
-        versionCode     = 1
-        versionName     = "1.0.0"
+        applicationId = "com.sentry.app"
+        minSdk        = 23
+        targetSdk     = 35
+        versionCode   = 1
+        versionName   = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
         buildConfigField(
             "String",
             "MIDDLEWARE_BASE_URL",
@@ -69,11 +68,11 @@ dependencies {
     // Core
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
     implementation("androidx.activity:activity-compose:1.9.2")
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
 
-    // Compose BOM
+    // Compose BOM — pins all Compose versions to a tested set
     val composeBom = platform("androidx.compose:compose-bom:2024.09.03")
     implementation(composeBom)
     androidTestImplementation(composeBom)
@@ -87,30 +86,30 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.8.5")
 
-    // Hilt
+    // Hilt — dependency injection
     implementation("com.google.dagger:hilt-android:2.52")
     kapt("com.google.dagger:hilt-android-compiler:2.52")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-    // Retrofit + OkHttp
+    // Retrofit + OkHttp — networking
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.jakewharton.retrofit2:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
-    // Serialization
+    // Kotlinx Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0")
 
-    // DataStore (encrypted token storage)
+    // DataStore — encrypted token storage
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
-    // Logging
+    // Logging — stripped from release by ProGuard
     implementation("com.jakewharton.timber:timber:5.0.1")
 
-    // AppCompat + Material (required for XML theme)
+    // AppCompat + Material — required for XML window theme
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
 
