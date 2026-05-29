@@ -1,6 +1,6 @@
 package com.sentry.app.di
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sentry.app.BuildConfig
 import com.sentry.app.data.local.TokenManager
 import com.sentry.app.data.remote.api.SentryApiService
