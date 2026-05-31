@@ -44,12 +44,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
@@ -112,6 +108,9 @@ dependencies {
     // AppCompat + Material — required for XML window theme
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
+
+    // Image loading (Pepper robot photo)
+    implementation("io.coil-kt:coil-compose:2.7.0")
 
     // Tests
     testImplementation("junit:junit:4.13.2")
