@@ -3,9 +3,9 @@ package com.sentry.app.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // SENTRY brand palette
-val SentryCyan    = Color(0xFF00BCD4)
-val SentryCyanDk  = Color(0xFF0097A7)
-val SentryCyanLt  = Color(0xFFB2EBF2)
+val SentryCyan   = Color(0xFF00BCD4)
+val SentryCyanDk = Color(0xFF0097A7)
+val SentryCyanLt = Color(0xFFB2EBF2)
 val Teal500   = Color(0xFF1D9E75)
 
 // Semantic

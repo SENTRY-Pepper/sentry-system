@@ -2,6 +2,7 @@ package com.sentry.app.features.splash
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,38 +24,33 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
+import com.sentry.app.R
+import com.sentry.app.core.navigation.UserRole
+import com.sentry.app.ui.theme.ItimFont
+import com.sentry.app.ui.theme.PhilosopherFont
 import kotlinx.coroutines.delay
 
-// Brand cyan — matches your Figma exactly
 val SentryCyan = Color(0xFF00BCD4)
 
 @Composable
 fun SplashScreen(
-    onAuthenticated: (com.sentry.app.core.navigation.UserRole) -> Unit,
+    onAuthenticated: (UserRole) -> Unit,
     onUnauthenticated: () -> Unit,
     vm: SplashViewModel = hiltViewModel(),
 ) {
-    // Fade-in animation for the content
     val alpha = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
-        // Fade in content over 600ms
         alpha.animateTo(1f, animationSpec = tween(600))
-
-        // Hold for 2.5 seconds then route
         delay(2500)
-
-        if (vm.isAuthenticated()) {
-            onAuthenticated(vm.getRole())
-        } else {
-            onUnauthenticated()
-        }
+        if (vm.isAuthenticated()) onAuthenticated(vm.getRole())
+        else onUnauthenticated()
     }
 
     Box(
@@ -70,7 +66,7 @@ fun SplashScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            // Pepper robot image in white rounded card
+            // Pepper robot in white rounded card
             Box(
                 modifier = Modifier
                     .size(width = 220.dp, height = 160.dp)
@@ -78,32 +74,33 @@ fun SplashScreen(
                     .background(Color.White),
                 contentAlignment = Alignment.Center,
             ) {
-                AsyncImage(
-                    model = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Pepper_robot.jpg/320px-Pepper_robot.jpg",
-                    contentDescription = "Pepper robot — SENTRY AI cybersecurity tutor",
+                Image(
+                    painter = painterResource(id = R.drawable.pepper_robot),
+                    contentDescription = "Pepper robot — SENTRY cybersecurity tutor",
                     modifier = Modifier
-                        .size(width = 200.dp, height = 150.dp)
-                        .clip(RoundedCornerShape(16.dp)),
+                        .size(width = 200.dp, height = 145.dp),
                     contentScale = ContentScale.Fit,
                 )
             }
 
             Spacer(Modifier.height(24.dp))
 
-            // SENTRY wordmark
+            // SENTRY wordmark — Itim font
             Text(
                 text = "SENTRY",
-                fontSize = 40.sp,
-                fontWeight = FontWeight.Bold,
+                fontFamily = ItimFont,
+                fontSize = 42.sp,
+                fontWeight = FontWeight.Normal,
                 color = Color.White,
                 letterSpacing = 6.sp,
             )
 
             Spacer(Modifier.height(10.dp))
 
-            // Subtitle
+            // Subtitle — Philosopher font
             Text(
                 text = "Your personalised grounded\nCybersecurity AI tutor",
+                fontFamily = PhilosopherFont,
                 fontSize = 15.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color.White.copy(alpha = 0.85f),
@@ -113,7 +110,6 @@ fun SplashScreen(
 
             Spacer(Modifier.height(48.dp))
 
-            // Loading bar — fills over 2.5 seconds
             LoadingBar(
                 modifier = Modifier
                     .fillMaxWidth()
