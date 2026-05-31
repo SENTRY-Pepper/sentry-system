@@ -70,7 +70,7 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(
-            route = Routes.SESSION,
+            route     = Routes.SESSION,
             arguments = listOf(navArgument("sessionId") { type = NavType.StringType }),
         ) {
             SessionScreen(
@@ -79,6 +79,7 @@ fun AppNavGraph(navController: NavHostController) {
                         popUpTo(Routes.TRAINEE_HOME)
                     }
                 },
+                onBack = { navController.popBackStack() },
             )
         }
 
