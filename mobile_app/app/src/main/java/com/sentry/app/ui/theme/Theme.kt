@@ -5,10 +5,10 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 
 private val SentryColorScheme = lightColorScheme(
-    primary            = Teal600,
+    primary            = SentryCyan,
     onPrimary          = White,
-    primaryContainer   = Teal50,
-    onPrimaryContainer = Teal700,
+    primaryContainer   = SentryCyanLt,
+    onPrimaryContainer = SentryCyanDk,
     secondary          = Teal500,
     onSecondary        = White,
     surface            = White,
