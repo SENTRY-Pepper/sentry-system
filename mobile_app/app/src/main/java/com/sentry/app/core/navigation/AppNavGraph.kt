@@ -84,11 +84,11 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         composable(
-            route = Routes.RESULTS,
+            route     = Routes.RESULTS,
             arguments = listOf(navArgument("sessionId") { type = NavType.StringType }),
         ) {
             ResultsScreen(
-                onDone = {
+                onDone     = {
                     navController.navigate(Routes.TRAINEE_HOME) {
                         popUpTo(Routes.TRAINEE_HOME) { inclusive = true }
                     }
