@@ -100,8 +100,8 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Routes.ADMIN_HOME) {
             AdminHomeScreen(
                 onOpenAnalytics = { navController.navigate(Routes.ANALYTICS) },
-                onOpenChat = { navController.navigate(Routes.CHAT) },
-                onOpenSettings = { navController.navigate(Routes.SETTINGS) },
+                onOpenChat      = { navController.navigate(Routes.CHAT) },
+                onOpenSettings  = { navController.navigate(Routes.SETTINGS) },
             )
         }
 
@@ -115,7 +115,7 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable(Routes.SETTINGS) {
             SettingsScreen(
-                onBack = { navController.popBackStack() },
+                onBack   = { navController.popBackStack() },
                 onLogout = {
                     navController.navigate(Routes.AUTH) {
                         popUpTo(0) { inclusive = true }
