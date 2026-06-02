@@ -57,20 +57,22 @@ fun SettingsScreen(
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
 
-    var serverUrl      by remember { mutableStateOf("http://10.0.2.2:8000") }
-    var groundedAi     by remember { mutableStateOf(true) }
-    var showSources    by remember { mutableStateOf(true) }
-    var notifications  by remember { mutableStateOf(false) }
+    var serverUrl     by remember { mutableStateOf("http://10.0.2.2:8000") }
+    var groundedAi    by remember { mutableStateOf(true) }
+    var showSources   by remember { mutableStateOf(true) }
+    var notifications by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.loggedOut) {
         if (state.loggedOut) onLogout()
     }
 
+    // Outer column — top bar + scrollable body, fills the screen
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundGray),
     ) {
+
         // ── Top bar ──────────────────────────────────────────────────
         Box(
             modifier = Modifier
@@ -86,7 +88,7 @@ fun SettingsScreen(
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint = Color.White,
+                        tint               = Color.White,
                     )
                     Text(
                         text       = "Back",
@@ -106,16 +108,16 @@ fun SettingsScreen(
             )
         }
 
-        // ── Content ──────────────────────────────────────────────────
+        // ── Scrollable content ───────────────────────────────────────
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .verticalScroll(rememberScrollState())
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
 
-            // Profile card
+            // ── Profile card ─────────────────────────────────────────
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -126,8 +128,8 @@ fun SettingsScreen(
             ) {
                 Column {
                     Row(
-                        verticalAlignment      = Alignment.CenterVertically,
-                        modifier               = Modifier.padding(bottom = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier          = Modifier.padding(bottom = 16.dp),
                     ) {
                         Box(
                             modifier         = Modifier
@@ -166,13 +168,14 @@ fun SettingsScreen(
                             .background(CardBorder),
                     )
 
-                    ProfileRow(label = "Participant ID",  value = "EMP_042")
-                    ProfileRow(label = "Organisation",    value = "Heritage Insurance")
-                    ProfileRow(label = "Role",            value = "Trainee", isLast = true)
+                    // No isLast parameter — divider always drawn inside ProfileRow
+                    ProfileRow(label = "Participant ID", value = "EMP_042")
+                    ProfileRow(label = "Organisation",   value = "Heritage Insurance")
+                    ProfileRow(label = "Role",           value = "Trainee")
                 }
             }
 
-            // Server configuration
+            // ── Server configuration ──────────────────────────────────
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -196,7 +199,6 @@ fun SettingsScreen(
                         color    = TextSecondary,
                         modifier = Modifier.padding(bottom = 14.dp),
                     )
-
                     OutlinedTextField(
                         value         = serverUrl,
                         onValueChange = { serverUrl = it },
@@ -209,12 +211,8 @@ fun SettingsScreen(
                             unfocusedBorderColor = CardBorder,
                         ),
                     )
-
                     Spacer(Modifier.height(10.dp))
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
                             modifier = Modifier
                                 .size(8.dp)
@@ -231,7 +229,7 @@ fun SettingsScreen(
                 }
             }
 
-            // Preferences
+            // ── Preferences ───────────────────────────────────────────
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -249,36 +247,30 @@ fun SettingsScreen(
                         color      = TextPrimary,
                         modifier   = Modifier.padding(bottom = 4.dp),
                     )
-
                     ToggleRow(
                         label    = "Grounded AI responses",
                         subtitle = "Use RAG pipeline for verified answers",
                         enabled  = groundedAi,
                         onToggle = { groundedAi = !groundedAi },
                     )
-
                     Box(modifier = Modifier.fillMaxWidth().height(0.5.dp).background(CardBorder))
-
                     ToggleRow(
                         label    = "Show source citations",
                         subtitle = "Display OWASP and legal references",
                         enabled  = showSources,
                         onToggle = { showSources = !showSources },
                     )
-
                     Box(modifier = Modifier.fillMaxWidth().height(0.5.dp).background(CardBorder))
-
                     ToggleRow(
                         label    = "Session notifications",
                         subtitle = "Remind me to complete training",
                         enabled  = notifications,
                         onToggle = { notifications = !notifications },
-                        isLast   = true,
                     )
                 }
             }
 
-            // Sign out
+            // ── Sign out ──────────────────────────────────────────────
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -297,16 +289,15 @@ fun SettingsScreen(
                     color      = DangerRed,
                 )
             }
+
+            Spacer(Modifier.height(8.dp))
         }
     }
 }
 
+// isLast removed — divider is always drawn after every row
 @Composable
-private fun ProfileRow(
-    label: String,
-    value: String,
-    isLast: Boolean = false,
-) {
+private fun ProfileRow(label: String, value: String) {
     Column {
         Row(
             modifier              = Modifier
@@ -315,26 +306,10 @@ private fun ProfileRow(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment     = Alignment.CenterVertically,
         ) {
-            Text(
-                text     = label,
-                fontSize = 13.sp,
-                color    = TextSecondary,
-            )
-            Text(
-                text       = value,
-                fontSize   = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color      = TextPrimary,
-            )
+            Text(text = label, fontSize = 13.sp, color = TextSecondary)
+            Text(text = value, fontSize = 13.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
         }
-        if (!isLast) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(0.5.dp)
-                    .background(CardBorder),
-            )
-        }
+        Box(modifier = Modifier.fillMaxWidth().height(0.5.dp).background(CardBorder))
     }
 }
 
@@ -344,32 +319,19 @@ private fun ToggleRow(
     subtitle: String,
     enabled: Boolean,
     onToggle: () -> Unit,
-    isLast: Boolean = false,
 ) {
     Row(
-        modifier          = Modifier
+        modifier              = Modifier
             .fillMaxWidth()
             .padding(vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment     = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text       = label,
-                fontSize   = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color      = TextPrimary,
-            )
-            Text(
-                text     = subtitle,
-                fontSize = 11.sp,
-                color    = TextSecondary,
-            )
+            Text(text = label,    fontSize = 13.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+            Text(text = subtitle, fontSize = 11.sp, color = TextSecondary)
         }
-
         Spacer(Modifier.width(12.dp))
-
-        // Toggle switch
         Box(
             modifier = Modifier
                 .width(44.dp)
