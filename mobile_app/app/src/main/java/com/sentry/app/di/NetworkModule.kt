@@ -1,6 +1,5 @@
 package com.sentry.app.di
 
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.sentry.app.BuildConfig
 import com.sentry.app.data.local.TokenManager
 import com.sentry.app.data.remote.api.SentryApiService
@@ -14,6 +13,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 import javax.inject.Singleton
@@ -22,20 +22,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
-        coerceInputValues  = true
-        isLenient          = true
+        coerceInputValues = true
+        isLenient = true
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideOkHttpClient(
         tokenProvider: Provider<TokenManager>,
     ): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
-                    else HttpLoggingInterceptor.Level.NONE
+            else HttpLoggingInterceptor.Level.NONE
         }
         return OkHttpClient.Builder()
             .addInterceptor(AuthInterceptor(tokenProvider))
@@ -47,7 +49,8 @@ object NetworkModule {
             .build()
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideRetrofit(client: OkHttpClient, json: Json): Retrofit =
         Retrofit.Builder()
             .baseUrl("${BuildConfig.MIDDLEWARE_BASE_URL}/")
@@ -55,7 +58,8 @@ object NetworkModule {
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideApiService(retrofit: Retrofit): SentryApiService =
         retrofit.create(SentryApiService::class.java)
 }

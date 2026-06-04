@@ -44,10 +44,10 @@ import com.sentry.app.features.splash.SentryCyan
 import com.sentry.app.ui.theme.PhilosopherFont
 
 private val BackgroundGray = Color(0xFFF5F5F5)
-private val CardBorder     = Color(0xFFE0E0E0)
-private val TextPrimary    = Color(0xFF212121)
-private val TextSecondary  = Color(0xFF757575)
-private val DangerRed      = Color(0xFFF44336)
+private val CardBorder = Color(0xFFE0E0E0)
+private val TextPrimary = Color(0xFF212121)
+private val TextSecondary = Color(0xFF757575)
+private val DangerRed = Color(0xFFF44336)
 
 @Composable
 fun SettingsScreen(
@@ -57,9 +57,9 @@ fun SettingsScreen(
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
 
-    var serverUrl     by remember { mutableStateOf("http://10.0.2.2:8000") }
-    var groundedAi    by remember { mutableStateOf(true) }
-    var showSources   by remember { mutableStateOf(true) }
+    var serverUrl by remember { mutableStateOf("http://10.0.2.2:8000") }
+    var groundedAi by remember { mutableStateOf(true) }
+    var showSources by remember { mutableStateOf(true) }
     var notifications by remember { mutableStateOf(false) }
 
     LaunchedEffect(state.loggedOut) {
@@ -81,30 +81,30 @@ fun SettingsScreen(
                 .background(SentryCyan),
         ) {
             IconButton(
-                onClick  = onBack,
+                onClick = onBack,
                 modifier = Modifier.align(Alignment.CenterStart),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
-                        tint               = Color.White,
+                        tint = Color.White,
                     )
                     Text(
-                        text       = "Back",
-                        color      = Color.White,
-                        fontSize   = 13.sp,
+                        text = "Back",
+                        color = Color.White,
+                        fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                     )
                 }
             }
             Text(
-                text       = "Settings",
+                text = "Settings",
                 fontFamily = PhilosopherFont,
-                fontSize   = 17.sp,
+                fontSize = 17.sp,
                 fontWeight = FontWeight.Bold,
-                color      = Color.White,
-                modifier   = Modifier.align(Alignment.Center),
+                color = Color.White,
+                modifier = Modifier.align(Alignment.Center),
             )
         }
 
@@ -129,34 +129,34 @@ fun SettingsScreen(
                 Column {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier          = Modifier.padding(bottom = 16.dp),
+                        modifier = Modifier.padding(bottom = 16.dp),
                     ) {
                         Box(
-                            modifier         = Modifier
+                            modifier = Modifier
                                 .size(48.dp)
                                 .clip(CircleShape)
                                 .background(Color(0xFFE0F7FA)),
                             contentAlignment = Alignment.Center,
                         ) {
                             Text(
-                                text       = "E4",
-                                fontSize   = 16.sp,
+                                text = "E4",
+                                fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
-                                color      = SentryCyan,
+                                color = SentryCyan,
                             )
                         }
                         Spacer(Modifier.width(14.dp))
                         Column {
                             Text(
-                                text       = "EMP_042",
-                                fontSize   = 16.sp,
+                                text = "EMP_042",
+                                fontSize = 16.sp,
                                 fontWeight = FontWeight.Bold,
-                                color      = TextPrimary,
+                                color = TextPrimary,
                             )
                             Text(
-                                text     = "Heritage Insurance · Trainee",
+                                text = "Heritage Insurance · Trainee",
                                 fontSize = 12.sp,
-                                color    = TextSecondary,
+                                color = TextSecondary,
                             )
                         }
                     }
@@ -170,8 +170,8 @@ fun SettingsScreen(
 
                     // No isLast parameter — divider always drawn inside ProfileRow
                     ProfileRow(label = "Participant ID", value = "EMP_042")
-                    ProfileRow(label = "Organisation",   value = "Heritage Insurance")
-                    ProfileRow(label = "Role",           value = "Trainee")
+                    ProfileRow(label = "Organisation", value = "Heritage Insurance")
+                    ProfileRow(label = "Role", value = "Trainee")
                 }
             }
 
@@ -186,28 +186,28 @@ fun SettingsScreen(
             ) {
                 Column {
                     Text(
-                        text       = "Server configuration",
+                        text = "Server configuration",
                         fontFamily = PhilosopherFont,
-                        fontSize   = 15.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color      = TextPrimary,
-                        modifier   = Modifier.padding(bottom = 4.dp),
+                        color = TextPrimary,
+                        modifier = Modifier.padding(bottom = 4.dp),
                     )
                     Text(
-                        text     = "SENTRY middleware connection",
+                        text = "SENTRY middleware connection",
                         fontSize = 12.sp,
-                        color    = TextSecondary,
+                        color = TextSecondary,
                         modifier = Modifier.padding(bottom = 14.dp),
                     )
                     OutlinedTextField(
-                        value         = serverUrl,
+                        value = serverUrl,
                         onValueChange = { serverUrl = it },
-                        label         = { Text("Middleware URL", fontSize = 12.sp) },
-                        modifier      = Modifier.fillMaxWidth(),
-                        singleLine    = true,
-                        shape         = RoundedCornerShape(10.dp),
-                        colors        = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor   = SentryCyan,
+                        label = { Text("Middleware URL", fontSize = 12.sp) },
+                        modifier = Modifier.fillMaxWidth(),
+                        singleLine = true,
+                        shape = RoundedCornerShape(10.dp),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = SentryCyan,
                             unfocusedBorderColor = CardBorder,
                         ),
                     )
@@ -221,9 +221,9 @@ fun SettingsScreen(
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text     = "Connected · Response time ~142ms",
+                            text = "Connected · Response time ~142ms",
                             fontSize = 12.sp,
-                            color    = TextSecondary,
+                            color = TextSecondary,
                         )
                     }
                 }
@@ -240,31 +240,37 @@ fun SettingsScreen(
             ) {
                 Column {
                     Text(
-                        text       = "Preferences",
+                        text = "Preferences",
                         fontFamily = PhilosopherFont,
-                        fontSize   = 15.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color      = TextPrimary,
-                        modifier   = Modifier.padding(bottom = 4.dp),
+                        color = TextPrimary,
+                        modifier = Modifier.padding(bottom = 4.dp),
                     )
                     ToggleRow(
-                        label    = "Grounded AI responses",
+                        label = "Grounded AI responses",
                         subtitle = "Use RAG pipeline for verified answers",
-                        enabled  = groundedAi,
+                        enabled = groundedAi,
                         onToggle = { groundedAi = !groundedAi },
                     )
-                    Box(modifier = Modifier.fillMaxWidth().height(0.5.dp).background(CardBorder))
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(0.5.dp)
+                        .background(CardBorder))
                     ToggleRow(
-                        label    = "Show source citations",
+                        label = "Show source citations",
                         subtitle = "Display OWASP and legal references",
-                        enabled  = showSources,
+                        enabled = showSources,
                         onToggle = { showSources = !showSources },
                     )
-                    Box(modifier = Modifier.fillMaxWidth().height(0.5.dp).background(CardBorder))
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(0.5.dp)
+                        .background(CardBorder))
                     ToggleRow(
-                        label    = "Session notifications",
+                        label = "Session notifications",
                         subtitle = "Remind me to complete training",
-                        enabled  = notifications,
+                        enabled = notifications,
                         onToggle = { notifications = !notifications },
                     )
                 }
@@ -282,11 +288,11 @@ fun SettingsScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    text       = "Sign out",
+                    text = "Sign out",
                     fontFamily = PhilosopherFont,
-                    fontSize   = 15.sp,
+                    fontSize = 15.sp,
                     fontWeight = FontWeight.Bold,
-                    color      = DangerRed,
+                    color = DangerRed,
                 )
             }
 
@@ -295,21 +301,28 @@ fun SettingsScreen(
     }
 }
 
-// isLast removed — divider is always drawn after every row
 @Composable
 private fun ProfileRow(label: String, value: String) {
     Column {
         Row(
-            modifier              = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment     = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(text = label, fontSize = 13.sp, color = TextSecondary)
-            Text(text = value, fontSize = 13.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+            Text(
+                text = value,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
+                color = TextPrimary
+            )
         }
-        Box(modifier = Modifier.fillMaxWidth().height(0.5.dp).background(CardBorder))
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .height(0.5.dp)
+            .background(CardBorder))
     }
 }
 
@@ -321,14 +334,19 @@ private fun ToggleRow(
     onToggle: () -> Unit,
 ) {
     Row(
-        modifier              = Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 14.dp),
-        verticalAlignment     = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(text = label,    fontSize = 13.sp, fontWeight = FontWeight.Medium, color = TextPrimary)
+            Text(
+                text = label,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Medium,
+                color = TextPrimary
+            )
             Text(text = subtitle, fontSize = 11.sp, color = TextSecondary)
         }
         Spacer(Modifier.width(12.dp))

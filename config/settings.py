@@ -15,7 +15,7 @@ class Settings:
     # Used by: ai_engine/llm/client.py
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
     LLM_MODEL: str = os.getenv("LLM_MODEL", "gpt-4")
-    LLM_MAX_TOKENS: int = int(os.getenv("LLM_MAX_TOKENS", 1024))
+    LLM_MAX_TOKENS: int = int(os.getenv("LLM_MAX_TOKENS", 512))
     LLM_TEMPERATURE: float = float(os.getenv("LLM_TEMPERATURE", 0.2))
 
     # Used by: ai_engine/embeddings/embedder.py
@@ -34,6 +34,9 @@ class Settings:
     RAG_TOP_K: int = int(os.getenv("RAG_TOP_K", 5))
     RAG_CHUNK_SIZE: int = int(os.getenv("RAG_CHUNK_SIZE", 512))
     RAG_CHUNK_OVERLAP: int = int(os.getenv("RAG_CHUNK_OVERLAP", 64))
+    RAG_CONTEXT_TOKEN_BUDGET: int = int(os.getenv("RAG_CONTEXT_TOKEN_BUDGET", 1800))
+    RAG_MAX_CONTEXT_CHUNKS: int = int(os.getenv("RAG_MAX_CONTEXT_CHUNKS", 3))
+    RAG_MIN_RELEVANCE_SCORE: float = float(os.getenv("RAG_MIN_RELEVANCE_SCORE", 0.60))
 
     # Used by: middleware/main.py
     MIDDLEWARE_HOST: str = os.getenv("MIDDLEWARE_HOST", "0.0.0.0")
