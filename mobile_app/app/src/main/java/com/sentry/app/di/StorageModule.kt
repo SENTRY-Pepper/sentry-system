@@ -13,7 +13,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object StorageModule {
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     fun provideTokenManager(
         @ApplicationContext context: Context,
     ): TokenManager = TokenManager(context)

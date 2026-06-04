@@ -32,9 +32,9 @@ Used by: middleware/routes/query_routes.py
 import time
 from typing import Dict, Any
 
-from ai_engine.rag.retriever import Retriever
-from ai_engine.rag.prompt_builder import PromptBuilder
-from ai_engine.llm.client import LLMClient
+from ai_engine.generation.client import LLMClient
+from ai_engine.generation.prompt_builder import PromptBuilder
+from ai_engine.retrieval.retriever import Retriever
 
 
 class RAGPipeline:
@@ -115,9 +115,9 @@ class RAGPipeline:
 
         # Step 3: Generate grounded response
         generation_start = time.time()
-        llm_result = self._llm.grounded_generate(
-            query=query,
-            context_chunks=chunks[: prompt_data["chunks_used"]],
+        llm_result = self._llm.grounded_generate_from_prompt(
+            user_message=prompt_data["user_message"],
+            sources_used=prompt_data["sources"],
         )
         generation_ms = round((time.time() - generation_start) * 1000, 2)
 

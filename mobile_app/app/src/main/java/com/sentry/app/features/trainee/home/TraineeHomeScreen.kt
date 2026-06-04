@@ -427,6 +427,7 @@ private fun CtaCard(
                 color    = Color(0xFFF44336),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth(),
+                fontFamily = PhilosopherFont
             )
         }
     }
