@@ -44,11 +44,9 @@ class Chunker:
 
             chunk_index += 1
 
-            # If we have reached the end, stop
             if end == len(tokens):
                 break
 
-            # Slide forward
             start += self.chunk_size - self.chunk_overlap
 
         return chunks
