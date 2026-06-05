@@ -1,20 +1,3 @@
-"""
-SENTRY — Semantic Retriever
-=============================
-Queries ChromaDB to find the most semantically relevant document
-chunks for a given user question.
-
-This is the 'R' in RAG. The retriever:
-    1. Embeds the user query using the same model used at ingestion time
-    2. Performs cosine similarity search against the vector store
-    3. Returns the top-k most relevant chunks with their metadata
-
-The retrieved chunks are then passed to the prompt builder, which
-injects them as grounding context before the LLM generates a response.
-
-Used by: ai_engine/rag/pipeline.py
-"""
-
 import os
 
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
@@ -31,14 +14,6 @@ from ai_engine.retrieval.embedder import Embedder  # noqa: E402
 
 
 class Retriever:
-    """
-    Semantic retriever backed by ChromaDB.
-
-    Connects to the persisted vector store built by
-    scripts/ingest_knowledge_base.py and performs top-k
-    cosine similarity retrieval for any text query.
-    """
-
     def __init__(self) -> None:
         chroma_dir = Path(settings.CHROMA_PERSIST_DIR)
 
@@ -65,35 +40,13 @@ class Retriever:
             f"({stored} chunks indexed)."
         )
 
-    # ------------------------------------------------------------------
     # Public API
-    # ------------------------------------------------------------------
-
     def retrieve(
         self,
         query: str,
         top_k: int = None,
         doc_type_filter: str = None,
     ) -> List[Dict[str, Any]]:
-        """
-        Retrieve the most relevant chunks for a query.
-
-        Args:
-            query:           The user's question or search text.
-            top_k:           Number of results to return.
-                             Defaults to settings.RAG_TOP_K.
-            doc_type_filter: Optional — restrict results to a specific
-                             document type: "owasp" or "legal".
-                             None means search across all documents.
-
-        Returns:
-            List of result dicts, ranked by relevance (most relevant first):
-                - "text":        The chunk content.
-                - "source":      Originating document filename.
-                - "doc_type":    "owasp" or "legal".
-                - "chunk_index": Position within the source document.
-                - "score":       Cosine similarity score (0–1, higher = more relevant).
-        """
         if not query or not query.strip():
             raise ValueError("[Retriever] Query cannot be empty.")
 
@@ -135,18 +88,9 @@ class Retriever:
             "min_relevance_score": settings.RAG_MIN_RELEVANCE_SCORE,
         }
 
-    # ------------------------------------------------------------------
     # Internal helpers
-    # ------------------------------------------------------------------
 
     def _format_results(self, raw_results: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """
-        Convert ChromaDB's raw query response into clean result dicts.
-
-        ChromaDB returns distances (lower = more similar for cosine).
-        We convert to similarity scores (higher = more similar) so the
-        rest of the system works with an intuitive 0–1 scale.
-        """
         formatted = []
 
         documents = raw_results.get("documents", [[]])[0]
