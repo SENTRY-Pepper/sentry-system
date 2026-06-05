@@ -1,26 +1,3 @@
-"""
-SENTRY — LLM Client
-=====================
-Wraps the OpenAI GPT-4 API with two distinct generation modes:
-
-    1. baseline_generate(query)
-       Raw LLM response with no retrieval grounding.
-       Used as the CONTROL condition in the evaluation study.
-       Represents what a standard chatbot would produce.
-
-    2. grounded_generate(query, context_chunks)
-       RAG-augmented response where retrieved document chunks
-       are injected into the prompt as verified context.
-       Used as the EXPERIMENTAL condition in the evaluation study.
-       This is SENTRY's core contribution.
-
-Keeping both modes in one client ensures the only variable
-between conditions is the presence/absence of retrieved context —
-model, temperature, and token limits are identical.
-
-Used by: ai_engine/rag/pipeline.py
-"""
-
 import time
 from typing import List, Dict, Any
 
@@ -29,10 +6,7 @@ from openai import OpenAI
 from config.settings import settings
 
 
-# ------------------------------------------------------------------
 # System prompts
-# ------------------------------------------------------------------
-
 BASELINE_SYSTEM_PROMPT = """You are SENTRY, an AI cybersecurity training \
 assistant deployed on a Pepper humanoid robot. You help employees at Small \
 and Medium Enterprises understand cybersecurity threats and safe practices.
@@ -57,10 +31,6 @@ Rules:
 
 
 class LLMClient:
-    """
-    OpenAI GPT-4 wrapper for SENTRY's two generation modes.
-    """
-
     def __init__(self) -> None:
         if not settings.OPENAI_API_KEY:
             raise EnvironmentError(
@@ -72,27 +42,8 @@ class LLMClient:
         self._temperature = settings.LLM_TEMPERATURE
         print(f"[LLMClient] Initialised. Model: {self._model}")
 
-    # ------------------------------------------------------------------
     # Public API
-    # ------------------------------------------------------------------
-
     def baseline_generate(self, query: str) -> Dict[str, Any]:
-        """
-        Generate a response using only the LLM's parametric knowledge.
-        No retrieval. No grounding. This is the control condition.
-
-        Args:
-            query: The user's question.
-
-        Returns:
-            Dict containing:
-                - "response":       The generated text.
-                - "mode":           "baseline"
-                - "model":          Model name used.
-                - "latency_ms":     Response time in milliseconds.
-                - "prompt_tokens":  Tokens used in the prompt.
-                - "completion_tokens": Tokens used in the completion.
-        """
         if not query or not query.strip():
             raise ValueError("[LLMClient] Query cannot be empty.")
 
@@ -108,25 +59,6 @@ class LLMClient:
         query: str,
         context_chunks: List[Dict[str, Any]],
     ) -> Dict[str, Any]:
-        """
-        Generate a response grounded in retrieved document chunks.
-        This is the experimental condition — SENTRY's RAG output.
-
-        Args:
-            query:          The user's question.
-            context_chunks: Retrieved chunks from the Retriever,
-                            each with "text", "source", "doc_type", "score".
-
-        Returns:
-            Dict containing:
-                - "response":           The grounded generated text.
-                - "mode":               "grounded"
-                - "model":              Model name used.
-                - "latency_ms":         Response time in milliseconds.
-                - "prompt_tokens":      Tokens used in the prompt.
-                - "completion_tokens":  Tokens used in the completion.
-                - "sources_used":       List of source documents cited.
-        """
         if not query or not query.strip():
             raise ValueError("[LLMClient] Query cannot be empty.")
 
@@ -151,12 +83,6 @@ class LLMClient:
         user_message: str,
         sources_used: List[str],
     ) -> Dict[str, Any]:
-        """
-        Generate a grounded response from a pre-built prompt.
-
-        The RAG pipeline uses this so PromptBuilder's token accounting and
-        the actual OpenAI request stay aligned.
-        """
         if not user_message or not user_message.strip():
             raise ValueError("[LLMClient] user_message cannot be empty.")
 
@@ -169,18 +95,12 @@ class LLMClient:
         result["sources_used"] = sources_used
         return result
 
-    # ------------------------------------------------------------------
     # Internal helpers
-    # ------------------------------------------------------------------
-
     def _call_api(
         self,
         messages: List[Dict[str, str]],
         mode: str,
     ) -> Dict[str, Any]:
-        """
-        Make the OpenAI API call with timing and token tracking.
-        """
         start_time = time.time()
 
         completion = self._client.chat.completions.create(
@@ -205,14 +125,6 @@ class LLMClient:
         }
 
     def _build_context_block(self, chunks: List[Dict[str, Any]]) -> str:
-        """
-        Format retrieved chunks into a numbered context block
-        for injection into the grounded prompt.
-
-        Each chunk is labelled with its source document so the
-        LLM can reference it — this also enables source attribution
-        on Pepper's tablet display.
-        """
         lines = []
         for i, chunk in enumerate(chunks, start=1):
             source = chunk.get("source", "unknown")
