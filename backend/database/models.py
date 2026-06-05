@@ -1,27 +1,3 @@
-"""
-SENTRY — Database Models
-==========================
-SQLAlchemy ORM table definitions for the SENTRY system.
-
-Tables:
-    TrainingSession     — One record per employee training session
-    ScenarioInteraction — One record per scenario within a session
-    AssessmentResult    — Pre/post assessment scores per session
-    EvaluationLog       — RAG vs baseline comparison records (research)
-
-Design principles:
-    - All personal identifiers are anonymised (session_id only, no names)
-    - Timestamps are UTC throughout
-    - Foreign keys enforce relational integrity
-    - The EvaluationLog table feeds directly into Derick's evaluation
-      module for the research study
-
-Used by:
-    backend/database/connection.py  (Base registration)
-    middleware/routes/session_routes.py
-    middleware/routes/analytics_routes.py
-"""
-
 import uuid
 from datetime import datetime, timezone
 from typing import Optional
@@ -50,22 +26,10 @@ def new_uuid() -> str:
     return str(uuid.uuid4())
 
 
-# ------------------------------------------------------------------
 # TrainingSession
-# ------------------------------------------------------------------
 
 
 class TrainingSession(Base):
-    """
-    Represents one complete training session for one employee.
-
-    Created when an employee starts a session on the SENTRY app.
-    Updated when the session ends with final scores and duration.
-
-    Anonymisation: participant_id is an internal code assigned by the
-    organisation — SENTRY never stores names or employee IDs.
-    """
-
     __tablename__ = "training_sessions"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
@@ -109,26 +73,10 @@ class TrainingSession(Base):
         )
 
 
-# ------------------------------------------------------------------
 # ScenarioInteraction
-# ------------------------------------------------------------------
 
 
 class ScenarioInteraction(Base):
-    """
-    Records one scenario interaction within a training session.
-
-    One session contains multiple interactions — one per scenario
-    presented to the employee. If the employee makes a wrong decision
-    and is corrected, correction_loops increments.
-
-    This table provides Timothy's behavioural metrics:
-        - Decision accuracy per scenario type
-        - Response latency
-        - Correction loop count
-        - Risky action frequency
-    """
-
     __tablename__ = "scenario_interactions"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
@@ -140,12 +88,10 @@ class ScenarioInteraction(Base):
     scenario_id: Mapped[str] = mapped_column(
         String(50),
         nullable=False,
-        # e.g. "phishing-01", "usb-drop-02"
     )
     scenario_type: Mapped[str] = mapped_column(
         String(50),
         nullable=False,
-        # e.g. "phishing", "usb_drop", "password", "network", "social_engineering"
     )
     # "correct" or "risky"
     decision: Mapped[str] = mapped_column(String(20), nullable=False)
@@ -173,30 +119,17 @@ class ScenarioInteraction(Base):
         )
 
 
-# ------------------------------------------------------------------
 # AssessmentResult
-# ------------------------------------------------------------------
 
 
 class AssessmentResult(Base):
-    """
-    Stores pre and post assessment scores for a session.
-
-    The pre-assessment is administered before any training content.
-    The post-assessment uses structurally identical questions with
-    different surface details to prevent memorisation inflation.
-
-    knowledge_gain = post_score - pre_score
-    The main objective targets >= 30% improvement (relative gain).
-    """
-
     __tablename__ = "assessment_results"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
     session_id: Mapped[str] = mapped_column(
         ForeignKey("training_sessions.id", ondelete="CASCADE"),
         nullable=False,
-        unique=True,  # One assessment record per session
+        unique=True,
         index=True,
     )
     # Scores as percentages (0.0 – 100.0)
@@ -227,26 +160,10 @@ class AssessmentResult(Base):
         )
 
 
-# ------------------------------------------------------------------
 # EvaluationLog
-# ------------------------------------------------------------------
 
 
 class EvaluationLog(Base):
-    """
-    Research evaluation record — one per query pair during the study.
-
-    Stores the automated hallucination and grounding scores computed
-    by Derick's HallucinationScorer for each query processed during
-    a participant session.
-
-    This table is the bridge between Timothy's session data and
-    Derick's evaluation module. It enables:
-        - Per-session grounding accuracy tracking
-        - Aggregate statistical analysis across all participants
-        - t-test and effect size computation in the final report
-    """
-
     __tablename__ = "evaluation_logs"
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
@@ -260,7 +177,6 @@ class EvaluationLog(Base):
     mode: Mapped[str] = mapped_column(
         String(20),
         nullable=False,
-        # "grounded" or "baseline"
     )
     # AI response text
     response: Mapped[str] = mapped_column(Text, nullable=False)
