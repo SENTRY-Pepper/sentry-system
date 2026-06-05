@@ -6,7 +6,6 @@ os.environ["CHROMA_TELEMETRY"] = "False"
 from pathlib import Path  # noqa: E402
 from dotenv import load_dotenv  # noqa: E402
 
-# Go back a level from config/ to project root, where .env lives
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(PROJECT_ROOT / ".env")
 
@@ -42,8 +41,7 @@ class Settings:
     MIDDLEWARE_HOST: str = os.getenv("MIDDLEWARE_HOST", "0.0.0.0")
     MIDDLEWARE_PORT: int = int(os.getenv("MIDDLEWARE_PORT", 8000))
 
-    # Pepper robot connection (consumed via middleware, set by Timothy)
-    # Used by: middleware/routes/pepper_routes.py
+    # Pepper robot connection, Used by: middleware/routes/pepper_routes.py
     PEPPER_IP: str = os.getenv("PEPPER_IP", "")
     PEPPER_PORT: int = int(os.getenv("PEPPER_PORT", 9559))
 
