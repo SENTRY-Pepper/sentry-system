@@ -1,26 +1,3 @@
-"""
-SENTRY — Knowledge Base Ingestion Script
-==========================================
-One-time (or on-update) script that:
-    1. Reads raw OWASP markdown files and legal PDF documents
-    2. Extracts and cleans text from each document
-    3. Chunks text using the token-aware Chunker
-    4. Embeds each chunk using the local sentence-transformer model
-    5. Stores chunks + embeddings + metadata in ChromaDB
-
-Run this from the project root:
-    python scripts/ingest_knowledge_base.py
-
-Re-run whenever source documents are updated. The script clears
-the existing collection before re-ingesting to avoid duplicates.
-
-Dependencies used:
-    pdfplumber  — PDF text extraction
-    Chunker     — token-aware text splitting
-    Embedder    — sentence-transformer vector generation
-    chromadb    — vector store persistence
-"""
-
 import os
 import json
 from pathlib import Path
@@ -36,9 +13,7 @@ from config.settings import settings  # noqa: E402
 from ai_engine.ingestion.chunker import Chunker  # noqa: E402
 from ai_engine.retrieval.embedder import Embedder  # noqa: E402
 
-# ------------------------------------------------------------------
 # Document readers
-# ------------------------------------------------------------------
 
 
 def read_markdown_file(path: Path) -> str:
@@ -47,10 +22,6 @@ def read_markdown_file(path: Path) -> str:
 
 
 def read_pdf_file(path: Path) -> str:
-    """
-    Extract text from a PDF using pdfplumber.
-    Pages are joined with double newlines to preserve structure.
-    """
     pages = []
     with pdfplumber.open(path) as pdf:
         for page_num, page in enumerate(pdf.pages, start=1):
@@ -64,16 +35,10 @@ def read_pdf_file(path: Path) -> str:
     return "\n\n".join(pages)
 
 
-# ------------------------------------------------------------------
 # Document discovery
-# ------------------------------------------------------------------
 
 
 def collect_documents() -> list[dict]:
-    """
-    Walk the raw knowledge base directories and return a list of
-    document dicts with keys: path, source, doc_type.
-    """
     documents = []
 
     # OWASP markdown files
@@ -115,16 +80,10 @@ def collect_documents() -> list[dict]:
     return documents
 
 
-# ------------------------------------------------------------------
 # ChromaDB setup
-# ------------------------------------------------------------------
 
 
 def get_or_create_collection(client: chromadb.PersistentClient):
-    """
-    Delete the existing collection (if any) and create a fresh one.
-    This guarantees no stale or duplicate chunks persist across runs.
-    """
     existing = [c.name for c in client.list_collections()]
     if settings.CHROMA_COLLECTION_NAME in existing:
         print(
@@ -136,15 +95,12 @@ def get_or_create_collection(client: chromadb.PersistentClient):
     collection = client.create_collection(
         name=settings.CHROMA_COLLECTION_NAME,
         metadata={"hnsw:space": "cosine"},
-        # cosine similarity is standard for sentence-transformer embeddings
     )
     print(f"[Ingest] Created fresh collection: '{settings.CHROMA_COLLECTION_NAME}'")
     return collection
 
 
-# ------------------------------------------------------------------
 # Core ingestion
-# ------------------------------------------------------------------
 
 
 def ingest_document(
@@ -154,19 +110,6 @@ def ingest_document(
     collection,
     chunk_id_offset: int,
 ) -> int:
-    """
-    Process a single document: read → chunk → embed → store.
-
-    Args:
-        doc:             Document dict (path, source, doc_type).
-        chunker:         Chunker instance.
-        embedder:        Embedder instance.
-        collection:      ChromaDB collection.
-        chunk_id_offset: Running integer to ensure unique IDs across docs.
-
-    Returns:
-        Number of chunks ingested from this document.
-    """
     path: Path = doc["path"]
     source: str = doc["source"]
     doc_type: str = doc["doc_type"]
@@ -203,7 +146,7 @@ def ingest_document(
         print(f"  [Skip] No chunks produced for {source}.")
         return 0
 
-    # 3. Embed all chunks in one batch call (efficient)
+    # 3. Embed all chunks in one batch call
     texts = [c["text"] for c in chunks]
     embeddings = embedder.embed_many(texts)
     print(f"  Embedded {len(embeddings)} chunk(s).")
@@ -236,17 +179,10 @@ def ingest_document(
     return len(chunks)
 
 
-# ------------------------------------------------------------------
 # Ingestion summary — save to processed/ for documentation
-# ------------------------------------------------------------------
 
 
 def save_ingestion_report(report: dict) -> None:
-    """
-    Save a JSON summary of the ingestion run to knowledge_base/processed/.
-    Useful for documenting exactly what was ingested — relevant for
-    your evaluation chapter (traceability of knowledge sources).
-    """
     settings.PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     report_path = settings.PROCESSED_DIR / "ingestion_report.json"
     with open(report_path, "w", encoding="utf-8") as f:
@@ -254,9 +190,7 @@ def save_ingestion_report(report: dict) -> None:
     print(f"\n[Ingest] Report saved to: {report_path}")
 
 
-# ------------------------------------------------------------------
 # Entry point
-# ------------------------------------------------------------------
 
 
 def main() -> None:
@@ -264,8 +198,7 @@ def main() -> None:
     print("SENTRY — Knowledge Base Ingestion")
     print("=" * 60)
 
-    # Validate settings (checks API key etc.)
-    # OPENAI not needed here but good habit to validate early
+    # Validate settings
     if not settings.OPENAI_API_KEY:
         print(
             "[Warning] OPENAI_API_KEY not set — ingestion will continue "
