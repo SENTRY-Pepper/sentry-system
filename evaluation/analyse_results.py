@@ -30,10 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from config.settings import settings
 
 
-# ------------------------------------------------------------------
 # Statistical helpers
-# ------------------------------------------------------------------
-
 
 def cohens_d(group1: np.ndarray, group2: np.ndarray) -> float:
     """
@@ -114,7 +111,7 @@ def run_ttest(
         "baseline_std": round(float(np.std(baseline, ddof=1)), 4),
         "t_statistic": round(float(t_stat), 4),
         "p_value": round(float(p_value), 6),
-        "significant": bool(p_value < 0.05),  # Cast to Python bool — not numpy bool_
+        "significant": bool(p_value < 0.05),  
         "cohens_d": d,
         "effect_size": interpret_effect(d),
         "n_grounded": int(len(grounded)),
