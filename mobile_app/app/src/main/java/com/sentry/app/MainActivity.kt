@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.sentry.app.core.navigation.AppNavGraph
-import com.sentry.app.ui.theme.SentryTheme
+import com.sentry.app.core.ui.theme.SentryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

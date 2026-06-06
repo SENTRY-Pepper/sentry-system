@@ -1,21 +1,41 @@
 package com.sentry.app.core.navigation
 
-object Routes {
-    const val SPLASH        = "splash"
-    const val AUTH          = "auth"
-    const val TRAINEE_HOME  = "trainee_home"
-    const val SESSION       = "session/{sessionId}"
-    const val RESULTS       = "results/{sessionId}"
-    const val ADMIN_HOME    = "admin_home"
-    const val ANALYTICS     = "analytics"
-    const val CHAT          = "chat"
-    const val SETTINGS      = "settings"
+import kotlinx.serialization.Serializable
 
-    fun session(id: String)  = "session/$id"
-    fun results(id: String)  = "results/$id"
+sealed class Routes {
+
+    @Serializable
+    data object Splash : Routes()
+
+    @Serializable
+    data object Auth : Routes()
+
+    @Serializable
+    data object TraineeHome : Routes()
+
+    @Serializable
+    data object AdminHome : Routes()
+
+    @Serializable
+    data object Analytics : Routes()
+
+    @Serializable
+    data object Chat : Routes()
+
+    @Serializable
+    data object Settings : Routes()
+
+    // routes with args
+    @Serializable
+    data class Session(val sessionId: String) : Routes()
+
+    @Serializable
+    data class Results(val sessionId: String) : Routes()
 }
 
-enum class UserRole { TRAINEE, ADMIN;
+enum class UserRole {
+    TRAINEE, ADMIN;
+
     companion object {
         fun from(v: String) = entries.firstOrNull {
             it.name.equals(v, ignoreCase = true)

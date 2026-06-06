@@ -3,18 +3,15 @@ package com.sentry.app.features.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sentry.app.core.navigation.UserRole
+import com.sentry.app.core.network.NetworkResult
 import com.sentry.app.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-data class AuthUiState(
-    val loading: Boolean       = false,
-    val error: String          = "",
-    val success: UserRole?     = null,
-)
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
@@ -24,6 +21,9 @@ class AuthViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AuthUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _events = MutableSharedFlow<AuthEvent>()
+    val events = _events.asSharedFlow()
+
     fun login(
         participantId: String,
         pin: String,
@@ -32,12 +32,21 @@ class AuthViewModel @Inject constructor(
     ) = viewModelScope.launch {
         _uiState.value = AuthUiState(loading = true)
 
-        authRepository.login(participantId, pin, role, organisationId)
-            .onSuccess { state ->
-                _uiState.value = AuthUiState(success = UserRole.from(state.role))
+        when (val result = authRepository.login(participantId, pin, role, organisationId)) {
+            is NetworkResult.Success -> {
+                _uiState.value = AuthUiState()
+                _events.emit(AuthEvent.NavigateToHome(UserRole.from(result.data.role)))
             }
-            .onFailure { e ->
-                _uiState.value = AuthUiState(error = e.message ?: "Login failed")
+
+            is NetworkResult.Error -> {
+                _uiState.value = AuthUiState(error = result.message ?: "Login failed")
             }
+
+            is NetworkResult.Exception -> {
+                _uiState.value = AuthUiState(error = result.e.message ?: "Unexpected error")
+            }
+
+            is NetworkResult.Loading -> Unit
+        }
     }
 }

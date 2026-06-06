@@ -6,303 +6,377 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sentry.app.features.splash.SentryCyan
-import com.sentry.app.ui.theme.PhilosopherFont
+import androidx.navigation.NavHostController
+import com.sentry.app.R
+import com.sentry.app.core.ui.components.texts.SentryText
+import com.sentry.app.core.ui.models.SentryTextAlign
+import com.sentry.app.core.ui.models.SentryTextSize
+import com.sentry.app.core.ui.theme.LocalBrandColors
 
-private val BackgroundGray = Color(0xFFF5F5F5)
+// component-specific tokens
 private val CardBorder = Color(0xFFE0E0E0)
-private val TextPrimary = Color(0xFF212121)
-private val TextSecondary = Color(0xFF757575)
-private val DangerRed = Color(0xFFF44336)
+private val DangerRedBg = Color(0xFFFFCDD2)
+private val ConnectedGreen = Color(0xFF4CAF50)
 
 @Composable
 fun SettingsScreen(
-    onBack: () -> Unit,
-    onLogout: () -> Unit,
+    navController: NavHostController,
     vm: SettingsViewModel = hiltViewModel(),
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
+    val scheme = MaterialTheme.colorScheme
+    val brand = LocalBrandColors.current
 
-    var serverUrl by remember { mutableStateOf("http://10.0.2.2:8000") }
-    var groundedAi by remember { mutableStateOf(true) }
-    var showSources by remember { mutableStateOf(true) }
-    var notifications by remember { mutableStateOf(false) }
-
-    LaunchedEffect(state.loggedOut) {
-        if (state.loggedOut) onLogout()
-    }
-
-    // Outer column — top bar + scrollable body, fills the screen
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BackgroundGray),
-    ) {
-
-        // ── Top bar ──────────────────────────────────────────────────
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp)
-                .background(SentryCyan),
-        ) {
-            IconButton(
-                onClick = onBack,
-                modifier = Modifier.align(Alignment.CenterStart),
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.White,
-                    )
-                    Text(
-                        text = "Back",
-                        color = Color.White,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
+    // one-shot logout event — navigate to auth and clear back stack
+    LaunchedEffect(Unit) {
+        vm.events.collect { event ->
+            when (event) {
+                is SettingsEvent.LoggedOut -> {
+                    navController.navigate("auth") {
+                        popUpTo(0) { inclusive = true }
+                    }
                 }
             }
-            Text(
-                text = "Settings",
-                fontFamily = PhilosopherFont,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.align(Alignment.Center),
-            )
         }
+    }
 
-        // ── Scrollable content ───────────────────────────────────────
+    // avatar initials from participantId
+    val initials = state.participantId
+        .filter { it.isLetterOrDigit() }
+        .takeLast(2)
+        .uppercase()
+        .ifEmpty { "?" }
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(scheme.background),
+    ) {
+        // ── Left column — profile + server config ────────────────────
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .weight(1f)
+                .fillMaxHeight(),
         ) {
+            SettingsTopBar(
+                title = "Settings",
+                onBack = { navController.popBackStack() },
+            )
 
-            // ── Profile card ─────────────────────────────────────────
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White)
-                    .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
-                    .padding(20.dp),
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Column {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(bottom = 16.dp),
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(48.dp)
-                                .clip(CircleShape)
-                                .background(Color(0xFFE0F7FA)),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            Text(
-                                text = "E4",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = SentryCyan,
-                            )
-                        }
-                        Spacer(Modifier.width(14.dp))
-                        Column {
-                            Text(
-                                text = "EMP_042",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = TextPrimary,
-                            )
-                            Text(
-                                text = "Heritage Insurance · Trainee",
-                                fontSize = 12.sp,
-                                color = TextSecondary,
-                            )
-                        }
-                    }
-
+                // profile card
+                item {
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(0.5.dp)
-                            .background(CardBorder),
-                    )
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(scheme.surface)
+                            .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
+                            .padding(20.dp),
+                    ) {
+                        Column {
+                            // avatar row
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.padding(bottom = 16.dp),
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(48.dp)
+                                        .clip(CircleShape)
+                                        .background(scheme.primary.copy(alpha = 0.12f)),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    SentryText(
+                                        text = initials,
+                                        size = SentryTextSize.Lg,
+                                        weight = FontWeight.Bold,
+                                        color = scheme.primary,
+                                    )
+                                }
+                                Spacer(Modifier.width(14.dp))
+                                Column {
+                                    SentryText(
+                                        text = state.participantId.ifEmpty { "—" },
+                                        size = SentryTextSize.Lg,
+                                        weight = FontWeight.Bold,
+                                        color = scheme.onBackground,
+                                    )
+                                    SentryText(
+                                        text = "${state.organisation} · ${state.role}",
+                                        size = SentryTextSize.Sm,
+                                        color = scheme.outline,
+                                    )
+                                }
+                            }
 
-                    // No isLast parameter — divider always drawn inside ProfileRow
-                    ProfileRow(label = "Participant ID", value = "EMP_042")
-                    ProfileRow(label = "Organisation", value = "Heritage Insurance")
-                    ProfileRow(label = "Role", value = "Trainee")
-                }
-            }
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(0.5.dp)
+                                    .background(CardBorder),
+                            )
 
-            // ── Server configuration ──────────────────────────────────
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White)
-                    .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
-                    .padding(20.dp),
-            ) {
-                Column {
-                    Text(
-                        text = "Server configuration",
-                        fontFamily = PhilosopherFont,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TextPrimary,
-                        modifier = Modifier.padding(bottom = 4.dp),
-                    )
-                    Text(
-                        text = "SENTRY middleware connection",
-                        fontSize = 12.sp,
-                        color = TextSecondary,
-                        modifier = Modifier.padding(bottom = 14.dp),
-                    )
-                    OutlinedTextField(
-                        value = serverUrl,
-                        onValueChange = { serverUrl = it },
-                        label = { Text("Middleware URL", fontSize = 12.sp) },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true,
-                        shape = RoundedCornerShape(10.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = SentryCyan,
-                            unfocusedBorderColor = CardBorder,
-                        ),
-                    )
-                    Spacer(Modifier.height(10.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(
-                            modifier = Modifier
-                                .size(8.dp)
-                                .clip(CircleShape)
-                                .background(Color(0xFF4CAF50)),
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            text = "Connected · Response time ~142ms",
-                            fontSize = 12.sp,
-                            color = TextSecondary,
-                        )
+                            ProfileRow(
+                                label = "Participant ID",
+                                value = state.participantId.ifEmpty { "—" })
+                            ProfileRow(
+                                label = "Organisation",
+                                value = state.organisation.ifEmpty { "—" })
+                            ProfileRow(label = "Role", value = state.role.ifEmpty { "—" })
+                        }
                     }
                 }
-            }
 
-            // ── Preferences ───────────────────────────────────────────
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(16.dp))
-                    .background(Color.White)
-                    .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
-                    .padding(20.dp),
-            ) {
-                Column {
-                    Text(
-                        text = "Preferences",
-                        fontFamily = PhilosopherFont,
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TextPrimary,
-                        modifier = Modifier.padding(bottom = 4.dp),
-                    )
-                    ToggleRow(
-                        label = "Grounded AI responses",
-                        subtitle = "Use RAG pipeline for verified answers",
-                        enabled = groundedAi,
-                        onToggle = { groundedAi = !groundedAi },
-                    )
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(0.5.dp)
-                        .background(CardBorder))
-                    ToggleRow(
-                        label = "Show source citations",
-                        subtitle = "Display OWASP and legal references",
-                        enabled = showSources,
-                        onToggle = { showSources = !showSources },
-                    )
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .height(0.5.dp)
-                        .background(CardBorder))
-                    ToggleRow(
-                        label = "Session notifications",
-                        subtitle = "Remind me to complete training",
-                        enabled = notifications,
-                        onToggle = { notifications = !notifications },
-                    )
+                // server configuration
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(scheme.surface)
+                            .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
+                            .padding(20.dp),
+                    ) {
+                        Column {
+                            SentryText(
+                                text = "Server configuration",
+                                size = SentryTextSize.Md,
+                                weight = FontWeight.Bold,
+                                color = scheme.onBackground,
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            SentryText(
+                                text = "SENTRY middleware connection",
+                                size = SentryTextSize.Sm,
+                                color = scheme.outline,
+                            )
+                            Spacer(Modifier.height(14.dp))
+                            OutlinedTextField(
+                                value = state.serverUrl,
+                                onValueChange = { vm.setServerUrl(it) },
+                                label = {
+                                    SentryText(
+                                        text = "Middleware URL",
+                                        size = SentryTextSize.Sm,
+                                        color = scheme.outline,
+                                    )
+                                },
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true,
+                                shape = RoundedCornerShape(10.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = scheme.primary,
+                                    unfocusedBorderColor = CardBorder,
+                                ),
+                            )
+                            Spacer(Modifier.height(10.dp))
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(8.dp)
+                                        .clip(CircleShape)
+                                        .background(ConnectedGreen),
+                                )
+                                Spacer(Modifier.width(8.dp))
+                                SentryText(
+                                    text = "Connected · Response time ~142ms",
+                                    size = SentryTextSize.Sm,
+                                    color = scheme.outline,
+                                )
+                            }
+                        }
+                    }
                 }
-            }
 
-            // ── Sign out ──────────────────────────────────────────────
+                item { Spacer(Modifier.height(80.dp)) }
+            }
+        }
+
+        // ── Right column — preferences + sign out ────────────────────
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .background(scheme.surface),
+        ) {
+            // right header bar
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(Color.White)
-                    .border(1.5.dp, Color(0xFFFFCDD2), RoundedCornerShape(14.dp))
-                    .clickable { vm.logout() }
-                    .padding(vertical = 16.dp),
-                contentAlignment = Alignment.Center,
+                    .height(64.dp)
+                    .background(scheme.primary),
+                contentAlignment = Alignment.CenterStart,
             ) {
-                Text(
-                    text = "Sign out",
-                    fontFamily = PhilosopherFont,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = DangerRed,
+                SentryText(
+                    text = "Preferences",
+                    size = SentryTextSize.Sm,
+                    weight = FontWeight.Bold,
+                    color = scheme.background,
+                    modifier = Modifier.padding(horizontal = 20.dp),
                 )
             }
 
-            Spacer(Modifier.height(8.dp))
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(scheme.background)
+                            .border(1.dp, CardBorder, RoundedCornerShape(16.dp))
+                            .padding(20.dp),
+                    ) {
+                        Column {
+                            ToggleRow(
+                                label = "Grounded AI responses",
+                                subtitle = "Use RAG pipeline for verified answers",
+                                enabled = state.groundedAi,
+                                onToggle = { vm.setGroundedAi(!state.groundedAi) },
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(0.5.dp)
+                                    .background(CardBorder),
+                            )
+                            ToggleRow(
+                                label = "Show source citations",
+                                subtitle = "Display OWASP and legal references",
+                                enabled = state.showSources,
+                                onToggle = { vm.setShowSources(!state.showSources) },
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(0.5.dp)
+                                    .background(CardBorder),
+                            )
+                            ToggleRow(
+                                label = "Session notifications",
+                                subtitle = "Remind me to complete training",
+                                enabled = state.notifications,
+                                onToggle = { vm.setNotifications(!state.notifications) },
+                            )
+                        }
+                    }
+                }
+
+                // sign out button
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(scheme.surface)
+                            .border(1.5.dp, DangerRedBg, RoundedCornerShape(14.dp))
+                            .clickable { vm.logout() }
+                            .padding(vertical = 16.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        SentryText(
+                            text = "Sign out",
+                            size = SentryTextSize.Md,
+                            weight = FontWeight.Bold,
+                            color = brand.red,
+                        )
+                    }
+                }
+
+                item { Spacer(Modifier.height(80.dp)) }
+            }
         }
     }
 }
 
 @Composable
+private fun SettingsTopBar(
+    title: String,
+    onBack: () -> Unit,
+) {
+    val scheme = MaterialTheme.colorScheme
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp)
+            .background(scheme.primary)
+            .padding(start = 10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(R.drawable.arrow_left_circle),
+                contentDescription = "Back",
+                tint = Color.White,
+                modifier = Modifier.size(30.dp).clickable{onBack()}
+            )
+            Spacer(Modifier.width(14.dp))
+            SentryText(
+                text = "Back",
+                size = SentryTextSize.Xl,
+                weight = FontWeight.Bold,
+                color = Color.White,
+            )
+        }
+        SentryText(
+            text = title,
+            size = SentryTextSize.Xl,
+            weight = FontWeight.Bold,
+            color = Color.White,
+            align = SentryTextAlign.Center,
+            //modifier = Modifier.align(Alignment.Center),
+        )
+        Spacer(Modifier.width(5.dp))
+
+    }
+}
+
+@Composable
 private fun ProfileRow(label: String, value: String) {
+    val scheme = MaterialTheme.colorScheme
+
     Column {
         Row(
             modifier = Modifier
@@ -311,18 +385,24 @@ private fun ProfileRow(label: String, value: String) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = label, fontSize = 13.sp, color = TextSecondary)
-            Text(
+            SentryText(
+                text = label,
+                size = SentryTextSize.Md,
+                color = scheme.outline,
+            )
+            SentryText(
                 text = value,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color = TextPrimary
+                size = SentryTextSize.Md,
+                weight = FontWeight.Medium,
+                color = scheme.onBackground,
             )
         }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(0.5.dp)
-            .background(CardBorder))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(0.5.dp)
+                .background(CardBorder),
+        )
     }
 }
 
@@ -333,6 +413,8 @@ private fun ToggleRow(
     enabled: Boolean,
     onToggle: () -> Unit,
 ) {
+    val scheme = MaterialTheme.colorScheme
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -341,21 +423,26 @@ private fun ToggleRow(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(
+            SentryText(
                 text = label,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Medium,
-                color = TextPrimary
+                size = SentryTextSize.Md,
+                weight = FontWeight.Medium,
+                color = scheme.onBackground,
             )
-            Text(text = subtitle, fontSize = 11.sp, color = TextSecondary)
+            SentryText(
+                text = subtitle,
+                size = SentryTextSize.Xs,
+                color = scheme.outline,
+            )
         }
         Spacer(Modifier.width(12.dp))
+        // custom toggle — no Material Switch API to avoid API 23 compat issues
         Box(
             modifier = Modifier
                 .width(44.dp)
                 .height(24.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(if (enabled) SentryCyan else Color(0xFFBDBDBD))
+                .background(if (enabled) scheme.primary else scheme.outline)
                 .clickable { onToggle() },
             contentAlignment = if (enabled) Alignment.CenterEnd else Alignment.CenterStart,
         ) {
