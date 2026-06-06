@@ -1,6 +1,7 @@
 package com.sentry.app.data.repository
 
 import com.sentry.app.core.navigation.UserRole
+import com.sentry.app.core.network.NetworkResult
 import com.sentry.app.data.local.TokenManager
 import com.sentry.app.data.models.response.AuthState
 import kotlinx.coroutines.flow.Flow
@@ -19,9 +20,9 @@ class AuthRepository @Inject constructor(
     ) { token, role ->
         AuthState(
             isAuthenticated = token != null,
-            participantId   = tokenManager.getParticipantId() ?: "",
-            role            = role ?: UserRole.TRAINEE.name.lowercase(),
-            organisationId  = tokenManager.getOrganisationId() ?: "",
+            participantId = tokenManager.getParticipantId() ?: "",
+            role = role ?: UserRole.TRAINEE.name.lowercase(),
+            organisationId = tokenManager.getOrganisationId() ?: "",
         )
     }
 
@@ -30,15 +31,24 @@ class AuthRepository @Inject constructor(
         pin: String,
         role: String,
         organisationId: String,
-    ): Result<AuthState> = runCatching {
-        require(participantId.isNotBlank()) { "Participant ID is required" }
-        require(pin.length >= 4) { "PIN must be at least 4 digits" }
+    ): NetworkResult<AuthState> {
+        return try {
+            require(participantId.isNotBlank()) { "Participant ID is required" }
+            require(pin.length >= 4) { "PIN must be at least 4 digits" }
 
-        val token = "${participantId}_${System.currentTimeMillis()}"
-        tokenManager.saveSession(token, participantId, role, organisationId)
+            // local fake token — no backend auth endpoint in this study
+            val token = "${participantId}_${System.currentTimeMillis()}"
+            tokenManager.saveSession(token, participantId, role, organisationId)
 
-        Timber.i("AuthRepository: login — $participantId ($role)")
-        AuthState(true, participantId, role, organisationId)
+            Timber.i("AuthRepository: login — $participantId ($role)")
+            NetworkResult.Success(AuthState(true, participantId, role, organisationId))
+        } catch (e: IllegalArgumentException) {
+            NetworkResult.Error(
+                message = e.message ?: "Validation failed"
+            )
+        } catch (e: Exception) {
+            NetworkResult.Exception(e)
+        }
     }
 
     suspend fun logout() {
@@ -47,5 +57,5 @@ class AuthRepository @Inject constructor(
     }
 
     fun isAuthenticated() = tokenManager.isAuthenticated()
-    fun getCurrentRole()  = UserRole.from(tokenManager.getRole() ?: "trainee")
+    fun getCurrentRole() = UserRole.from(tokenManager.getRole() ?: "trainee")
 }

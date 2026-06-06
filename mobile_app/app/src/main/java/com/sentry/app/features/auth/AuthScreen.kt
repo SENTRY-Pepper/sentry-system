@@ -7,21 +7,22 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,232 +38,280 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.sentry.app.R
 import com.sentry.app.core.navigation.UserRole
-import com.sentry.app.features.splash.SentryCyan
-import com.sentry.app.ui.theme.ItimFont
-import com.sentry.app.ui.theme.PhilosopherFont
+import com.sentry.app.core.navigation.navigateAndClear
+import com.sentry.app.core.navigation.navigateSingleTop
+import com.sentry.app.core.ui.components.texts.SentryText
+import com.sentry.app.core.ui.models.SentryTextAlign
+import com.sentry.app.core.ui.models.SentryTextSize
+import com.sentry.app.core.ui.theme.LocalBrandColors
 
-private val SentryGreen     = Color(0xFF4CAF50)
-private val SentryGreenDk   = Color(0xFF388E3C)
-private val SentryGreenLt   = Color(0xFFE8F5E9)
-private val BorderGreen     = Color(0xFF66BB6A)
-private val TextFieldBorder = Color(0xFF66BB6A)
+// component-specific tokens — green accent is auth-screen only, not a global brand token
+private val AuthGreen = Color(0xFF4CAF50)
+private val AuthGreenDark = Color(0xFF388E3C)
+private val AuthGreenBorder = Color(0xFF66BB6A)
+private val NeutralBorder = Color(0xFFBDBDBD)
+private val NeutralText = Color(0xFF424242)
+private val CardBorder = Color(0xFFE0E0E0)
 
 @Composable
 fun AuthScreen(
-    state: AuthUiState,
-    onLoginClick: (String, String, String, String) -> Unit,
-    onLoginSuccess: (UserRole) -> Unit,
+    navController: NavHostController,
+    vm: AuthViewModel = hiltViewModel(),
 ) {
-    var participantId  by remember { mutableStateOf("") }
-    var password       by remember { mutableStateOf("") }
-    var organisation   by remember { mutableStateOf("") }
-    var selectedRole   by remember { mutableStateOf(UserRole.TRAINEE) }
+    val state by vm.uiState.collectAsStateWithLifecycle()
+    val scheme = MaterialTheme.colorScheme
+    val brand = LocalBrandColors.current
 
-    LaunchedEffect(state.success) {
-        state.success?.let { onLoginSuccess(it) }
+    var participantId by remember { mutableStateOf("") }
+    var pin by remember { mutableStateOf("") }
+    var organisation by remember { mutableStateOf("") }
+    var selectedRole by remember { mutableStateOf(UserRole.TRAINEE) }
+
+    // collect one-shot nav events
+    LaunchedEffect(Unit) {
+        vm.events.collect { event ->
+            when (event) {
+                is AuthEvent.NavigateToHome -> {
+                    val route = if (event.role == UserRole.ADMIN) "adminHome" else "traineeHome"
+                    navController.navigateAndClear(route, popUpToRoute = "auth")
+
+                }
+            }
+        }
     }
 
-    Column(
+    Row(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
-            .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
+            .background(scheme.background),
     ) {
-
-        // ── Cyan header bar ──────────────────────────────────────────
-        Box(
+        // ── Left column — branding + role toggle ─────────────────────
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(90.dp)
-                .background(SentryCyan),
-        )
-
-        // ── Pepper robot card — overlaps the cyan bar ────────────────
-        Box(
-            modifier = Modifier
-                .padding(top = 0.dp)
-                .size(width = 180.dp, height = 130.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(Color.White)
-                .border(1.dp, Color(0xFFE0E0E0), RoundedCornerShape(16.dp)),
-            contentAlignment = Alignment.Center,
+                .weight(1f)
+                .fillMaxHeight()
+                .background(scheme.primary),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            Image(
-                painter            = painterResource(id = R.drawable.pepper_robot),
-                contentDescription = "Pepper robot",
-                modifier           = Modifier.size(width = 160.dp, height = 115.dp),
-                contentScale       = ContentScale.Fit,
+            // pepper robot card
+            Box(
+                modifier = Modifier
+                    .size(width = 180.dp, height = 140.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(Color.White)
+                    .border(1.dp, CardBorder, RoundedCornerShape(16.dp)),
+                contentAlignment = Alignment.Center,
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.pepper_robot),
+                    contentDescription = "Pepper robot",
+                    modifier = Modifier.size(width = 160.dp, height = 120.dp),
+                    contentScale = ContentScale.Fit,
+                )
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            SentryText(
+                text = "Welcome to SENTRY",
+                size = SentryTextSize.Display,
+                weight = FontWeight.Bold,
+                color = Color.White,
+                align = SentryTextAlign.Center,
+                modifier = Modifier.padding(horizontal = 24.dp),
             )
-        }
 
-        Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(8.dp))
 
-        // ── Welcome text ─────────────────────────────────────────────
-        Text(
-            text       = "Welcome to SENTRY, your personalised and\ngrounded AI tutor in Cybersecurity.",
-            fontFamily = PhilosopherFont,
-            fontSize   = 15.sp,
-            color      = Color(0xFF212121),
-            textAlign  = TextAlign.Center,
-            lineHeight = 22.sp,
-            modifier   = Modifier.padding(horizontal = 32.dp),
-        )
-
-        Spacer(Modifier.height(20.dp))
-
-        // ── Role toggle ──────────────────────────────────────────────
-        Row(
-            modifier            = Modifier.padding(horizontal = 80.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            RoleButton(
-                label    = "Trainee",
-                selected = selectedRole == UserRole.TRAINEE,
-                onClick  = { selectedRole = UserRole.TRAINEE },
-                modifier = Modifier.weight(1f),
+            SentryText(
+                text = "Your personalised and grounded\nAI tutor in Cybersecurity",
+                size = SentryTextSize.Sm,
+                color = Color.White.copy(alpha = 0.85f),
+                align = SentryTextAlign.Center,
+                maxLines = 3,
+                modifier = Modifier.padding(horizontal = 32.dp),
             )
-            RoleButton(
-                label    = "Admin",
-                selected = selectedRole == UserRole.ADMIN,
-                onClick  = { selectedRole = UserRole.ADMIN },
-                modifier = Modifier.weight(1f),
-            )
-        }
 
-        Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(32.dp))
 
-        // ── Form card ────────────────────────────────────────────────
-        Box(
-            modifier = Modifier
-                .padding(horizontal = 32.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp))
-                .border(1.5.dp, BorderGreen, RoundedCornerShape(16.dp))
-                .background(Color.White)
-                .padding(20.dp),
-        ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            // role toggle
+            Row(
+                modifier = Modifier.padding(horizontal = 32.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                RoleButton(
+                    label = "Trainee",
+                    selected = selectedRole == UserRole.TRAINEE,
+                    onClick = { selectedRole = UserRole.TRAINEE },
+                    modifier = Modifier.weight(1f),
+                )
+                RoleButton(
+                    label = "Admin",
+                    selected = selectedRole == UserRole.ADMIN,
+                    onClick = { selectedRole = UserRole.ADMIN },
+                    modifier = Modifier.weight(1f),
+                )
+            }
 
-                // Left: form fields
-                Column(modifier = Modifier.weight(1f)) {
+            Spacer(Modifier.height(24.dp))
+
+            // info panel
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 32.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Color.White.copy(alpha = 0.12f))
+                    .padding(16.dp),
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    SentryText(
+                        text = if (selectedRole == UserRole.TRAINEE)
+                            "Signing in as an Employee"
+                        else
+                            "Signing in as an Admin",
+                        size = SentryTextSize.Md,
+                        weight = FontWeight.Bold,
+                        color = Color.White,
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    InfoItem("Real-world scenarios")
+                    InfoItem("AI grounded explanations")
+                    InfoItem("Legal context from Kenyan Law")
                     if (selectedRole == UserRole.ADMIN) {
-                        AuthField(
-                            label       = "Organisation:",
-                            value       = organisation,
-                            onValueChange = { organisation = it },
-                        )
-                        Spacer(Modifier.height(12.dp))
-                    }
-                    AuthField(
-                        label         = "Participant ID:",
-                        value         = participantId,
-                        onValueChange = { participantId = it },
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    AuthField(
-                        label         = "Password:",
-                        value         = password,
-                        onValueChange = { password = it },
-                        isPassword    = true,
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        text     = "Forgot Password?",
-                        fontSize = 12.sp,
-                        color    = Color(0xFFF44336),
-                        modifier = Modifier
-                            .align(Alignment.End)
-                            .clickable { },
-                    )
-                }
-
-                Spacer(Modifier.width(8.dp))
-
-                // Right: info panel + proceed button
-                Column(modifier = Modifier.weight(1f)) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(SentryGreen)
-                            .padding(16.dp),
-                    ) {
-                        Column {
-                            Text(
-                                text       = if (selectedRole == UserRole.TRAINEE)
-                                    "Signing in as an Employee"
-                                else
-                                    "Sign in as an Admin",
-                                fontFamily = PhilosopherFont,
-                                fontSize   = 15.sp,
-                                fontWeight = FontWeight.Bold,
-                                color      = Color.White,
-                            )
-                            Spacer(Modifier.height(10.dp))
-                            InfoItem("Real-world scenarios")
-                            InfoItem("AI grounded explanations")
-                            InfoItem("Legal context from Kenyan Law")
-                            if (selectedRole == UserRole.ADMIN) {
-                                InfoItem("Organisational analytics")
-                            }
-                        }
-                    }
-
-                    Spacer(Modifier.height(12.dp))
-
-                    // Proceed button
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(SentryGreenDk)
-                            .clickable {
-                                val org = if (selectedRole == UserRole.ADMIN)
-                                    organisation else "SENTRY_STUDY"
-                                onLoginClick(
-                                    participantId,
-                                    password,
-                                    selectedRole.name.lowercase(),
-                                    org,
-                                )
-                            }
-                            .padding(vertical = 14.dp),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            text       = if (selectedRole == UserRole.TRAINEE)
-                                "Proceed to sessions ⊞"
-                            else
-                                "Proceed to Admin Panel ⊞",
-                            fontFamily = PhilosopherFont,
-                            fontSize   = 14.sp,
-                            fontWeight = FontWeight.Bold,
-                            color      = Color.White,
-                        )
-                    }
-
-                    // Error message
-                    if (state.error.isNotBlank()) {
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            text     = state.error,
-                            fontSize = 12.sp,
-                            color    = Color(0xFFF44336),
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth(),
-                        )
+                        InfoItem("Organisational analytics")
                     }
                 }
             }
         }
 
-        Spacer(Modifier.height(32.dp))
+        // ── Right column — login form ─────────────────────────────────
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .background(scheme.background),
+            contentPadding = PaddingValues(32.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            item {
+                SentryText(
+                    text = "Sign in",
+                    size = SentryTextSize.Xl,
+                    weight = FontWeight.Bold,
+                    color = scheme.onBackground,
+                )
+                Spacer(Modifier.height(4.dp))
+                SentryText(
+                    text = "Enter your credentials to continue",
+                    size = SentryTextSize.Sm,
+                    color = scheme.outline,
+                )
+            }
+
+            // organisation field — admin only
+            if (selectedRole == UserRole.ADMIN) {
+                item {
+                    AuthField(
+                        label = "Organisation:",
+                        value = organisation,
+                        onValueChange = { organisation = it },
+                    )
+                }
+            }
+
+            item {
+                AuthField(
+                    label = "Participant ID:",
+                    value = participantId,
+                    onValueChange = { participantId = it },
+                )
+            }
+
+            item {
+                AuthField(
+                    label = "PIN:",
+                    value = pin,
+                    onValueChange = { pin = it },
+                    isPassword = true,
+                )
+                Spacer(Modifier.height(4.dp))
+                SentryText(
+                    text = "Forgot PIN?",
+                    size = SentryTextSize.Sm,
+                    color = brand.red,
+                    modifier = Modifier
+                        //.align(Alignment.End)
+                        .clickable { },
+                )
+            }
+
+            // proceed button
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(
+                            if (state.loading) scheme.outline
+                            else AuthGreenDark
+                        )
+                        .clickable(enabled = !state.loading) {
+                            val org = if (selectedRole == UserRole.ADMIN)
+                                organisation else "SENTRY_STUDY"
+                            vm.login(
+                                participantId = participantId,
+                                pin = pin,
+                                role = selectedRole.name.lowercase(),
+                                organisationId = org,
+                            )
+                        }
+                        .padding(vertical = 14.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    if (state.loading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(20.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        SentryText(
+                            text = if (selectedRole == UserRole.TRAINEE)
+                                "Proceed to sessions ⊞"
+                            else
+                                "Proceed to Admin Panel ⊞",
+                            size = SentryTextSize.Md,
+                            weight = FontWeight.Bold,
+                            color = Color.White,
+                        )
+                    }
+                }
+            }
+
+            // error
+            if (state.error.isNotBlank()) {
+                item {
+                    SentryText(
+                        text = state.error,
+                        size = SentryTextSize.Sm,
+                        color = brand.red,
+                        align = SentryTextAlign.Center,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
+
+            item { Spacer(Modifier.height(80.dp)) }
+        }
     }
 }
 
@@ -276,22 +325,23 @@ private fun RoleButton(
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(24.dp))
-            .background(if (selected) SentryGreen else Color.White)
+            .background(
+                if (selected) Color.White else Color.Transparent
+            )
             .border(
                 width = 1.5.dp,
-                color = if (selected) SentryGreen else Color(0xFFBDBDBD),
+                color = if (selected) Color.White else Color.White.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(24.dp),
             )
             .clickable { onClick() }
             .padding(vertical = 10.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Text(
-            text       = label,
-            fontFamily = PhilosopherFont,
-            fontSize   = 14.sp,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-            color      = if (selected) Color.White else Color(0xFF424242),
+        SentryText(
+            text = label,
+            size = SentryTextSize.Md,
+            weight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            color = if (selected) AuthGreen else Color.White,
         )
     }
 }
@@ -303,28 +353,30 @@ private fun AuthField(
     onValueChange: (String) -> Unit,
     isPassword: Boolean = false,
 ) {
+    val scheme = MaterialTheme.colorScheme
+
     Column {
-        Text(
-            text     = label,
-            fontSize = 13.sp,
-            color    = Color(0xFF424242),
-            fontWeight = FontWeight.Medium,
+        SentryText(
+            text = label,
+            size = SentryTextSize.Sm,
+            weight = FontWeight.Medium,
+            color = NeutralText,
         )
         Spacer(Modifier.height(4.dp))
         OutlinedTextField(
-            value         = value,
+            value = value,
             onValueChange = onValueChange,
-            modifier      = Modifier.fillMaxWidth(),
-            singleLine    = true,
-            shape         = RoundedCornerShape(10.dp),
-            colors        = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor   = TextFieldBorder,
-                unfocusedBorderColor = Color(0xFFBDBDBD),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            shape = RoundedCornerShape(10.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = AuthGreenBorder,
+                unfocusedBorderColor = NeutralBorder,
             ),
             visualTransformation = if (isPassword) PasswordVisualTransformation()
-            else androidx.compose.ui.text.input.VisualTransformation.None,
+            else VisualTransformation.None,
             keyboardOptions = if (isPassword)
-                KeyboardOptions(keyboardType = KeyboardType.Password)
+                KeyboardOptions(keyboardType = KeyboardType.NumberPassword)
             else
                 KeyboardOptions.Default,
         )
@@ -334,15 +386,18 @@ private fun AuthField(
 @Composable
 private fun InfoItem(text: String) {
     Row(
-        modifier       = Modifier.padding(vertical = 3.dp),
         verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 2.dp),
     ) {
-        Text("i.  ", fontSize = 12.sp, color = Color.White)
-        Text(
-            text       = text,
-            fontFamily = PhilosopherFont,
-            fontSize   = 12.sp,
-            color      = Color.White,
+        SentryText(
+            text = "i.  ",
+            size = SentryTextSize.Sm,
+            color = Color.White.copy(alpha = 0.7f),
+        )
+        SentryText(
+            text = text,
+            size = SentryTextSize.Sm,
+            color = Color.White,
         )
     }
 }

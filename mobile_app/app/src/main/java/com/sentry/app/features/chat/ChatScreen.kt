@@ -29,9 +29,9 @@ import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -44,30 +44,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.sentry.app.R
-import com.sentry.app.features.splash.SentryCyan
-import com.sentry.app.ui.theme.PhilosopherFont
-
-private val UserBubble    = Color(0xFF29B6F6)
-private val PepperBubble  = Color(0xFFE3F2FD)
-private val PepperBorder  = Color(0xFFBBDEFB)
-private val SourceTagBg   = Color(0xFFE8EAF6)
-private val SourceTagText = Color(0xFF3949AB)
-private val TextPrimary   = Color(0xFF212121)
-private val TextSecondary = Color(0xFF757575)
+import com.sentry.app.core.ui.components.texts.SentryText
+import com.sentry.app.core.ui.models.SentryTextSize
 
 @Composable
 fun ChatScreen(
-    onBack: () -> Unit,
+    navController: NavHostController,
     vm: ChatViewModel = hiltViewModel(),
 ) {
-    val state     by vm.uiState.collectAsStateWithLifecycle()
+    val state by vm.uiState.collectAsStateWithLifecycle()
+    val scheme = MaterialTheme.colorScheme
     val listState = rememberLazyListState()
 
-    // Auto-scroll to bottom when new message arrives
+    // auto-scroll to bottom when new message arrives
     LaunchedEffect(state.messages.size) {
         if (state.messages.isNotEmpty()) {
             listState.animateScrollToItem(state.messages.lastIndex)
@@ -77,7 +70,7 @@ fun ChatScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5))
+            .background(scheme.background)
             .imePadding(),
     ) {
         // ── Top bar ──────────────────────────────────────────────────
@@ -85,10 +78,10 @@ fun ChatScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(64.dp)
-                .background(SentryCyan),
+                .background(scheme.primary),
         ) {
             IconButton(
-                onClick  = onBack,
+                onClick = { navController.popBackStack() },
                 modifier = Modifier.align(Alignment.CenterStart),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -97,37 +90,37 @@ fun ChatScreen(
                         contentDescription = "Back",
                         tint = Color.White,
                     )
-                    Text(
-                        text       = "BACK",
-                        color      = Color.White,
-                        fontSize   = 13.sp,
-                        fontWeight = FontWeight.Bold,
+                    SentryText(
+                        text = "BACK",
+                        size = SentryTextSize.Sm,
+                        weight = FontWeight.Bold,
+                        color = Color.White,
                     )
                 }
             }
+
             Column(
-                modifier            = Modifier.align(Alignment.Center),
+                modifier = Modifier.align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(
-                    text       = "Chat with Pepper",
-                    fontFamily = PhilosopherFont,
-                    fontSize   = 17.sp,
-                    fontWeight = FontWeight.Bold,
-                    color      = Color.White,
+                SentryText(
+                    text = "Chat with Pepper",
+                    size = SentryTextSize.Xl,
+                    weight = FontWeight.Bold,
+                    color = Color.White,
                 )
-                Text(
-                    text     = "Grounded AI · OWASP + Kenyan law",
-                    fontSize = 11.sp,
-                    color    = Color.White.copy(alpha = 0.85f),
+                SentryText(
+                    text = "Grounded AI · OWASP + Kenyan law",
+                    size = SentryTextSize.Xs,
+                    color = Color.White.copy(alpha = 0.85f),
                 )
             }
         }
 
         // ── Message list ─────────────────────────────────────────────
         LazyColumn(
-            state           = listState,
-            modifier        = Modifier
+            state = listState,
+            modifier = Modifier
                 .weight(1f)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -137,44 +130,42 @@ fun ChatScreen(
                     UserMessage(text = message.text)
                 } else {
                     PepperMessage(
-                        text    = message.text,
+                        text = message.text,
                         sources = message.sources,
                     )
                 }
             }
 
             if (state.loading) {
-                item {
-                    PepperTypingIndicator()
-                }
+                item { PepperTypingIndicator() }
             }
         }
 
         // ── Input bar ────────────────────────────────────────────────
         Row(
-            modifier          = Modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
-                .border(0.5.dp, Color(0xFFE0E0E0), RoundedCornerShape(0.dp))
+                .background(scheme.surface)
+                .border(0.5.dp, InputBorder, RoundedCornerShape(0.dp))
                 .padding(horizontal = 12.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             OutlinedTextField(
-                value         = state.inputText,
+                value = state.inputText,
                 onValueChange = { vm.onInputChanged(it) },
-                placeholder   = {
-                    Text(
-                        "Ask Pepper about cybersecurity…",
-                        fontSize = 13.sp,
-                        color    = Color(0xFFBDBDBD),
+                placeholder = {
+                    SentryText(
+                        text = "Ask Pepper about cybersecurity…",
+                        size = SentryTextSize.Md,
+                        color = scheme.outline,
                     )
                 },
-                modifier      = Modifier.weight(1f),
-                singleLine    = true,
-                shape         = RoundedCornerShape(24.dp),
-                colors        = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor   = SentryCyan,
-                    unfocusedBorderColor = Color(0xFFE0E0E0),
+                modifier = Modifier.weight(1f),
+                singleLine = true,
+                shape = RoundedCornerShape(24.dp),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = scheme.primary,
+                    unfocusedBorderColor = InputBorder,
                 ),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
                 keyboardActions = KeyboardActions(onSend = { vm.sendMessage() }),
@@ -186,15 +177,15 @@ fun ChatScreen(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(CircleShape)
-                    .background(SentryCyan),
+                    .background(scheme.primary),
                 contentAlignment = Alignment.Center,
             ) {
                 IconButton(onClick = { vm.sendMessage() }) {
                     Icon(
                         Icons.AutoMirrored.Filled.Send,
                         contentDescription = "Send",
-                        tint               = Color.White,
-                        modifier           = Modifier.size(20.dp),
+                        tint = Color.White,
+                        modifier = Modifier.size(20.dp),
                     )
                 }
             }
@@ -205,7 +196,7 @@ fun ChatScreen(
 @Composable
 private fun UserMessage(text: String) {
     Row(
-        modifier              = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.End,
     ) {
         Box(
@@ -215,11 +206,11 @@ private fun UserMessage(text: String) {
                 .background(UserBubble)
                 .padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
-            Text(
-                text      = text,
-                fontSize  = 14.sp,
-                color     = Color.White,
-                lineHeight = 21.sp,
+            SentryText(
+                text = text,
+                size = SentryTextSize.Md,
+                color = Color.White,
+                maxLines = Int.MAX_VALUE,
             )
         }
     }
@@ -227,27 +218,29 @@ private fun UserMessage(text: String) {
 
 @Composable
 private fun PepperMessage(text: String, sources: List<String>) {
+    val scheme = MaterialTheme.colorScheme
+
     Row(
-        modifier          = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.Bottom,
         horizontalArrangement = Arrangement.Start,
     ) {
-        // Pepper avatar
+        // pepper avatar
         Box(
             modifier = Modifier
                 .size(36.dp)
                 .clip(CircleShape)
-                .background(Color.White)
-                .border(1.dp, Color(0xFFE0E0E0), CircleShape),
+                .background(scheme.surface)
+                .border(1.dp, InputBorder, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
             Image(
-                painter            = painterResource(R.drawable.pepper_robot),
+                painter = painterResource(R.drawable.pepper_robot),
                 contentDescription = "Pepper",
-                modifier           = Modifier
+                modifier = Modifier
                     .size(30.dp)
                     .clip(CircleShape),
-                contentScale       = ContentScale.Crop,
+                contentScale = ContentScale.Crop,
             )
         }
 
@@ -265,22 +258,22 @@ private fun PepperMessage(text: String, sources: List<String>) {
                     )
                     .padding(horizontal = 16.dp, vertical = 12.dp),
             ) {
-                Text(
-                    text      = text,
-                    fontSize  = 14.sp,
-                    color     = TextPrimary,
-                    lineHeight = 21.sp,
+                SentryText(
+                    text = text,
+                    size = SentryTextSize.Md,
+                    color = scheme.onBackground,
+                    maxLines = Int.MAX_VALUE,
                 )
             }
 
-            // Sources
+            // sources
             if (sources.isNotEmpty()) {
                 Spacer(Modifier.height(6.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text(
-                        text     = "Sources:",
-                        fontSize = 10.sp,
-                        color    = TextSecondary,
+                    SentryText(
+                        text = "Sources:",
+                        size = SentryTextSize.Xs,
+                        color = scheme.outline,
                     )
                     sources.take(3).forEach { source ->
                         Box(
@@ -289,10 +282,10 @@ private fun PepperMessage(text: String, sources: List<String>) {
                                 .background(SourceTagBg)
                                 .padding(horizontal = 8.dp, vertical = 3.dp),
                         ) {
-                            Text(
-                                text     = source,
-                                fontSize = 10.sp,
-                                color    = SourceTagText,
+                            SentryText(
+                                text = source,
+                                size = SentryTextSize.Xs,
+                                color = SourceTagText,
                             )
                         }
                     }
@@ -304,23 +297,29 @@ private fun PepperMessage(text: String, sources: List<String>) {
 
 @Composable
 private fun PepperTypingIndicator() {
+    val scheme = MaterialTheme.colorScheme
+
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier
                 .size(36.dp)
                 .clip(CircleShape)
-                .background(Color.White)
-                .border(1.dp, Color(0xFFE0E0E0), CircleShape),
+                .background(scheme.surface)
+                .border(1.dp, InputBorder, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
             Image(
-                painter            = painterResource(R.drawable.pepper_robot),
+                painter = painterResource(R.drawable.pepper_robot),
                 contentDescription = null,
-                modifier           = Modifier.size(30.dp).clip(CircleShape),
-                contentScale       = ContentScale.Crop,
+                modifier = Modifier
+                    .size(30.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop,
             )
         }
+
         Spacer(Modifier.width(8.dp))
+
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(18.dp))
@@ -329,20 +328,29 @@ private fun PepperTypingIndicator() {
                 .padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
             Row(
-                verticalAlignment     = Alignment.CenterVertically,
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
                 CircularProgressIndicator(
-                    modifier    = Modifier.size(14.dp),
-                    color       = SentryCyan,
+                    modifier = Modifier.size(14.dp),
+                    color = scheme.primary,
                     strokeWidth = 2.dp,
                 )
-                Text(
-                    text     = "Pepper is thinking…",
-                    fontSize = 13.sp,
-                    color    = TextSecondary,
+                SentryText(
+                    text = "Pepper is thinking…",
+                    size = SentryTextSize.Md,
+                    color = scheme.outline,
                 )
             }
         }
     }
 }
+
+
+// component-specific tokens — chat bubble colours are not global brand tokens
+private val UserBubble = Color(0xFF29B6F6)
+private val PepperBubble = Color(0xFFE3F2FD)
+private val PepperBorder = Color(0xFFBBDEFB)
+private val SourceTagBg = Color(0xFFE8EAF6)
+private val SourceTagText = Color(0xFF3949AB)
+private val InputBorder = Color(0xFFE0E0E0)

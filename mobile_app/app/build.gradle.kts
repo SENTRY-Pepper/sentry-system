@@ -8,15 +8,15 @@ plugins {
 }
 
 android {
-    namespace  = "com.sentry.app"
+    namespace = "com.sentry.app"
     compileSdk = 35
 
     defaultConfig {
         applicationId = "com.sentry.app"
-        minSdk        = 23
-        targetSdk     = 35
-        versionCode   = 1
-        versionName   = "1.0.0"
+        minSdk = 23
+        targetSdk = 35
+        versionCode = 1
+        versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField(
             "String",
@@ -27,13 +27,13 @@ android {
 
     buildTypes {
         debug {
-            isDebuggable        = true
-            isMinifyEnabled     = false
+            isDebuggable = true
+            isMinifyEnabled = false
             applicationIdSuffix = ".debug"
             manifestPlaceholders["usesCleartextTraffic"] = "true"
         }
         release {
-            isMinifyEnabled   = true
+            isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -49,7 +49,7 @@ android {
     }
 
     buildFeatures {
-        compose     = true
+        compose = true
         buildConfig = true
     }
 
@@ -88,11 +88,19 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
     // Retrofit + OkHttp — networking
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    /* implementation("com.squareup.retrofit2:retrofit:2.11.0")
+     implementation("com.squareup.retrofit2:converter-kotlinx-serialization:2.11.0")
+     implementation("com.squareup.okhttp3:okhttp:4.12.0")
+     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+ */
 
+    // Ktor
+    val ktor_version = "2.3.12"
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-cio:$ktor_version")          // pure Kotlin engine, API 23 safe
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
     // Kotlinx Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 
@@ -113,12 +121,14 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
 
     // Google Fonts for Compose
-    implementation("androidx.compose.ui:ui-text-google-fonts:1.7.3")
+    //implementation("androidx.compose.ui:ui-text-google-fonts:1.7.3")
 
     // Tests
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+
+
 }
 
 kapt {

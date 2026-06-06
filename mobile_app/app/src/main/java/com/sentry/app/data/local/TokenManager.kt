@@ -20,28 +20,28 @@ private val Context.authDataStore: DataStore<Preferences>
 
 @Singleton
 class TokenManager @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
 ) {
     companion object {
-        private val KEY_TOKEN   = stringPreferencesKey("auth_token")
-        private val KEY_ID      = stringPreferencesKey("participant_id")
-        private val KEY_ROLE    = stringPreferencesKey("user_role")
-        private val KEY_ORG     = stringPreferencesKey("organisation_id")
+        private val KEY_TOKEN = stringPreferencesKey("auth_token")
+        private val KEY_ID = stringPreferencesKey("participant_id")
+        private val KEY_ROLE = stringPreferencesKey("user_role")
+        private val KEY_ORG = stringPreferencesKey("organisation_id")
     }
 
     // Synchronous reads used by OkHttp interceptor (runs off main thread)
-    fun getToken(): String?         = runBlocking { dataFlow(KEY_TOKEN).first() }
-    fun getRole(): String?          = runBlocking { dataFlow(KEY_ROLE).first() }
+    fun getToken(): String? = runBlocking { dataFlow(KEY_TOKEN).first() }
+    fun getRole(): String? = runBlocking { dataFlow(KEY_ROLE).first() }
     fun getParticipantId(): String? = runBlocking { dataFlow(KEY_ID).first() }
     fun getOrganisationId(): String? = runBlocking { dataFlow(KEY_ORG).first() }
-    fun isAuthenticated(): Boolean  = getToken() != null
+    fun isAuthenticated(): Boolean = getToken() != null
 
     // Blocking clear for use from interceptor thread
     fun clearTokenBlocking() = runBlocking { clearToken() }
 
     // Reactive flows for ViewModels
     val tokenFlow: Flow<String?> = dataFlow(KEY_TOKEN)
-    val roleFlow:  Flow<String?> = dataFlow(KEY_ROLE)
+    val roleFlow: Flow<String?> = dataFlow(KEY_ROLE)
 
     // Suspend writes — called from coroutine context only
     suspend fun saveSession(
@@ -53,9 +53,9 @@ class TokenManager @Inject constructor(
         Timber.d("TokenManager: saving session for $participantId ($role)")
         context.authDataStore.edit {
             it[KEY_TOKEN] = token
-            it[KEY_ID]    = participantId
-            it[KEY_ROLE]  = role
-            it[KEY_ORG]   = organisationId
+            it[KEY_ID] = participantId
+            it[KEY_ROLE] = role
+            it[KEY_ORG] = organisationId
         }
     }
 

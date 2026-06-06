@@ -9,6 +9,7 @@ import timber.log.Timber
  * @HiltAndroidApp triggers Hilt's code generation and sets up
  * the dependency injection graph for the entire app.
  */
+
 @HiltAndroidApp
 class SentryApplication : Application() {
     override fun onCreate() {

@@ -1,55 +1,37 @@
 package com.sentry.app.data.repository
 
 import com.sentry.app.core.network.NetworkResult
-import com.sentry.app.core.network.safeApiCall
-import com.sentry.app.data.models.request.*
-import com.sentry.app.data.models.response.*
-import com.sentry.app.data.remote.api.SentryApiService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import javax.inject.Inject
-import javax.inject.Singleton
+import com.sentry.app.data.models.response.SessionEndResponse
+import com.sentry.app.data.models.response.SessionStartResponse
+import com.sentry.app.data.models.response.SessionSummary
 
-@Singleton
-class SessionRepository @Inject constructor(private val api: SentryApiService) {
+interface SessionRepository {
 
     suspend fun startSession(
-        participantId: String, condition: String, organisationId: String,
-    ): NetworkResult<SessionStartResponse> = io {
-        safeApiCall("Session.start") {
-            api.startSession(SessionStartRequest(participantId, condition, organisationId))
-        }
-    }
+        condition: String,
+    ): NetworkResult<SessionStartResponse>
 
     suspend fun endSession(
-        sessionId: String, preScore: Float?, postScore: Float?, durationSeconds: Int?,
-    ): NetworkResult<SessionEndResponse> = io {
-        safeApiCall("Session.end") {
-            api.endSession(SessionEndRequest(sessionId, preScore, postScore, durationSeconds))
-        }
-    }
+        sessionId: String,
+        preAssessmentScore: Float?,
+        postAssessmentScore: Float?,
+        durationSeconds: Int?,
+    ): NetworkResult<SessionEndResponse>
 
-    suspend fun getSession(sessionId: String): NetworkResult<SessionSummary> = io {
-        safeApiCall("Session.get") { api.getSession(sessionId) }
-    }
+    suspend fun getSession(
+        sessionId: String,
+    ): NetworkResult<SessionSummary>
 
-    // Fire-and-forget — non-fatal if it fails
-    suspend fun logInteraction(
-        sessionId: String, scenarioId: String, scenarioType: String,
-        decision: String, employeeResponse: String?, responseTimeMs: Int?,
-        correctionLoops: Int = 0, aiLatencyMs: Float?, aiSources: String?,
-    ): NetworkResult<InteractionLogResponse> = io {
-        safeApiCall("Session.log") {
-            api.logInteraction(
-                InteractionLogRequest(
-                    sessionId, scenarioId, scenarioType,
-                    decision, employeeResponse, responseTimeMs,
-                    correctionLoops, aiLatencyMs, aiSources,
-                )
-            )
-        }
-    }
-
-    private suspend fun <T> io(block: suspend () -> T): T =
-        withContext(Dispatchers.IO) { block() }
+    // fire-and-forget — failures are non-fatal and must not block UI
+    fun logInteraction(
+        sessionId: String,
+        scenarioId: String,
+        scenarioType: String,
+        decision: String,
+        employeeResponse: String?,
+        responseTimeMs: Int?,
+        correctionLoops: Int,
+        aiLatencyMs: Float?,
+        aiSources: String?,
+    )
 }

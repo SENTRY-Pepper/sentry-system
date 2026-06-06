@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -26,37 +26,41 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.sentry.app.R
 import com.sentry.app.core.navigation.UserRole
-import com.sentry.app.ui.theme.ItimFont
-import com.sentry.app.ui.theme.PhilosopherFont
+import com.sentry.app.core.navigation.navigateAndClear
+import com.sentry.app.core.navigation.navigateSingleTop
+import com.sentry.app.core.ui.components.texts.SentryText
+import com.sentry.app.core.ui.models.SentryTextAlign
+import com.sentry.app.core.ui.models.SentryTextSize
 import kotlinx.coroutines.delay
-
-val SentryCyan = Color(0xFF00BCD4)
 
 @Composable
 fun SplashScreen(
-    onAuthenticated: (UserRole) -> Unit,
-    onUnauthenticated: () -> Unit,
+    navController: NavHostController,
     vm: SplashViewModel = hiltViewModel(),
 ) {
+    val scheme = MaterialTheme.colorScheme
     val alpha = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
         alpha.animateTo(1f, animationSpec = tween(600))
         delay(2500)
-        if (vm.isAuthenticated()) onAuthenticated(vm.getRole())
-        else onUnauthenticated()
+        if (vm.isAuthenticated()) {
+            val route = if (vm.getRole() == UserRole.ADMIN) "adminHome" else "traineeHome"
+            navController.navigateAndClear(route, popUpToRoute = "splash")
+        } else {
+            navController.navigateSingleTop("auth")
+        }
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(SentryCyan),
+            .background(scheme.primary),
         contentAlignment = Alignment.Center,
     ) {
         Column(
@@ -66,7 +70,7 @@ fun SplashScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            // Pepper robot in white rounded card
+            // pepper robot card
             Box(
                 modifier = Modifier
                     .size(width = 220.dp, height = 160.dp)
@@ -77,35 +81,31 @@ fun SplashScreen(
                 Image(
                     painter = painterResource(id = R.drawable.pepper_robot),
                     contentDescription = "Pepper robot — SENTRY cybersecurity tutor",
-                    modifier = Modifier
-                        .size(width = 200.dp, height = 145.dp),
+                    modifier = Modifier.size(width = 200.dp, height = 145.dp),
                     contentScale = ContentScale.Fit,
                 )
             }
 
             Spacer(Modifier.height(24.dp))
 
-            // SENTRY wordmark — Itim font
-            Text(
+            // SENTRY wordmark
+            SentryText(
                 text = "SENTRY",
-                fontFamily = ItimFont,
-                fontSize = 42.sp,
-                fontWeight = FontWeight.Normal,
+                size = SentryTextSize.Hero,
+                weight = FontWeight.Bold,
                 color = Color.White,
-                letterSpacing = 6.sp,
+                align = SentryTextAlign.Center,
             )
 
             Spacer(Modifier.height(10.dp))
 
-            // Subtitle — Philosopher font
-            Text(
+            // subtitle
+            SentryText(
                 text = "Your personalised grounded\nCybersecurity AI tutor",
-                fontFamily = PhilosopherFont,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Normal,
+                size = SentryTextSize.Md,
                 color = Color.White.copy(alpha = 0.85f),
-                textAlign = TextAlign.Center,
-                lineHeight = 22.sp,
+                align = SentryTextAlign.Center,
+                maxLines = 3,
             )
 
             Spacer(Modifier.height(48.dp))
