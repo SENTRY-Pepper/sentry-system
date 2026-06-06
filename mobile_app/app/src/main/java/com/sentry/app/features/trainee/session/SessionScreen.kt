@@ -9,24 +9,25 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -35,83 +36,132 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sentry.app.features.splash.SentryCyan
-import com.sentry.app.ui.theme.PhilosopherFont
-
-private val ScenarioHeaderPurple = Color(0xFF5C6BC0)
-private val CorrectGreen         = Color(0xFF4CAF50)
-private val CorrectGreenBg       = Color(0xFFE8F5E9)
-private val WrongRed             = Color(0xFFF44336)
-private val WrongRedBg           = Color(0xFFFFEBEE)
-private val NeutralBorder        = Color(0xFFE0E0E0)
-private val TextPrimary          = Color(0xFF212121)
-private val TextSecondary        = Color(0xFF757575)
-private val AiBubbleBg           = Color(0xFFE3F2FD)
-private val AiBubbleBorder       = Color(0xFFBBDEFB)
-private val SourceTagBg          = Color(0xFFE8EAF6)
-private val SourceTagText        = Color(0xFF3949AB)
+import androidx.navigation.NavHostController
+import com.sentry.app.core.navigation.navigateSingleTop
+import com.sentry.app.core.ui.components.texts.SentryText
+import com.sentry.app.core.ui.models.SentryTextAlign
+import com.sentry.app.core.ui.models.SentryTextSize
+import com.sentry.app.core.ui.theme.LocalBrandColors
 
 @Composable
 fun SessionScreen(
-    onSessionComplete: (String) -> Unit,
-    onBack: () -> Unit,
+    navController: NavHostController,
+    sessionId: String,
     vm: SessionViewModel = hiltViewModel(),
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(state.isComplete) {
-        if (state.isComplete) onSessionComplete(state.sessionId)
-    }
-
+    val brand = LocalBrandColors.current
+    val scheme = MaterialTheme.colorScheme
     val scenario = vm.getCurrentScenario()
 
-    Column(
+    // navigate to results when session ends
+    LaunchedEffect(state.isComplete) {
+        if (state.isComplete) {
+            navController.navigateSingleTop("results/${state.sessionId}")
+        }
+    }
+
+    Row(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFF5F5F5)),
+            .background(scheme.background),
     ) {
-        // ── Top bar ──────────────────────────────────────────────────
-        SessionTopBar(
-            current  = state.currentIndex + 1,
-            total    = state.totalScenarios,
-            type     = scenario.type,
-            onBack   = onBack,
-        )
-
-        // ── Scrollable body ──────────────────────────────────────────
+        // Left column — scenario card
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .weight(1f)
+                .fillMaxHeight(),
         ) {
-            // Scenario card
-            ScenarioCard(
-                scenario         = scenario,
-                selectedChoiceId = state.selectedChoiceId,
-                isAnswered       = state.isAnswered,
-                onChoiceSelected = { vm.selectChoice(it) },
+            SessionTopBar(
+                current = state.currentIndex + 1,
+                total = state.totalScenarios,
+                type = scenario.type,
+                onBack = { navController.popBackStack() },
             )
 
-            // AI feedback — appears after answering
-            AnimatedVisibility(
-                visible = state.isAnswered,
-                enter   = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                ResultFeedback(
-                    isCorrect  = state.isCorrect,
-                    aiResponse = state.aiResponse,
-                    aiSources  = state.aiSources,
-                    aiLoading  = state.aiLoading,
-                    isLast     = state.currentIndex == state.totalScenarios - 1,
-                    onNext     = { vm.nextScenario() },
+                item {
+                    ScenarioCard(
+                        scenario = scenario,
+                        selectedChoiceId = state.selectedChoiceId,
+                        isAnswered = state.isAnswered,
+                        onChoiceSelected = { vm.selectChoice(it) },
+                    )
+                }
+                item { Spacer(Modifier.height(80.dp)) }
+            }
+        }
+
+        // ── Right column — AI feedback
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .background(scheme.surface),
+        ) {
+            // right column header bar — same height as top bar
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .background(scheme.primary.copy(alpha = 0.08f)),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                SentryText(
+                    text = "Pepper's analysis",
+                    size = SentryTextSize.Sm,
+                    weight = FontWeight.Bold,
+                    color = scheme.primary,
+                    modifier = Modifier.padding(horizontal = 20.dp),
                 )
+            }
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                item {
+                    AnimatedVisibility(
+                        visible = state.isAnswered,
+                        enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
+                    ) {
+                        ResultFeedback(
+                            isCorrect = state.isCorrect,
+                            aiResponse = state.aiResponse,
+                            aiSources = state.aiSources,
+                            aiLoading = state.aiLoading,
+                            isLast = state.currentIndex == state.totalScenarios - 1,
+                            onNext = { vm.nextScenario() },
+                        )
+                    }
+
+                    // placeholder when not yet answered
+                    if (!state.isAnswered) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(200.dp),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            SentryText(
+                                text = "Select an answer to see Pepper's response",
+                                size = SentryTextSize.Sm,
+                                color = scheme.outline,
+                                align = SentryTextAlign.Center,
+                            )
+                        }
+                    }
+                }
+                item { Spacer(Modifier.height(80.dp)) }
             }
         }
     }
@@ -124,60 +174,61 @@ private fun SessionTopBar(
     type: String,
     onBack: () -> Unit,
 ) {
+    val scheme = MaterialTheme.colorScheme
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .background(SentryCyan),
+            .background(scheme.primary),
     ) {
-        // Back button
+        // back button
         IconButton(
-            onClick  = onBack,
+            onClick = onBack,
             modifier = Modifier.align(Alignment.CenterStart),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                    imageVector        = Icons.AutoMirrored.Filled.ArrowBack,
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint               = Color.White,
+                    tint = Color.White,
                 )
-                Text(
-                    text     = "BACK",
-                    color    = Color.White,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold,
+                SentryText(
+                    text = "BACK",
+                    size = SentryTextSize.Sm,
+                    weight = FontWeight.Bold,
+                    color = Color.White,
                 )
             }
         }
 
-        // Centre — scenario number + type
+        // centre — scenario counter + type
         Column(
-            modifier            = Modifier.align(Alignment.Center),
+            modifier = Modifier.align(Alignment.Center),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text       = "Scenario $current of $total",
-                fontFamily = PhilosopherFont,
-                fontSize   = 16.sp,
-                fontWeight = FontWeight.Bold,
-                color      = Color.White,
+            SentryText(
+                text = "Scenario $current of $total",
+                size = SentryTextSize.Lg,
+                weight = FontWeight.Bold,
+                color = Color.White,
             )
-            Text(
-                text     = type,
-                fontSize = 12.sp,
-                color    = Color.White.copy(alpha = 0.85f),
+            SentryText(
+                text = type,
+                size = SentryTextSize.Sm,
+                color = Color.White.copy(alpha = 0.85f),
             )
         }
 
-        // Right — progress pills
+        // right — progress pills
         Row(
-            modifier          = Modifier
+            modifier = Modifier
                 .align(Alignment.CenterEnd)
                 .padding(end = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            repeat(5) { index ->
+            repeat(total.coerceAtMost(5)) { index ->
                 Box(
                     modifier = Modifier
                         .width(28.dp)
@@ -204,10 +255,10 @@ private fun ScenarioCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .border(1.dp, NeutralBorder, RoundedCornerShape(16.dp)),
     ) {
-        // Purple header — matches your Figma exactly
+        // purple scenario header
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -215,36 +266,36 @@ private fun ScenarioCard(
                 .padding(vertical = 18.dp, horizontal = 20.dp),
             contentAlignment = Alignment.Center,
         ) {
-            Text(
-                text       = scenario.title,
-                fontFamily = PhilosopherFont,
-                fontSize   = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color      = Color.White,
-                textAlign  = TextAlign.Center,
+            SentryText(
+                text = scenario.title,
+                size = SentryTextSize.Xl,
+                weight = FontWeight.Bold,
+                color = Color.White,
+                align = SentryTextAlign.Center,
             )
         }
 
-        // Prompt text
-        Text(
-            text     = scenario.prompt,
-            fontSize = 14.sp,
-            color    = TextPrimary,
-            lineHeight = 22.sp,
+        // prompt
+        SentryText(
+            text = scenario.prompt,
+            size = SentryTextSize.Md,
+            color = MaterialTheme.colorScheme.onBackground,
+            lineHeight = 22.dp.value.sp,
+            maxLines = Int.MAX_VALUE,
             modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp),
         )
 
-        // Choices
+        // choices
         Column(
-            modifier            = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier.padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             scenario.choices.forEach { choice ->
                 ChoiceRow(
-                    choice           = choice,
-                    isSelected       = selectedChoiceId == choice.id,
-                    isAnswered       = isAnswered,
-                    onSelect         = { if (!isAnswered) onChoiceSelected(choice.id) },
+                    choice = choice,
+                    isSelected = selectedChoiceId == choice.id,
+                    isAnswered = isAnswered,
+                    onSelect = { if (!isAnswered) onChoiceSelected(choice.id) },
                 )
             }
         }
@@ -260,11 +311,31 @@ private fun ChoiceRow(
     isAnswered: Boolean,
     onSelect: () -> Unit,
 ) {
-    val (bgColor, borderColor) = when {
-        isAnswered && choice.isCorrect -> CorrectGreenBg to CorrectGreen
-        isAnswered && isSelected && !choice.isCorrect -> WrongRedBg to WrongRed
-        isSelected -> Color(0xFFE3F2FD) to SentryCyan
-        else -> Color.White to NeutralBorder
+    val brand = LocalBrandColors.current
+    val scheme = MaterialTheme.colorScheme
+
+    val correctBg = brand.green.copy(alpha = 0.12f)
+    val wrongBg = brand.red.copy(alpha = 0.10f)
+
+    val bgColor = when {
+        isAnswered && choice.isCorrect -> correctBg
+        isAnswered && isSelected -> wrongBg
+        isSelected -> scheme.primary.copy(alpha = 0.10f)
+        else -> scheme.surface
+    }
+
+    val borderColor = when {
+        isAnswered && choice.isCorrect -> brand.green
+        isAnswered && isSelected -> brand.red
+        isSelected -> scheme.primary
+        else -> NeutralBorder
+    }
+
+    val circleColor = when {
+        isAnswered && choice.isCorrect -> brand.green
+        isAnswered && isSelected -> brand.red
+        isSelected -> scheme.primary
+        else -> scheme.outline
     }
 
     Row(
@@ -277,40 +348,31 @@ private fun ChoiceRow(
             .padding(horizontal = 14.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        // Radio circle
         Box(
             modifier = Modifier
                 .size(26.dp)
                 .clip(CircleShape)
-                .background(
-                    when {
-                        isAnswered && choice.isCorrect             -> CorrectGreen
-                        isAnswered && isSelected && !choice.isCorrect -> WrongRed
-                        isSelected                                 -> SentryCyan
-                        else                                       -> Color(0xFFBDBDBD)
-                    }
-                ),
+                .background(circleColor),
             contentAlignment = Alignment.Center,
         ) {
-            if ((isAnswered && choice.isCorrect) ||
-                (isAnswered && isSelected && !choice.isCorrect)) {
-                Text(
-                    text       = if (choice.isCorrect) "✓" else "✗",
-                    color      = Color.White,
-                    fontSize   = 13.sp,
-                    fontWeight = FontWeight.Bold,
+            if (isAnswered && (choice.isCorrect || isSelected)) {
+                SentryText(
+                    text = if (choice.isCorrect) "✓" else "✗",
+                    size = SentryTextSize.Sm,
+                    weight = FontWeight.Bold,
+                    color = Color.White,
                 )
             }
         }
 
         Spacer(Modifier.width(12.dp))
 
-        Text(
-            text      = choice.text,
-            fontSize  = 13.sp,
-            color     = TextPrimary,
-            lineHeight = 20.sp,
-            modifier  = Modifier.weight(1f),
+        SentryText(
+            text = choice.text,
+            size = SentryTextSize.Md,
+            color = scheme.onBackground,
+            maxLines = Int.MAX_VALUE,
+            modifier = Modifier.weight(1f),
         )
     }
 }
@@ -324,38 +386,42 @@ private fun ResultFeedback(
     isLast: Boolean,
     onNext: () -> Unit,
 ) {
+    val brand = LocalBrandColors.current
+    val scheme = MaterialTheme.colorScheme
+
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
-        // Result banner
+        // result banner
+        val bannerBg =
+            if (isCorrect) brand.green.copy(alpha = 0.12f) else brand.red.copy(alpha = 0.10f)
+        val bannerBorder = if (isCorrect) brand.green else brand.red
+        val bannerColor = if (isCorrect) brand.green else brand.red
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(12.dp))
-                .background(if (isCorrect) CorrectGreenBg else WrongRedBg)
-                .border(
-                    1.dp,
-                    if (isCorrect) CorrectGreen else WrongRed,
-                    RoundedCornerShape(12.dp),
-                )
+                .background(bannerBg)
+                .border(1.dp, bannerBorder, RoundedCornerShape(12.dp))
                 .padding(14.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text     = if (isCorrect) "✓" else "✗",
-                    fontSize = 20.sp,
-                    color    = if (isCorrect) CorrectGreen else WrongRed,
-                    fontWeight = FontWeight.Bold,
+                SentryText(
+                    text = if (isCorrect) "✓" else "✗",
+                    size = SentryTextSize.Xl,
+                    weight = FontWeight.Bold,
+                    color = bannerColor,
                 )
                 Spacer(Modifier.width(10.dp))
-                Text(
-                    text       = if (isCorrect)
+                SentryText(
+                    text = if (isCorrect)
                         "Correct decision — well done!"
                     else
                         "Risky decision — let's learn from this",
-                    fontFamily = PhilosopherFont,
-                    fontSize   = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    color      = if (isCorrect) Color(0xFF1B5E20) else Color(0xFFB71C1C),
+                    size = SentryTextSize.Md,
+                    weight = FontWeight.Bold,
+                    color = bannerColor,
+                    maxLines = 2,
                 )
             }
         }
@@ -372,20 +438,25 @@ private fun ResultFeedback(
             Column {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(
-                        modifier         = Modifier
+                        modifier = Modifier
                             .size(30.dp)
                             .clip(CircleShape)
-                            .background(SentryCyan),
+                            .background(scheme.primary),
                         contentAlignment = Alignment.Center,
                     ) {
-                        Text("P", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                        SentryText(
+                            text = "P",
+                            size = SentryTextSize.Sm,
+                            weight = FontWeight.Bold,
+                            color = Color.White,
+                        )
                     }
                     Spacer(Modifier.width(8.dp))
-                    Text(
-                        text       = "Pepper · Grounded response",
-                        fontSize   = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color      = Color(0xFF1565C0),
+                    SentryText(
+                        text = "Pepper · Grounded response",
+                        size = SentryTextSize.Sm,
+                        weight = FontWeight.Bold,
+                        color = AiNameColor,
                     )
                 }
 
@@ -394,23 +465,23 @@ private fun ResultFeedback(
                 if (aiLoading) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         CircularProgressIndicator(
-                            modifier  = Modifier.size(18.dp),
-                            color     = SentryCyan,
+                            modifier = Modifier.size(18.dp),
+                            color = scheme.primary,
                             strokeWidth = 2.dp,
                         )
                         Spacer(Modifier.width(8.dp))
-                        Text(
-                            text     = "Pepper is thinking…",
-                            fontSize = 13.sp,
-                            color    = TextSecondary,
+                        SentryText(
+                            text = "Pepper is thinking…",
+                            size = SentryTextSize.Md,
+                            color = scheme.outline,
                         )
                     }
                 } else {
-                    Text(
-                        text      = aiResponse,
-                        fontSize  = 13.sp,
-                        color     = TextPrimary,
-                        lineHeight = 21.sp,
+                    SentryText(
+                        text = aiResponse,
+                        size = SentryTextSize.Md,
+                        color = scheme.onBackground,
+                        maxLines = Int.MAX_VALUE,
                     )
 
                     if (aiSources.isNotEmpty()) {
@@ -426,10 +497,10 @@ private fun ResultFeedback(
                                         .background(SourceTagBg)
                                         .padding(horizontal = 10.dp, vertical = 4.dp),
                                 ) {
-                                    Text(
-                                        text     = source,
-                                        fontSize = 10.sp,
-                                        color    = SourceTagText,
+                                    SentryText(
+                                        text = source,
+                                        size = SentryTextSize.Xs,
+                                        color = SourceTagText,
                                     )
                                 }
                             }
@@ -439,25 +510,34 @@ private fun ResultFeedback(
             }
         }
 
-        // Next / Finish button
+        // next / finish button
         if (!aiLoading) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(14.dp))
-                    .background(SentryCyan)
+                    .background(scheme.primary)
                     .clickable { onNext() }
                     .padding(vertical = 16.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    text       = if (isLast) "View my results" else "Next scenario →",
-                    fontFamily = PhilosopherFont,
-                    fontSize   = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    color      = Color.White,
+                SentryText(
+                    text = if (isLast) "View my results" else "Next scenario →",
+                    size = SentryTextSize.Md,
+                    weight = FontWeight.Bold,
+                    color = Color.White,
                 )
             }
         }
     }
 }
+
+
+// component-specific design tokens — not in global theme
+private val ScenarioHeaderPurple = Color(0xFF5C6BC0)
+private val AiBubbleBg = Color(0xFFE3F2FD)
+private val AiBubbleBorder = Color(0xFFBBDEFB)
+private val SourceTagBg = Color(0xFFE8EAF6)
+private val SourceTagText = Color(0xFF3949AB)
+private val NeutralBorder = Color(0xFFE0E0E0)
+private val AiNameColor = Color(0xFF1565C0)
