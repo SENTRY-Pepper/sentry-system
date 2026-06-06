@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -20,7 +21,7 @@ import com.sentry.app.core.ui.constants.sentryTextXl
 import com.sentry.app.core.ui.constants.sentryTextXs
 import com.sentry.app.core.ui.models.SentryTextAlign
 import com.sentry.app.core.ui.models.SentryTextSize
-import com.sentry.app.core.ui.theme.PhilosopherFont
+import com.sentry.app.core.ui.theme.ItimFont
 
 
 @Composable
@@ -34,6 +35,7 @@ fun SentryText(
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Ellipsis,
     lineHeight: TextUnit = TextUnit.Unspecified,
+    fontFamily: FontFamily = ItimFont
 ) {
     val fontSize = when (size) {
         SentryTextSize.Xs -> sentryTextXs
@@ -52,7 +54,7 @@ fun SentryText(
     }
 
     val style = TextStyle(
-        fontFamily = PhilosopherFont,
+        fontFamily = fontFamily,
         fontWeight = weight,
         fontSize = fontSize,
         textAlign = textAlign,

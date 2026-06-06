@@ -33,11 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.sentry.app.R
 import com.sentry.app.core.ui.components.texts.SentryText
 import com.sentry.app.core.ui.models.SentryTextAlign
 import com.sentry.app.core.ui.models.SentryTextSize
@@ -239,14 +241,14 @@ fun SettingsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(64.dp)
-                    .background(scheme.primary.copy(alpha = 0.08f)),
+                    .background(scheme.primary),
                 contentAlignment = Alignment.CenterStart,
             ) {
                 SentryText(
                     text = "Preferences",
                     size = SentryTextSize.Sm,
                     weight = FontWeight.Bold,
-                    color = scheme.primary,
+                    color = scheme.background,
                     modifier = Modifier.padding(horizontal = 20.dp),
                 )
             }
@@ -334,29 +336,29 @@ private fun SettingsTopBar(
 ) {
     val scheme = MaterialTheme.colorScheme
 
-    Box(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .background(scheme.primary),
+            .background(scheme.primary)
+            .padding(start = 10.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
-            onClick = onBack,
-            modifier = Modifier.align(Alignment.CenterStart),
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White,
-                )
-                SentryText(
-                    text = "Back",
-                    size = SentryTextSize.Sm,
-                    weight = FontWeight.Bold,
-                    color = Color.White,
-                )
-            }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(R.drawable.arrow_left_circle),
+                contentDescription = "Back",
+                tint = Color.White,
+                modifier = Modifier.size(30.dp).clickable{onBack()}
+            )
+            Spacer(Modifier.width(14.dp))
+            SentryText(
+                text = "Back",
+                size = SentryTextSize.Xl,
+                weight = FontWeight.Bold,
+                color = Color.White,
+            )
         }
         SentryText(
             text = title,
@@ -364,8 +366,10 @@ private fun SettingsTopBar(
             weight = FontWeight.Bold,
             color = Color.White,
             align = SentryTextAlign.Center,
-            modifier = Modifier.align(Alignment.Center),
+            //modifier = Modifier.align(Alignment.Center),
         )
+        Spacer(Modifier.width(5.dp))
+
     }
 }
 

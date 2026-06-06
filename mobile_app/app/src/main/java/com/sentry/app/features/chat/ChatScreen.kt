@@ -3,6 +3,7 @@ package com.sentry.app.features.chat
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,33 +75,33 @@ fun ChatScreen(
             .imePadding(),
     ) {
         // ── Top bar ──────────────────────────────────────────────────
-        Box(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(64.dp)
-                .background(scheme.primary),
+                .background(scheme.primary)
+                .padding(horizontal = 10.dp),
+            horizontalArrangement =Arrangement.SpaceBetween ,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                onClick = { navController.popBackStack() },
-                modifier = Modifier.align(Alignment.CenterStart),
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
-                        tint = Color.White,
-                    )
-                    SentryText(
-                        text = "BACK",
-                        size = SentryTextSize.Sm,
-                        weight = FontWeight.Bold,
-                        color = Color.White,
-                    )
-                }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    painter = painterResource(R.drawable.arrow_left_circle),
+                    contentDescription = "Back",
+                    tint = Color.White,
+                    modifier = Modifier.size(30.dp).clickable{navController.navigateUp()}
+                )
+                Spacer(Modifier.width(14.dp))
+                SentryText(
+                    text = "Back",
+                    size = SentryTextSize.Xl,
+                    weight = FontWeight.Bold,
+                    color = Color.White,
+                )
             }
 
             Column(
-                modifier = Modifier.align(Alignment.Center),
+               // modifier = Modifier.align(Alignment.Center),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 SentryText(
@@ -115,6 +116,8 @@ fun ChatScreen(
                     color = Color.White.copy(alpha = 0.85f),
                 )
             }
+
+            Spacer(Modifier.width(5.dp))
         }
 
         // ── Message list ─────────────────────────────────────────────

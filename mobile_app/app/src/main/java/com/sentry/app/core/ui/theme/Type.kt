@@ -16,6 +16,9 @@ val PhilosopherFont = FontFamily(
     Font(R.font.philosopher_bold_italic, FontWeight.Bold, FontStyle.Italic),
 )
 
+val ItimFont = FontFamily(Font(R.font.itim_regular, FontWeight.Normal))
+
+
 val Typography = Typography(
     displayLarge = TextStyle(
         fontFamily = PhilosopherFont,

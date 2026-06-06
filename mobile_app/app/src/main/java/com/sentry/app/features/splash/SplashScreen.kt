@@ -32,10 +32,10 @@ import androidx.navigation.NavHostController
 import com.sentry.app.R
 import com.sentry.app.core.navigation.UserRole
 import com.sentry.app.core.navigation.navigateAndClear
-import com.sentry.app.core.navigation.navigateSingleTop
 import com.sentry.app.core.ui.components.texts.SentryText
 import com.sentry.app.core.ui.models.SentryTextAlign
 import com.sentry.app.core.ui.models.SentryTextSize
+import com.sentry.app.core.ui.theme.PhilosopherFont
 import kotlinx.coroutines.delay
 
 @Composable
@@ -53,7 +53,7 @@ fun SplashScreen(
             val route = if (vm.getRole() == UserRole.ADMIN) "adminHome" else "traineeHome"
             navController.navigateAndClear(route, popUpToRoute = "splash")
         } else {
-            navController.navigateSingleTop("auth")
+            navController.navigateAndClear("auth", popUpToRoute = "splash")
         }
     }
 
@@ -95,6 +95,7 @@ fun SplashScreen(
                 weight = FontWeight.Bold,
                 color = Color.White,
                 align = SentryTextAlign.Center,
+                fontFamily = PhilosopherFont
             )
 
             Spacer(Modifier.height(10.dp))
@@ -110,11 +111,11 @@ fun SplashScreen(
 
             Spacer(Modifier.height(48.dp))
 
-            LoadingBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 40.dp),
-            )
+            /*  LoadingBar(
+                  modifier = Modifier
+                      .fillMaxWidth()
+                      .padding(horizontal = 40.dp),
+              )*/
         }
     }
 }
