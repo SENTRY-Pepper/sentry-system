@@ -28,3 +28,7 @@ local.properties
 
 # Google Services (if added later)
 google-services.json
+
+# Ignore Kotlin compiler/IDE error logs
+.kotlin/
+*.log
