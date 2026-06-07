@@ -20,6 +20,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.http.encodeURLPathPart
 
 // health
 
@@ -110,5 +111,5 @@ suspend fun SentryKtorClient.getOrganisationAnalytics(
     organisationId: String,
 ): NetworkResult<OrganisationAnalytics> =
     safeKtorCall("getOrganisationAnalytics") {
-        client.get("api/v1/analytics/organisation/$organisationId").body()
+        client.get("api/v1/analytics/organisation/${organisationId.encodeURLPathPart()}").body()
     }

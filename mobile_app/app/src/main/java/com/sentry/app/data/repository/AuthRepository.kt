@@ -2,6 +2,7 @@ package com.sentry.app.data.repository
 
 import com.sentry.app.core.navigation.UserRole
 import com.sentry.app.core.network.NetworkResult
+import com.sentry.app.core.organisation.normaliseOrganisationId
 import com.sentry.app.data.local.TokenManager
 import com.sentry.app.data.models.response.AuthState
 import kotlinx.coroutines.flow.Flow
@@ -35,13 +36,18 @@ class AuthRepository @Inject constructor(
         return try {
             require(participantId.isNotBlank()) { "Participant ID is required" }
             require(pin.length >= 4) { "PIN must be at least 4 digits" }
+            require(role != UserRole.ADMIN.name.lowercase() || organisationId.isNotBlank()) {
+                "Organisation ID is required for admin login"
+            }
 
             // local fake token — no backend auth endpoint in this study
             val token = "${participantId}_${System.currentTimeMillis()}"
-            tokenManager.saveSession(token, participantId, role, organisationId)
+            val canonicalOrganisationId = normaliseOrganisationId(organisationId)
+                .ifEmpty { "SENTRY_STUDY" }
+            tokenManager.saveSession(token, participantId, role, canonicalOrganisationId)
 
             Timber.i("AuthRepository: login — $participantId ($role)")
-            NetworkResult.Success(AuthState(true, participantId, role, organisationId))
+            NetworkResult.Success(AuthState(true, participantId, role, canonicalOrganisationId))
         } catch (e: IllegalArgumentException) {
             NetworkResult.Error(
                 message = e.message ?: "Validation failed"

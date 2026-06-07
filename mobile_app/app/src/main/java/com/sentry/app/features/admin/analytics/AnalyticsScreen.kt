@@ -206,12 +206,12 @@ private fun AggregateMetricsCard(state: AnalyticsUiState) {
                 MetricCell(
                     modifier = Modifier.weight(1f),
                     label = "Avg Post Score",
-                    value = "${"%.1f".format(state.avgAccuracy * 100)}%"
+                    value = "${"%.1f".format(state.avgAccuracy)}%"
                 )
                 MetricCell(
                     modifier = Modifier.weight(1f),
                     label = "Avg Knowledge Gain",
-                    value = "${"%.1f".format(state.avgKnowledgeGain * 100)}%"
+                    value = "${"%.1f".format(state.avgKnowledgeGain)}%"
                 )
                 MetricCell(
                     modifier = Modifier.weight(1f),
@@ -257,13 +257,13 @@ private fun ConditionComparisonCard(state: AnalyticsUiState) {
                 color = MaterialTheme.colorScheme.onBackground
             )
             SentryText(
-                text = "Grounded (${state.ragSessionCount} sessions) — ${"%.1f".format(state.ragAvgAccuracy * 100)}%",
+                text = "Grounded (${state.ragSessionCount} sessions) - ${"%.1f".format(state.ragAvgAccuracy)}%",
                 size = SentryTextSize.Xs,
                 color = MaterialTheme.colorScheme.outline
             )
             // API 23 safe: non-lambda progress overload
             LinearProgressIndicator(
-                progress = state.ragAvgAccuracy,
+                progress = percentToProgress(state.ragAvgAccuracy),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp)
@@ -272,12 +272,12 @@ private fun ConditionComparisonCard(state: AnalyticsUiState) {
                 trackColor = MaterialTheme.colorScheme.surfaceVariant
             )
             SentryText(
-                text = "Baseline (${state.baselineSessionCount} sessions) — ${"%.1f".format(state.baselineAvgAccuracy * 100)}%",
+                text = "Baseline (${state.baselineSessionCount} sessions) - ${"%.1f".format(state.baselineAvgAccuracy)}%",
                 size = SentryTextSize.Xs,
                 color = MaterialTheme.colorScheme.outline
             )
             LinearProgressIndicator(
-                progress = state.baselineAvgAccuracy,
+                progress = percentToProgress(state.baselineAvgAccuracy),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp)
@@ -330,6 +330,7 @@ private fun FilterChip(label: String, selected: Boolean, onClick: () -> Unit) {
 private fun SessionRowCard(session: SessionSummary) {
     val brandColors = LocalBrandColors.current
     val postScore = session.postAssessmentScore ?: 0f
+    val postScoreProgress = percentToProgress(postScore)
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -354,9 +355,9 @@ private fun SessionRowCard(session: SessionSummary) {
             }
             Column(horizontalAlignment = Alignment.End) {
                 SentryText(
-                    text = "${"%.0f".format(postScore * 100)}%",
+                    text = "${"%.0f".format(postScore)}%",
                     size = SentryTextSize.Sm,
-                    color = if (postScore >= 0.7f) brandColors.green else brandColors.red
+                    color = if (postScoreProgress >= 0.7f) brandColors.green else brandColors.red
                 )
                 val mins = (session.durationSeconds ?: 0) / 60
                 SentryText(
@@ -368,6 +369,9 @@ private fun SessionRowCard(session: SessionSummary) {
         }
     }
 }
+
+private fun percentToProgress(value: Float): Float =
+    (value / 100f).coerceIn(0f, 1f)
 
 @Composable
 private fun AnalyticsErrorCard(message: String, onRetry: () -> Unit) {
