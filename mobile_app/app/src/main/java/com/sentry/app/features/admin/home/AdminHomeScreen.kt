@@ -207,7 +207,7 @@ private fun SessionCountCard(state: AdminHomeUiState) {
             MetricCell(
                 modifier = Modifier.weight(1f),
                 label = "Knowledge Gain",
-                value = "${"%.1f".format(state.meanKnowledgeGain * 100)}%"
+                value = "${"%.1f".format(state.meanKnowledgeGain)}%"
             )
         }
     }
@@ -231,13 +231,13 @@ private fun ScoreComparisonCard(state: AdminHomeUiState) {
                 color = MaterialTheme.colorScheme.onBackground
             )
             SentryText(
-                text = "Pre — ${"%.1f".format(state.meanPreScore * 100)}%",
+                text = "Pre - ${"%.1f".format(state.meanPreScore)}%",
                 size = SentryTextSize.Xs,
                 color = MaterialTheme.colorScheme.outline
             )
             // API 23 safe: non-lambda progress overload
             LinearProgressIndicator(
-                progress = state.meanPreScore,
+                progress = percentToProgress(state.meanPreScore),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp)
@@ -246,12 +246,12 @@ private fun ScoreComparisonCard(state: AdminHomeUiState) {
                 trackColor = MaterialTheme.colorScheme.surfaceVariant
             )
             SentryText(
-                text = "Post — ${"%.1f".format(state.meanPostScore * 100)}%",
+                text = "Post - ${"%.1f".format(state.meanPostScore)}%",
                 size = SentryTextSize.Xs,
                 color = MaterialTheme.colorScheme.outline
             )
             LinearProgressIndicator(
-                progress = state.meanPostScore,
+                progress = percentToProgress(state.meanPostScore),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp)
@@ -318,6 +318,7 @@ private fun MetricCell(modifier: Modifier = Modifier, label: String, value: Stri
 private fun RecentSessionCard(session: SessionSummary) {
     val brandColors = LocalBrandColors.current
     val postScore = session.postAssessmentScore ?: 0f
+    val postScoreProgress = percentToProgress(postScore)
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -342,9 +343,9 @@ private fun RecentSessionCard(session: SessionSummary) {
             }
             Column(horizontalAlignment = Alignment.End) {
                 SentryText(
-                    text = "${"%.0f".format(postScore * 100)}%",
+                    text = "${"%.0f".format(postScore)}%",
                     size = SentryTextSize.Sm,
-                    color = if (postScore >= 0.7f) brandColors.green else brandColors.red
+                    color = if (postScoreProgress >= 0.7f) brandColors.green else brandColors.red
                 )
                 SentryText(
                     text = if (session.isComplete) "complete" else "in progress",
@@ -388,3 +389,6 @@ private fun ErrorCard(message: String, onRetry: () -> Unit) {
         }
     }
 }
+
+private fun percentToProgress(value: Float): Float =
+    (value / 100f).coerceIn(0f, 1f)
