@@ -53,6 +53,7 @@ fun TraineeHomeScreen(
     val brand = LocalBrandColors.current
 
     LaunchedEffect(Unit) {
+        vm.refreshProfile()
         vm.events.collect { event ->
             when (event) {
                 is TraineeHomeEvent.NavigateToSession ->
@@ -317,7 +318,7 @@ private fun CtaCard(
         if (!loading) {
             Spacer(Modifier.height(4.dp))
             SentryText(
-                text = "Next: Password Hygiene",
+                text = "Next: OWASP Top 10 module",
                 size = SentryTextSize.Xs,
                 color = scheme.outline,
                 align = SentryTextAlign.End,
