@@ -805,7 +805,9 @@ def run_sentry_session(
                 )
 
             if not feedback:
-                pepper.say_and_gesture("I am thinking about your response...", "thinking")
+                pepper.say_and_gesture(
+                    "I am thinking about your response...", "thinking"
+                )
                 feedback = manager.process_response(free_text="no clear response")
 
         # Immediate Pepper speech

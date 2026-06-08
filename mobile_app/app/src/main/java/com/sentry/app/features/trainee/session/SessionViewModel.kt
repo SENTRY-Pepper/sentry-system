@@ -7,6 +7,7 @@ import com.sentry.app.core.network.NetworkResult
 import com.sentry.app.data.repository.SessionRepository
 import com.sentry.app.features.trainee.curriculum.LocalSessionResult
 import com.sentry.app.features.trainee.curriculum.OwaspCurriculum
+import com.sentry.app.features.trainee.curriculum.OwaspQuestion
 import com.sentry.app.features.trainee.curriculum.OwaspTrainingModule
 import com.sentry.app.features.trainee.curriculum.TrainingProgressStore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,11 +18,14 @@ import javax.inject.Inject
 
 data class SessionUiState(
     val sessionId: String = "",
-    val currentIndex: Int = 0,
-    val totalScenarios: Int = OwaspCurriculum.totalModules,
+    val currentModuleIndex: Int = 0,
+    val currentQuestionIndex: Int = 0,
+    val totalModules: Int = OwaspCurriculum.totalModules,
+    val totalQuestions: Int = OwaspCurriculum.totalQuestions,
     val selectedChoiceId: String? = null,
     val isAnswered: Boolean = false,
     val isCorrect: Boolean = false,
+    val isModuleBreak: Boolean = false,
     val aiResponse: String = "",
     val aiSources: List<String> = emptyList(),
     val aiLoading: Boolean = false,
@@ -46,23 +50,27 @@ class SessionViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(
         SessionUiState(
             sessionId = sessionId,
-            totalScenarios = OwaspCurriculum.modules.size,
+            totalModules = OwaspCurriculum.modules.size,
+            totalQuestions = OwaspCurriculum.totalQuestions,
         )
     )
     val uiState = _uiState.asStateFlow()
 
     fun getCurrentScenario(): OwaspTrainingModule =
-        OwaspCurriculum.modules[_uiState.value.currentIndex]
+        OwaspCurriculum.modules[_uiState.value.currentModuleIndex]
+
+    fun getCurrentQuestion(): OwaspQuestion =
+        getCurrentScenario().questions[_uiState.value.currentQuestionIndex]
 
     fun selectChoice(choiceId: String) {
         val state = _uiState.value
-        if (state.isAnswered || state.isFinishing) return
+        if (state.isAnswered || state.isFinishing || state.isModuleBreak) return
 
         val module = getCurrentScenario()
-        val choice = module.options.first { it.id == choiceId }
+        val question = getCurrentQuestion()
+        val choice = question.options.first { it.id == choiceId }
         val sources = listOf(module.sourceReference)
 
-        answeredModuleIds.add(module.id)
         if (!choice.isCorrect) {
             missedModuleIds.add(module.id)
         }
@@ -79,7 +87,7 @@ class SessionViewModel @Inject constructor(
 
         sessionRepository.logInteraction(
             sessionId = sessionId,
-            scenarioId = module.id,
+            scenarioId = question.id,
             scenarioType = module.owaspId,
             decision = if (choice.isCorrect) "correct" else "risky",
             employeeResponse = "${choice.label}. ${choice.text}",
@@ -94,15 +102,48 @@ class SessionViewModel @Inject constructor(
         val state = _uiState.value
         if (state.isFinishing) return
 
-        val nextIndex = state.currentIndex + 1
-        if (nextIndex >= OwaspCurriculum.modules.size) {
-            finishSession()
-        } else {
+        if (state.isModuleBreak) {
+            val nextModuleIndex = state.currentModuleIndex + 1
+            if (nextModuleIndex >= OwaspCurriculum.modules.size) {
+                finishSession()
+            } else {
+                _uiState.value = state.copy(
+                    currentModuleIndex = nextModuleIndex,
+                    currentQuestionIndex = 0,
+                    selectedChoiceId = null,
+                    isAnswered = false,
+                    isCorrect = false,
+                    isModuleBreak = false,
+                    aiResponse = "",
+                    aiSources = emptyList(),
+                    aiLoading = false,
+                    error = "",
+                )
+            }
+            return
+        }
+
+        val module = getCurrentScenario()
+        val nextQuestionIndex = state.currentQuestionIndex + 1
+        if (nextQuestionIndex >= module.questions.size) {
+            answeredModuleIds.add(module.id)
             _uiState.value = state.copy(
-                currentIndex = nextIndex,
                 selectedChoiceId = null,
                 isAnswered = false,
                 isCorrect = false,
+                isModuleBreak = true,
+                aiResponse = "",
+                aiSources = emptyList(),
+                aiLoading = false,
+                error = "",
+            )
+        } else {
+            _uiState.value = state.copy(
+                currentQuestionIndex = nextQuestionIndex,
+                selectedChoiceId = null,
+                isAnswered = false,
+                isCorrect = false,
+                isModuleBreak = false,
                 aiResponse = "",
                 aiSources = emptyList(),
                 aiLoading = false,
@@ -113,7 +154,7 @@ class SessionViewModel @Inject constructor(
 
     private fun finishSession() {
         val state = _uiState.value
-        val total = OwaspCurriculum.modules.size
+        val total = OwaspCurriculum.totalQuestions
         val score = if (total > 0) {
             (state.correctCount.toFloat() / total.toFloat()) * 100f
         } else {
