@@ -17,6 +17,9 @@ sealed class Routes {
     data object AdminHome : Routes()
 
     @Serializable
+    data object ManagerHome : Routes()
+
+    @Serializable
     data object Analytics : Routes()
 
     @Serializable
@@ -34,7 +37,7 @@ sealed class Routes {
 }
 
 enum class UserRole {
-    TRAINEE, ADMIN;
+    TRAINEE, MANAGER, ADMIN;
 
     companion object {
         fun from(v: String) = entries.firstOrNull {

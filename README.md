@@ -35,16 +35,22 @@ SENTRY currently supports:
 - PostgreSQL-backed training sessions, interactions, assessments, and
   evaluation logs.
 - Android Jetpack Compose app with trainee and admin flows.
+- Admin and Manager role split: Admin for research analytics, Manager for
+  organisation training operations.
+- Backend Organisation/User model with trainee account management and
+  organisation analytics.
 - Android OWASP Top 10 curriculum with fixed A-D assessments, local saved
   feedback, and trainee progress tracking.
-- Local-only Android authentication with role and organisation persistence.
+- Backend-backed Android authentication with role and organisation persistence.
 - Organisation analytics keyed by canonical organisation ID strings.
 - Pepper robot interface with scenario orchestration and simulation support.
 - Evaluation utilities for grounded-vs-baseline research comparison.
 
-SENTRY is not yet a production multi-tenant platform. Backend authentication,
-server-side RBAC, user accounts, organisation membership, and detailed
-cross-device per-question learning history are planned future work.
+SENTRY is not yet a production multi-tenant platform. Prototype user and
+organisation tables now exist, Android login uses the backend login endpoint,
+and Admin/Manager analytics routes enforce roles. Signed/expiring tokens,
+strong password hashing, and detailed cross-device per-question learning
+history remain future work.
 
 ## Architecture
 
@@ -58,12 +64,16 @@ FastAPI Middleware
   /api/v1/query/baseline
   /api/v1/sessions/*
   /api/v1/analytics/*
+  /api/v1/manager/*
+  /api/v1/users/login
 
 RAG Engine
   ingestion -> retrieval -> prompt building -> OpenAI generation
   ChromaDB vector store over OWASP and Kenyan legal sources
 
 PostgreSQL
+  organisations
+  users
   training_sessions
   scenario_interactions
   assessment_results
@@ -164,17 +174,22 @@ The trainee session flow is now based on the OWASP Top 10:
   backend so organisation analytics use real completion and score data.
 - Open-ended grounded RAG remains available through the chat screen.
 
-## Authentication And Organisation Flow
+## Authentication, Roles, And Organisation Flow
 
-Authentication is local-only in the Android app:
+Authentication is backend-backed but still prototype-grade:
 
-- `AuthRepository.login()` validates form input locally.
-- A local token is generated and stored in DataStore.
-- Roles are `trainee` and `admin`.
-- Admin login requires an organisation value.
+- `AuthRepository.login()` validates basic form input.
+- Android calls `POST /api/v1/users/login`.
+- The returned bearer token is stored in DataStore.
+- Roles are `trainee`, `manager`, and `admin`.
+- Manager/Admin login requires an organisation value.
+- Admin/Manager analytics routes validate bearer tokens and roles.
 
-The backend stores organisation data only as
-`TrainingSession.organisation_id`. There is no Organisation table yet.
+The backend now stores organisations and users:
+
+- Admin: research-wide grounded-vs-baseline analytics.
+- Manager: organisation trainee management and performance analytics.
+- Trainee: learning sessions and personal progress.
 
 Android normalizes organisation names before analytics calls:
 
@@ -205,6 +220,13 @@ POST /api/v1/sessions/eval-log
 GET  /api/v1/analytics/study
 GET  /api/v1/analytics/sessions
 GET  /api/v1/analytics/organisation/{organisation_id}
+POST /api/v1/organisations
+POST /api/v1/users/login
+GET  /api/v1/manager/trainees
+POST /api/v1/manager/trainees
+PATCH /api/v1/manager/trainees/{user_id}/deactivate
+GET  /api/v1/manager/analytics/overview
+GET  /api/v1/manager/analytics/weaknesses
 ```
 
 Interactive docs are available at:
@@ -288,6 +310,55 @@ For a real device or Pepper tablet, use the laptop's LAN IP and ensure port
 
 Android verification may need network access after Gradle caches are cleaned.
 
+## Pepper Robot Integration
+
+Pepper integration is available through `pepper_interface/`. The robot client
+is kept Python 2.7 compatible for NAOqi and supports:
+
+- Speech output, gestures, and tablet display.
+- Spoken A-D scenario answers.
+- Spoken `question` and `repeat` commands.
+- Grounded or baseline answers for supported trainee questions.
+- Session and interaction logging through the same FastAPI API used by the
+  Android app.
+
+Pepper and the laptop must be on the same WiFi. Start middleware on all
+interfaces:
+
+```powershell
+uvicorn middleware.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Then run Pepper with the laptop LAN IP:
+
+```bash
+python pepper_interface/pepper_client.py \
+  --ip PEPPER_IP_ADDRESS \
+  --port 9559 \
+  --middleware http://LAPTOP_IP_ADDRESS:8000 \
+  --participant PEPPER_P001 \
+  --condition grounded \
+  --organisation SENTRY_STUDY \
+  --response-mode voice
+```
+
+Laptop smoke test:
+
+```powershell
+.\venv\Scripts\python.exe pepper_interface\pepper_client.py `
+  --simulation `
+  --middleware http://localhost:8000 `
+  --participant PEPPER_SIM `
+  --condition grounded `
+  --organisation SENTRY_STUDY `
+  --response-mode auto
+```
+
+Pepper's built-in NAOqi speech recognition is vocabulary-based. The current
+implementation prioritizes reliable low-latency HRI for answer choices and
+supported short questions. See `pepper_interface/GUIDE.md` for full setup,
+login details, latency controls, and physical test checklist.
+
 ## Testing
 
 Recommended local Python verification:
@@ -339,9 +410,13 @@ Evaluation tooling lives under `evaluation/`.
 
 ### Phase 6: Organisation Analytics System
 
-- Design Organisation, User, Admin, Manager, and Trainee models.
-- Add server-side authentication and authorization.
-- Add real user, department, team, and organisation analytics.
+- Implemented additive Organisation/User models.
+- Implemented Admin research analytics vs Manager organisation analytics split.
+- Implemented Manager trainee create/deactivate flow.
+- Implemented organisation overview, trainee performance, department
+  performance, and OWASP weakness analytics from real session activity.
+- Remaining: signed/expiring tokens, stronger password hashing, wider endpoint
+  authorization, and richer historical user trend persistence.
 
 ### Phase 7: Final Review
 

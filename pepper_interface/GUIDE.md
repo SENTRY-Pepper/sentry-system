@@ -1,247 +1,241 @@
-## Current Integration Status
+# SENTRY Pepper Robot Integration Guide
 
-| Component | Status |
-|---|---|
-| FastAPI middleware server | Complete — running on port 8000 |
-| `/api/v1/query` endpoint | Complete — grounded RAG responses |
-| `/api/v1/query/baseline` endpoint | Complete — control condition |
-| `/api/v1/sessions/*` endpoints | Complete — full session lifecycle |
-| `/api/v1/analytics/*` endpoints | Complete — study + org analytics |
-| PostgreSQL database | Complete — 4 tables initialised |
-| API documentation | `http://localhost:8000/docs` |
-| OpenAPI spec | `docs/api_specs/sentry_api_spec.json` |
-| Android app | Your workstream — see `mobile_app/README_MOBILE.md` |
-| NAOqi Pepper layer | Your workstream — this guide |
+## Integration Status
 
-sentry-system/
-│
-├── ai_engine/                      # DERICK — RAG + LLM (unchanged)
-│   ├── rag/
-│   ├── llm/
-│   └── embeddings/
-│
-├── knowledge_base/                 # DERICK — Vector store (unchanged)
-│   ├── raw/
-│   ├── processed/
-│   └── vector_store/
-│
-├── middleware/                     # SHARED — FastAPI server (expanded)
-│   ├── routes/
-│   │   ├── query_routes.py         # DERICK — AI query endpoints (done)
-│   │   ├── session_routes.py       # TIMOTHY — Session CRUD endpoints
-│   │   └── analytics_routes.py     # TIMOTHY — Dashboard data endpoints
-│   ├── validators/
-│   │   ├── request_validator.py    # DERICK (done)
-│   │   └── session_validator.py    # TIMOTHY — Session Pydantic models
-│   └── main.py                     # SHARED — registers all routers
-│
-├── backend/                        # TIMOTHY (Derick sets up foundation)
-│   ├── database/
-│   │   ├── connection.py           # PostgreSQL async connection
-│   │   ├── models.py               # SQLAlchemy table definitions
-│   │   └── migrations/             # Alembic schema versioning
-│   ├── analytics/
-│   │   ├── session_analytics.py    # Aggregates metrics per session
-│   │   └── report_generator.py     # Organisation-level reports
-│   └── dashboard/
-│       └── exports/                # CSV/JSON report exports
-│
-├── mobile_app/                     # TIMOTHY — Android Studio project
-│   ├── app/
-│   │   ├── src/
-│   │   │   └── main/
-│   │   │       ├── java/com/sentry/app/
-│   │   │       │   ├── MainActivity.kt
-│   │   │       │   ├── network/
-│   │   │       │   │   └── ApiClient.kt     # Retrofit calls to middleware
-│   │   │       │   ├── ui/
-│   │   │       │   │   ├── WelcomeScreen.kt
-│   │   │       │   │   ├── ScenarioScreen.kt
-│   │   │       │   │   ├── FeedbackScreen.kt
-│   │   │       │   │   └── ResultsScreen.kt
-│   │   │       │   ├── models/
-│   │   │       │   │   ├── QueryRequest.kt
-│   │   │       │   │   └── QueryResponse.kt
-│   │   │       │   └── viewmodels/
-│   │   │       │       └── SessionViewModel.kt
-│   │   │       └── res/
-│   │   │           ├── layout/
-│   │   │           └── values/
-│   │   └── build.gradle
-│   ├── figma/
-│   │   └── SENTRY_UI_Design.fig    # Figma export/link file
-│   ├── build.gradle
-│   └── README_MOBILE.md            # Setup + ADB deployment guide
-│
-├── pepper_interface/               # TIMOTHY — NAOqi layer
-│   ├── scenarios/
-│   │   ├── phishing_scenario.py
-│   │   ├── usb_drop_scenario.py
-│   │   ├── password_hygiene_scenario.py
-│   │   ├── network_hygiene_scenario.py
-│   │   └── social_engineering_scenario.py
-│   ├── dialogue/
-│   │   ├── state_machine.py
-│   │   ├── dialogue_manager.py
-│   │   └── response_parser.py
-│   ├── pepper_client.py
-│   ├── middleware_client.py        # HTTP calls to FastAPI
-│   └── TIMOTHY_GUIDE.md
-│
-├── evaluation/                     # DERICK (done)
-│   ├── metrics/
-│   ├── logs/
-│   └── reports/
-│
-├── tests/
-│   ├── unit/
-│   └── integration/
-│
-├── docs/
-│   ├── architecture/
-│   └── api_specs/
-│
-├── scripts/
-│   └── ingest_knowledge_base.py
-│
-├── config/
-│   └── settings.py
-│
-├── .env
-├── .env.example
-├── requirements.txt
-└── README.md
+SENTRY can be integrated with a Pepper robot for a guided cybersecurity
+training session.
 
-How Everything Connects
-This is the critical picture to understand:
-┌─────────────────────────────────────────────────────────────────┐
-│                     LOCAL WIFI NETWORK                          │
-│                                                                 │
-│  ┌──────────────────┐         ┌──────────────────────────────┐  │
-│  │  Pepper Robot    │         │   Laptop (Dev Machine)       │  │
-│  │                  │         │                              │  │
-│  │  NAOqi Python2.7 │◀───────▶│  FastAPI Middleware          │  │
-│  │  pepper_client.py│  HTTP   │  uvicorn port 8000           │  │
-│  │                  │         │                              │  │
-│  │  ┌─────────────┐ │         │  /api/v1/query    (Derick)   │  │
-│  │  │Android Tab  │ │         │  /api/v1/sessions (Timothy)  │  │
-│  │  │SENTRY App   │◀──────────│  /api/v1/analytics(Timothy)  │  │
-│  │  │(Kotlin APK) │ │  HTTP   │                              │  │
-│  │  └─────────────┘ │         │  RAG Pipeline                │  │
-│  └──────────────────┘         │  ChromaDB (175 chunks)       │  │
-│                               │  GPT-4 API                   │  │
-│                               │                              │  │
-│                               │  PostgreSQL                  │  │
-│                               │  (session logs, analytics)   │  │
-│                               └──────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────┘
-Key point: Both Pepper's NAOqi layer and the Android tablet app communicate with the same FastAPI server over WiFi. The laptop runs the server, Pepper and the tablet are clients on the same network. This is exactly how predecessor projects work.
+Implemented robot capabilities:
 
-What Each Person Builds
-Derick (you) — already done + database foundation
-Your AI engine is complete. You additionally set up:
+- Pepper speech output through `ALTextToSpeech`.
+- Pepper gestures through `ALAnimationPlayer`.
+- Pepper tablet scenario and feedback display through `ALTabletService`.
+- Spoken A-D answer selection through `ALSpeechRecognition`.
+- Spoken commands for `question` and `repeat`.
+- Grounded or baseline answers for trainee questions through the existing
+  FastAPI query endpoints.
+- Session start, interaction logging, and session completion through the
+  existing session API.
+- Simulation mode for laptop-side testing without physical Pepper hardware.
 
-backend/database/connection.py — PostgreSQL connection
-backend/database/models.py — Session and analytics tables
-Register Timothy's future routes in middleware/main.py
+Important limitation: Pepper's built-in NAOqi speech recognition is
+vocabulary-based. The current implementation is intentionally optimized for
+reliable low-latency recognition of answer options and a small question
+vocabulary. Fully open dictation should be added later through the Android
+tablet microphone or an external speech-to-text service if the study requires
+unrestricted natural-language questions.
 
-Timothy — three workstreams
-Workstream 1: Android App (mobile_app/)
+## Runtime Architecture
 
-Design screens in Figma collaboratively
-Build in Android Studio using Kotlin + Jetpack Compose
-Uses Retrofit to call FastAPI endpoints over WiFi
-Sideloaded onto Pepper's tablet via ADB
-Displays scenario prompts, receives AI feedback, shows results
+```text
+Pepper Robot
+  pepper_interface/pepper_client.py
+  NAOqi Python 2.7
+  TTS, gestures, ASR, tablet display
 
-Workstream 2: Pepper NAOqi layer (pepper_interface/)
+Laptop / Server
+  FastAPI middleware on port 8000
+  RAG pipeline
+  PostgreSQL
+  ChromaDB vector store
 
-Python 2.7 scripts running on Pepper
-Controls speech, gestures, tablet display
-Calls middleware via HTTP for AI responses
+Android App / Pepper Tablet
+  Optional visual learning interface
+  Backend-backed login
+  Trainee, Manager, Admin flows
+```
 
-Workstream 3: Backend routes (middleware/routes/)
+Pepper and the Android app are clients. The laptop runs the middleware and must
+be reachable over the same WiFi network.
 
-session_routes.py — creates and logs sessions to PostgreSQL
-analytics_routes.py — serves aggregated data
+ADB is not used to deploy the Pepper robot Python client. ADB is only relevant
+if you choose to install the optional Android app onto Pepper's Android tablet.
+Robot speech, gestures, listening, and tablet HTML display are controlled
+through NAOqi services.
 
-ADB Sideloading — How It Works
-This is how the APK gets onto Pepper's tablet:
-bash# 1. Enable developer mode on Pepper's tablet
-#    Settings → About → tap Build Number 7 times
+## Backend Preparation
 
-# 2. Connect laptop to Pepper's tablet via USB
-adb devices
-# Should show the tablet's serial number
+From the repository root:
 
-# 3. Install the APK
-adb install app/build/outputs/apk/debug/app-debug.apk
+```powershell
+.\venv\Scripts\Activate.ps1
+.\venv\Scripts\python.exe scripts\ingest_knowledge_base.py
+uvicorn middleware.main:app --reload --host 0.0.0.0 --port 8000
+```
 
-# 4. Launch it
-adb shell am start -n com.sentry.app/.MainActivity
+If PowerShell activation fails because of a stray parenthesis, use:
 
-# 5. For updates, uninstall first
-adb uninstall com.sentry.app
-adb install app/build/outputs/apk/debug/app-debug.apk
-The app then connects to FastAPI via the laptop's local IP address (e.g. http://192.168.1.100:8000). Both must be on the same WiFi network.
+```powershell
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned
+.\venv\Scripts\Activate.ps1
+```
 
-Network Configuration for the App
-The Android app cannot use localhost — it must use your laptop's actual local IP. Add this to your .env.example:
-env# Network — for Android app connection
-LAPTOP_LOCAL_IP=192.168.x.x    # Your laptop's IP on the shared WiFi
-The Kotlin ApiClient.kt will use this IP as its base URL:
-kotlin// ApiClient.kt
-object ApiClient {
-    // Change this to your laptop's local IP when running
-    private const val BASE_URL = "http://192.168.x.x:8000/"
+Verify locally:
 
-    val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-}
-Also add this to middleware/main.py — FastAPI needs to accept connections from non-localhost:
-python# Already set in your current main.py — confirm this line exists:
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Allows Android app on same network
-    ...
-)
-Your server start command also needs to bind to all interfaces — which it already does:
-bashuvicorn middleware.main:app --reload --host 0.0.0.0 --port 8000
-0.0.0.0 means it accepts connections from any device on the network, not just localhost.
+```powershell
+Invoke-RestMethod http://localhost:8000/health
+Invoke-RestMethod http://localhost:8000/api/v1/knowledge-base/status
+```
 
-Android App Screens (from Figma → Kotlin)
-These are the five screens Timothy builds, matching your proposal's scenario modules:
-WelcomeScreen      — Employee login/session start, health check ping
-ScenarioScreen     — Displays the attack scenario, captures response
-LoadingScreen      — Shows while waiting for AI response (covers latency)
-FeedbackScreen     — Displays Derick's grounded AI response + sources
-ResultsScreen      — Post-session score, risk profile, recommendations
-Each screen calls the middleware via Retrofit. The FeedbackScreen specifically displays:
+Find the laptop IP address:
 
-response field → the spoken/displayed AI feedback
-sources field → "Based on: OWASP Top 10, Computer Misuse Act" attribution
-retrieved_chunks → optional expandable detail for transparency
+```powershell
+ipconfig
+```
 
-Immediate Action Plan
-Right now — you (Derick):
+Use the IPv4 address for the active WiFi adapter, for example
+`192.168.1.100`.
 
-Create the mobile_app/ folder and mobile_app/README_MOBILE.md with the ADB deployment guide
-Set up backend/database/models.py and connection.py — I will write these for you now
-Add asyncpg and sqlalchemy to requirements
-Update middleware/main.py to register Timothy's future routes as placeholders
+Verify from another device on the same WiFi:
 
-Timothy (in parallel):
+```text
+http://192.168.1.100:8000/health
+```
 
-Install Android Studio
-Create new project: File → New → New Project → Empty Activity with Kotlin
-Set package name: com.sentry.app
-Add Retrofit dependency to build.gradle
-Design Figma screens — you both review together
-Build ApiClient.kt pointing to your middleware IP
+## Pepper Connection
 
-Together:
+Pepper must be on the same WiFi network as the laptop.
 
-Agree on the exact JSON contract for session logging (what the app POSTs when a session starts/ends)
-I will define that as a Pydantic model once you agree
+Run on Pepper or from a machine with the NAOqi Python SDK:
+
+```bash
+python pepper_interface/pepper_client.py \
+  --ip PEPPER_IP_ADDRESS \
+  --port 9559 \
+  --middleware http://LAPTOP_IP_ADDRESS:8000 \
+  --participant PEPPER_P001 \
+  --condition grounded \
+  --organisation SENTRY_STUDY \
+  --response-mode voice \
+  --response-timeout 12
+```
+
+For a non-interactive laptop smoke run:
+
+```powershell
+.\venv\Scripts\python.exe pepper_interface\pepper_client.py `
+  --simulation `
+  --middleware http://localhost:8000 `
+  --participant PEPPER_SIM `
+  --condition grounded `
+  --organisation SENTRY_STUDY `
+  --response-mode auto
+```
+
+`--response-mode auto` selects correct answers automatically and is intended
+for smoke verification only. Use `--response-mode voice` for real HRI testing.
+
+## Spoken Interaction Contract
+
+For each scenario, Pepper asks the trainee to say:
+
+- `option A`
+- `option B`
+- `option C`
+- `option D`
+- `question`
+- `repeat`
+
+When the trainee says `question`, Pepper prompts for one of the supported
+question phrases:
+
+- `what is phishing`
+- `why is this risky`
+- `what should I do`
+- `what is the law`
+- `how can I stay safe`
+- `repeat`
+
+The answer is routed through the current session condition:
+
+- `grounded` uses `POST /api/v1/query`.
+- `baseline` uses `POST /api/v1/query/baseline`.
+
+## Login Details
+
+The Pepper Python session does not require Android login. It identifies the
+research participant through CLI arguments:
+
+- Participant: `--participant PEPPER_P001`
+- Organisation: `--organisation SENTRY_STUDY`
+- Condition: `--condition grounded` or `baseline`
+
+For the Android app or Pepper tablet app, the backend login endpoint creates
+prototype users on first login. Use stable values during testing:
+
+```text
+Trainee
+Participant ID: PEPPER_P001
+PIN: 1234
+Role: Trainee
+Organisation: SENTRY_STUDY
+
+Manager
+Participant ID: MANAGER_001
+PIN: 1234
+Role: Manager
+Organisation: SENTRY_STUDY
+
+Admin
+Participant ID: ADMIN_001
+PIN: 1234
+Role: Admin
+Organisation: SENTRY_STUDY
+```
+
+Use the same PIN after first login. This authentication is prototype-grade and
+is not yet suitable for production deployment.
+
+## Latency Methodology
+
+For smoother human-robot interaction:
+
+- Run middleware on the same LAN as Pepper.
+- Bind FastAPI to `0.0.0.0`.
+- Generate `knowledge_base/vector_store/` before the session.
+- Keep the laptop plugged in and avoid VPN routing during tests.
+- Use `--response-timeout 12` to `15` seconds in noisy rooms.
+- Keep Pepper question vocabulary compact for faster ASR.
+- Pepper immediately says "I am thinking about your response" before calling
+  the RAG endpoint.
+- Spoken AI feedback is shortened before TTS so the robot does not read long
+  paragraphs.
+- Interaction logs store `ai_latency_ms` for later analysis.
+
+Expected latency profile on a stable LAN:
+
+```text
+ASR recognition:       usually under 1-2 seconds after speech
+Local scenario logic:  negligible
+RAG retrieval:         usually sub-second once vector store is warm
+LLM generation:        dominant variable, often several seconds
+Pepper TTS:            starts immediately after response text is available
+```
+
+If live RAG latency is too high for a study session, run the fixed OWASP
+assessment flow on Android for deterministic feedback and reserve Pepper RAG
+questions for short prompted explanations.
+
+## Pre-Physical Test Checklist
+
+1. PostgreSQL is running.
+2. `.env` contains valid database and OpenAI settings.
+3. `scripts/ingest_knowledge_base.py` has generated the vector store.
+4. Middleware starts without the ChromaDB missing-directory error.
+5. `http://LAPTOP_IP:8000/health` works from another device.
+6. Pepper and laptop are on the same WiFi.
+7. Pepper IP is reachable.
+8. Simulation smoke run succeeds with `--response-mode auto`.
+9. Physical run uses `--response-mode voice`.
+10. Room noise is low enough for Pepper ASR.
+
+## Verification Commands
+
+```powershell
+.\venv\Scripts\python.exe -m compileall pepper_interface
+.\venv\Scripts\python.exe -m pytest tests\unit\test_pepper_interface.py -q
+.\venv\Scripts\python.exe -m pytest tests\unit -m "not live" -q
+```
+
+Physical Pepper TTS, gesture, tablet, and microphone behavior still require a
+robot because NAOqi services are hardware/runtime services.

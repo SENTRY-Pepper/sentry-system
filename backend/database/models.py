@@ -34,6 +34,11 @@ class TrainingSession(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
     participant_id: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
+    user_id: Mapped[Optional[str]] = mapped_column(
+        ForeignKey("users.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     # "grounded" or "baseline" — which study condition
     condition: Mapped[str] = mapped_column(String(20), nullable=False)
     organisation_id: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
@@ -64,12 +69,73 @@ class TrainingSession(Base):
     eval_logs: Mapped[list["EvaluationLog"]] = relationship(
         back_populates="session", cascade="all, delete-orphan"
     )
+    user: Mapped[Optional["User"]] = relationship(back_populates="sessions")
 
     def __repr__(self) -> str:
         return (
             f"TrainingSession(id={self.id}, "
             f"participant={self.participant_id}, "
             f"condition={self.condition})"
+        )
+
+
+# Organisation
+
+
+class Organisation(Base):
+    __tablename__ = "organisations"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    canonical_id: Mapped[str] = mapped_column(
+        String(50),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utcnow
+    )
+
+    users: Mapped[list["User"]] = relationship(back_populates="organisation")
+
+    def __repr__(self) -> str:
+        return f"Organisation(canonical_id={self.canonical_id})"
+
+
+# User
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_uuid)
+    participant_id: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
+    display_name: Mapped[str] = mapped_column(String(120), nullable=False)
+    role: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
+    pin_hash: Mapped[str] = mapped_column(String(128), nullable=False)
+    organisation_id: Mapped[Optional[str]] = mapped_column(
+        ForeignKey("organisations.canonical_id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    department: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
+    position: Mapped[Optional[str]] = mapped_column(String(80), nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utcnow
+    )
+
+    organisation: Mapped[Optional["Organisation"]] = relationship(
+        back_populates="users"
+    )
+    sessions: Mapped[list["TrainingSession"]] = relationship(back_populates="user")
+
+    def __repr__(self) -> str:
+        return (
+            f"User(participant_id={self.participant_id}, "
+            f"role={self.role}, org={self.organisation_id})"
         )
 
 

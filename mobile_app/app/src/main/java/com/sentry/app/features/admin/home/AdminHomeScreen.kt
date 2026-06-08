@@ -55,7 +55,7 @@ fun AdminHomeScreen(
                 .padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // left column — org metrics
+            // left column: research metrics
             LazyColumn(
                 modifier = Modifier
                     .weight(1f)
@@ -85,9 +85,9 @@ fun AdminHomeScreen(
                 }
 
                 if (!state.loading && state.error.isEmpty()) {
-                    item { SessionCountCard(state = state) }
-                    item { ScoreComparisonCard(state = state) }
-                    item { GroundingAccuracyCard(state = state) }
+                    item { ResearchCountCard(state = state) }
+                    item { GroundingComparisonCard(state = state) }
+                    item { HallucinationCard(state = state) }
                     item { Spacer(modifier = Modifier.height(80.dp)) }
                 }
             }
@@ -107,7 +107,7 @@ fun AdminHomeScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         SentryText(
-                            text = "Recent Sessions",
+                            text = "Research Sessions",
                             size = SentryTextSize.Md,
                             color = MaterialTheme.colorScheme.onBackground
                         )
@@ -152,7 +152,7 @@ private fun AdminTopBar(navController: NavHostController) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         SentryText(
-            text = "Admin Dashboard",
+            text = "Admin Research",
             size = SentryTextSize.Lg,
             color = MaterialTheme.colorScheme.primary
         )
@@ -182,7 +182,7 @@ private fun AdminTopBar(navController: NavHostController) {
 }
 
 @Composable
-private fun SessionCountCard(state: AdminHomeUiState) {
+private fun ResearchCountCard(state: AdminHomeUiState) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -196,25 +196,25 @@ private fun SessionCountCard(state: AdminHomeUiState) {
         ) {
             MetricCell(
                 modifier = Modifier.weight(1f),
-                label = "Total Sessions",
+                label = "Total",
                 value = state.totalSessions.toString()
             )
             MetricCell(
                 modifier = Modifier.weight(1f),
-                label = "Completed",
-                value = state.completedSessions.toString()
+                label = "Grounded",
+                value = state.groundedSessions.toString()
             )
             MetricCell(
                 modifier = Modifier.weight(1f),
-                label = "Knowledge Gain",
-                value = "${"%.1f".format(state.meanKnowledgeGain)}%"
+                label = "Baseline",
+                value = state.baselineSessions.toString()
             )
         }
     }
 }
 
 @Composable
-private fun ScoreComparisonCard(state: AdminHomeUiState) {
+private fun GroundingComparisonCard(state: AdminHomeUiState) {
     val brandColors = LocalBrandColors.current
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -226,32 +226,18 @@ private fun ScoreComparisonCard(state: AdminHomeUiState) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             SentryText(
-                text = "Pre vs Post Assessment",
+                text = "Grounded vs Baseline Accuracy",
                 size = SentryTextSize.Sm,
                 color = MaterialTheme.colorScheme.onBackground
             )
             SentryText(
-                text = "Pre - ${"%.1f".format(state.meanPreScore)}%",
+                text = "Grounded - ${"%.1f".format(state.groundedAccuracy * 100)}%",
                 size = SentryTextSize.Xs,
                 color = MaterialTheme.colorScheme.outline
             )
             // API 23 safe: non-lambda progress overload
             LinearProgressIndicator(
-                progress = percentToProgress(state.meanPreScore),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .clip(RoundedCornerShape(4.dp)),
-                color = MaterialTheme.colorScheme.outline,
-                trackColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-            SentryText(
-                text = "Post - ${"%.1f".format(state.meanPostScore)}%",
-                size = SentryTextSize.Xs,
-                color = MaterialTheme.colorScheme.outline
-            )
-            LinearProgressIndicator(
-                progress = percentToProgress(state.meanPostScore),
+                progress = state.groundedAccuracy.coerceIn(0f, 1f),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp)
@@ -259,12 +245,26 @@ private fun ScoreComparisonCard(state: AdminHomeUiState) {
                 color = brandColors.green,
                 trackColor = MaterialTheme.colorScheme.surfaceVariant
             )
+            SentryText(
+                text = "Baseline - ${"%.1f".format(state.baselineAccuracy * 100)}%",
+                size = SentryTextSize.Xs,
+                color = MaterialTheme.colorScheme.outline
+            )
+            LinearProgressIndicator(
+                progress = state.baselineAccuracy.coerceIn(0f, 1f),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp)
+                    .clip(RoundedCornerShape(4.dp)),
+                color = MaterialTheme.colorScheme.primary,
+                trackColor = MaterialTheme.colorScheme.surfaceVariant
+            )
         }
     }
 }
 
 @Composable
-private fun GroundingAccuracyCard(state: AdminHomeUiState) {
+private fun HallucinationCard(state: AdminHomeUiState) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -275,18 +275,18 @@ private fun GroundingAccuracyCard(state: AdminHomeUiState) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             SentryText(
-                text = "Mean Grounding Accuracy",
+                text = "Hallucination Rate",
                 size = SentryTextSize.Sm,
                 color = MaterialTheme.colorScheme.onBackground
             )
             SentryText(
-                text = "${"%.1f".format(state.meanGroundingAccuracy * 100)}%",
+                text = "Grounded ${"%.1f".format(state.groundedHallucination * 100)}% vs Baseline ${"%.1f".format(state.baselineHallucination * 100)}%",
                 size = SentryTextSize.Md,
                 color = MaterialTheme.colorScheme.primary
             )
             // API 23 safe: non-lambda progress overload
             LinearProgressIndicator(
-                progress = state.meanGroundingAccuracy,
+                progress = state.groundedHallucination.coerceIn(0f, 1f),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp)

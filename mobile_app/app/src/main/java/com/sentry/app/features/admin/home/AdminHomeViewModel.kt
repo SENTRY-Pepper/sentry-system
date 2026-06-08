@@ -23,7 +23,7 @@ class AdminHomeViewModel @Inject constructor(
     }
 
     fun loadDashboard() {
-        loadOrgMetrics()
+        loadStudyMetrics()
         loadRecentSessions()
     }
 
@@ -31,21 +31,25 @@ class AdminHomeViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(error = "")
     }
 
-    private fun loadOrgMetrics() {
+    private fun loadStudyMetrics() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(loading = true, error = "")
 
-            when (val result = analyticsRepository.getOrganisationAnalytics()) {
+            when (val result = analyticsRepository.getStudyAnalytics()) {
                 is NetworkResult.Success -> {
                     val data = result.data
                     _uiState.value = _uiState.value.copy(
                         loading = false,
                         totalSessions = data.totalSessions,
-                        completedSessions = data.completedSessions,
-                        meanPreScore = data.meanPreScore ?: 0f,
-                        meanPostScore = data.meanPostScore ?: 0f,
-                        meanKnowledgeGain = data.meanKnowledgeGain ?: 0f,
-                        meanGroundingAccuracy = data.meanGroundingAccuracy ?: 0f
+                        groundedSessions = data.groundedSessions,
+                        baselineSessions = data.baselineSessions,
+                        groundedAccuracy = data.meanGroundingAccuracyGrounded ?: 0f,
+                        baselineAccuracy = data.meanGroundingAccuracyBaseline ?: 0f,
+                        groundedHallucination = data.meanHallucinationRateGrounded ?: 0f,
+                        baselineHallucination = data.meanHallucinationRateBaseline ?: 0f,
+                        groundingImprovement = data.meanGroundingImprovement ?: 0f,
+                        groundedKnowledgeGain = data.meanKnowledgeGainGrounded ?: 0f,
+                        baselineKnowledgeGain = data.meanKnowledgeGainBaseline ?: 0f,
                     )
                 }
 

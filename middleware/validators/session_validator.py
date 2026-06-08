@@ -10,7 +10,7 @@ Used by:
     middleware/routes/analytics_routes.py
 """
 
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel, Field
 from datetime import datetime
 
@@ -41,6 +41,11 @@ class SessionStartRequest(BaseModel):
         default=None,
         max_length=50,
         description="Organisation identifier for group-level analytics.",
+    )
+    user_id: Optional[str] = Field(
+        default=None,
+        max_length=36,
+        description="Optional persisted trainee user identifier.",
     )
 
     @classmethod
@@ -221,3 +226,102 @@ class StudyAnalytics(BaseModel):
     mean_grounding_improvement: Optional[float]
     mean_knowledge_gain_grounded: Optional[float]
     mean_knowledge_gain_baseline: Optional[float]
+
+
+# ------------------------------------------------------------------
+# Organisation and user models
+# ------------------------------------------------------------------
+
+
+class OrganisationCreateRequest(BaseModel):
+    name: str = Field(..., min_length=2, max_length=120)
+    canonical_id: Optional[str] = Field(default=None, max_length=50)
+
+
+class OrganisationResponse(BaseModel):
+    id: str
+    name: str
+    canonical_id: str
+    is_active: bool
+    created_at: datetime
+
+
+class UserCreateRequest(BaseModel):
+    participant_id: str = Field(..., min_length=2, max_length=50)
+    display_name: str = Field(..., min_length=2, max_length=120)
+    role: str = Field(..., description="admin, manager, or trainee")
+    pin: str = Field(..., min_length=4, max_length=32)
+    organisation_id: Optional[str] = Field(default=None, max_length=50)
+    department: Optional[str] = Field(default=None, max_length=80)
+    position: Optional[str] = Field(default=None, max_length=80)
+
+
+class UserResponse(BaseModel):
+    id: str
+    participant_id: str
+    display_name: str
+    role: str
+    organisation_id: Optional[str]
+    department: Optional[str]
+    position: Optional[str]
+    is_active: bool
+    created_at: datetime
+
+
+class UserLoginRequest(BaseModel):
+    participant_id: str = Field(..., min_length=2, max_length=50)
+    pin: str = Field(..., min_length=4, max_length=32)
+    role: str = Field(..., description="admin, manager, or trainee")
+    organisation_id: Optional[str] = Field(default=None, max_length=50)
+
+
+class UserLoginResponse(BaseModel):
+    token: str
+    user: UserResponse
+
+
+class TraineeAnalytics(BaseModel):
+    user_id: Optional[str]
+    participant_id: str
+    display_name: str
+    department: Optional[str]
+    position: Optional[str]
+    is_active: bool
+    session_count: int
+    completed_sessions: int
+    average_score: Optional[float]
+    best_score: Optional[float]
+    last_score: Optional[float]
+    last_session_at: Optional[datetime]
+    risky_answers: int
+    weakest_categories: List[str]
+
+
+class WeaknessAnalytics(BaseModel):
+    scenario_id: str
+    scenario_type: str
+    risky_answers: int
+    correct_answers: int
+    total_answers: int
+    risk_rate: float
+
+
+class DepartmentAnalytics(BaseModel):
+    department: str
+    trainee_count: int
+    completed_sessions: int
+    average_score: Optional[float]
+    risky_answers: int
+
+
+class ManagerOverviewAnalytics(BaseModel):
+    organisation_id: str
+    trainee_count: int
+    active_trainees: int
+    total_sessions: int
+    completed_sessions: int
+    average_score: Optional[float]
+    completion_rate: float
+    risky_answers: int
+    top_weaknesses: List[WeaknessAnalytics]
+    departments: List[DepartmentAnalytics]

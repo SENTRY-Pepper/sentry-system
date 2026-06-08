@@ -12,12 +12,15 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 
+from backend.database.connection import ensure_schema_updates
 from backend.database.models import (
     AssessmentResult,
     Base,
     EvaluationLog,
+    Organisation,
     ScenarioInteraction,
     TrainingSession,
+    User,
 )
 from config.settings import settings
 
@@ -57,6 +60,7 @@ async def test_table_creation():
     try:
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+            await ensure_schema_updates(conn)
 
         async with engine.connect() as conn:
             result = await conn.execute(
@@ -65,7 +69,8 @@ async def test_table_creation():
                     "WHERE table_schema = 'public' "
                     "AND table_name IN ("
                     "'training_sessions', 'scenario_interactions', "
-                    "'assessment_results', 'evaluation_logs'"
+                    "'assessment_results', 'evaluation_logs', "
+                    "'organisations', 'users'"
                     ")"
                 )
             )
@@ -76,6 +81,8 @@ async def test_table_creation():
             "scenario_interactions",
             "assessment_results",
             "evaluation_logs",
+            "organisations",
+            "users",
         }
         assert expected == tables, f"Missing tables: {expected - tables}"
         print(f"  Tables confirmed: {sorted(tables)}")
@@ -91,6 +98,7 @@ async def test_insert_and_query():
         # Ensure tables exist
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
+            await ensure_schema_updates(conn)
 
         session_factory = async_sessionmaker(
             bind=engine,
@@ -99,8 +107,39 @@ async def test_insert_and_query():
         )
 
         async with session_factory() as db:
+            await db.execute(
+                text("DELETE FROM training_sessions WHERE participant_id = 'TEST_P001'")
+            )
+            await db.execute(
+                text("DELETE FROM users WHERE participant_id = 'TEST_P001'")
+            )
+            await db.execute(
+                text("DELETE FROM organisations WHERE canonical_id = 'TEST_ORG'")
+            )
+            await db.flush()
+
+            organisation = Organisation(
+                name="Test Organisation",
+                canonical_id="TEST_ORG",
+            )
+            db.add(organisation)
+            await db.flush()
+
+            user = User(
+                participant_id="TEST_P001",
+                display_name="Test Trainee",
+                role="trainee",
+                pin_hash="test",
+                organisation_id="TEST_ORG",
+                department="IT",
+                position="Analyst",
+            )
+            db.add(user)
+            await db.flush()
+
             session = TrainingSession(
                 participant_id="TEST_P001",
+                user_id=user.id,
                 condition="grounded",
                 organisation_id="TEST_ORG",
             )
@@ -164,6 +203,7 @@ async def test_insert_and_query():
             print(f"  Eval log:           grounding={eval_log.grounding_accuracy}")
 
             assert session.id is not None
+            assert user.id is not None
             assert interaction.id is not None
             assert assessment.knowledge_gain == 27.0
             assert eval_log.grounding_accuracy == 0.75

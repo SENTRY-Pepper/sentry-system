@@ -1,5 +1,5 @@
 """
-SENTRY — Password Hygiene Scenario
+SENTRY â€” Password Hygiene Scenario
 =====================================
 Scenario 3: Employee is prompted to create a new account password
 and must choose the strongest approach.
@@ -12,19 +12,19 @@ from pepper_interface.scenarios.base_scenario import BaseScenario
 
 class PasswordScenario(BaseScenario):
     @property
-    def scenario_id(self) -> str:
+    def scenario_id(self):
         return "password-01"
 
     @property
-    def scenario_type(self) -> str:
+    def scenario_type(self):
         return "password"
 
     @property
-    def title(self) -> str:
+    def title(self):
         return "Password hygiene"
 
     @property
-    def prompt(self) -> str:
+    def prompt(self):
         return (
             "Your company is rolling out a new internal system and "
             "you need to create a password for your account. "
@@ -33,16 +33,16 @@ class PasswordScenario(BaseScenario):
         )
 
     @property
-    def choices(self) -> list[dict]:
+    def choices(self):
         return [
             {
                 "id": "name_dob",
-                "text": "Use my name and date of birth — easy to remember",
+                "text": "Use my name and date of birth â€” easy to remember",
                 "is_correct": False,
             },
             {
                 "id": "reuse",
-                "text": "Reuse my email password — I already remember it",
+                "text": "Reuse my email password â€” I already remember it",
                 "is_correct": False,
             },
             {
@@ -58,7 +58,7 @@ class PasswordScenario(BaseScenario):
         ]
 
     @property
-    def correct_keywords(self) -> list[str]:
+    def correct_keywords(self):
         return [
             "passphrase",
             "password manager",
@@ -76,7 +76,7 @@ class PasswordScenario(BaseScenario):
         ]
 
     @property
-    def risky_keywords(self) -> list[str]:
+    def risky_keywords(self):
         return [
             "name",
             "birthday",
@@ -90,7 +90,7 @@ class PasswordScenario(BaseScenario):
         ]
 
     @property
-    def rag_query(self) -> str:
+    def rag_query(self):
         return (
             "What makes a password strong according to OWASP guidelines? "
             "What are the risks of reusing passwords or using personal "
@@ -98,7 +98,7 @@ class PasswordScenario(BaseScenario):
         )
 
     @property
-    def pepper_intro(self) -> str:
+    def pepper_intro(self):
         return (
             "Passwords are the first line of defence for most systems. "
             "Weak passwords are responsible for a significant number of "
@@ -106,7 +106,7 @@ class PasswordScenario(BaseScenario):
         )
 
     @property
-    def pepper_correct_response(self) -> str:
+    def pepper_correct_response(self):
         return (
             "Excellent. Using a password manager to generate unique, complex "
             "passwords is considered best practice. It means that if one "
@@ -115,7 +115,7 @@ class PasswordScenario(BaseScenario):
         )
 
     @property
-    def pepper_risky_response(self) -> str:
+    def pepper_risky_response(self):
         return (
             "That approach leaves your account vulnerable. Weak or reused "
             "passwords are one of the leading causes of account takeovers. "

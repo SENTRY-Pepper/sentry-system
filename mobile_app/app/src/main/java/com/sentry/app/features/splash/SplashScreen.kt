@@ -50,7 +50,11 @@ fun SplashScreen(
         alpha.animateTo(1f, animationSpec = tween(600))
         delay(2500)
         if (vm.isAuthenticated()) {
-            val route = if (vm.getRole() == UserRole.ADMIN) "adminHome" else "traineeHome"
+            val route = when (vm.getRole()) {
+                UserRole.ADMIN -> "adminHome"
+                UserRole.MANAGER -> "managerHome"
+                UserRole.TRAINEE -> "traineeHome"
+            }
             navController.navigateAndClear(route, popUpToRoute = "splash")
         } else {
             navController.navigateAndClear("auth", popUpToRoute = "splash")

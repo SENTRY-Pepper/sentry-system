@@ -7,17 +7,25 @@ import com.sentry.app.data.models.request.InteractionLogRequest
 import com.sentry.app.data.models.request.QueryRequest
 import com.sentry.app.data.models.request.SessionEndRequest
 import com.sentry.app.data.models.request.SessionStartRequest
+import com.sentry.app.data.models.request.UserCreateRequest
+import com.sentry.app.data.models.request.UserLoginRequest
 import com.sentry.app.data.models.response.HealthResponse
 import com.sentry.app.data.models.response.InteractionLogResponse
+import com.sentry.app.data.models.response.ManagerOverviewAnalytics
 import com.sentry.app.data.models.response.OrganisationAnalytics
 import com.sentry.app.data.models.response.QueryResponse
 import com.sentry.app.data.models.response.SessionEndResponse
 import com.sentry.app.data.models.response.SessionStartResponse
 import com.sentry.app.data.models.response.SessionSummary
 import com.sentry.app.data.models.response.StudyAnalytics
+import com.sentry.app.data.models.response.TraineeAnalytics
+import com.sentry.app.data.models.response.UserLoginResponse
+import com.sentry.app.data.models.response.UserResponse
+import com.sentry.app.data.models.response.WeaknessAnalytics
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import io.ktor.client.request.patch
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.encodeURLPathPart
@@ -89,6 +97,15 @@ suspend fun SentryKtorClient.logInteraction(
 
 // analytics — admin only
 
+suspend fun SentryKtorClient.loginUser(
+    request: UserLoginRequest,
+): NetworkResult<UserLoginResponse> =
+    safeKtorCall("loginUser") {
+        client.post("api/v1/users/login") {
+            setBody(request)
+        }.body()
+    }
+
 suspend fun SentryKtorClient.getStudyAnalytics(): NetworkResult<StudyAnalytics> =
     safeKtorCall("getStudyAnalytics") {
         client.get("api/v1/analytics/study").body()
@@ -112,4 +129,50 @@ suspend fun SentryKtorClient.getOrganisationAnalytics(
 ): NetworkResult<OrganisationAnalytics> =
     safeKtorCall("getOrganisationAnalytics") {
         client.get("api/v1/analytics/organisation/${organisationId.encodeURLPathPart()}").body()
+    }
+
+suspend fun SentryKtorClient.getManagerOverview(
+    organisationId: String,
+): NetworkResult<ManagerOverviewAnalytics> =
+    safeKtorCall("getManagerOverview") {
+        client.get("api/v1/manager/analytics/overview") {
+            parameter("organisation_id", organisationId)
+        }.body()
+    }
+
+suspend fun SentryKtorClient.getManagerWeaknesses(
+    organisationId: String,
+    limit: Int = 10,
+): NetworkResult<List<WeaknessAnalytics>> =
+    safeKtorCall("getManagerWeaknesses") {
+        client.get("api/v1/manager/analytics/weaknesses") {
+            parameter("organisation_id", organisationId)
+            parameter("limit", limit)
+        }.body()
+    }
+
+suspend fun SentryKtorClient.listTrainees(
+    organisationId: String,
+): NetworkResult<List<TraineeAnalytics>> =
+    safeKtorCall("listTrainees") {
+        client.get("api/v1/manager/trainees") {
+            parameter("organisation_id", organisationId)
+        }.body()
+    }
+
+suspend fun SentryKtorClient.createTrainee(
+    request: UserCreateRequest,
+): NetworkResult<UserResponse> =
+    safeKtorCall("createTrainee") {
+        client.post("api/v1/manager/trainees") {
+            setBody(request)
+        }.body()
+    }
+
+suspend fun SentryKtorClient.deactivateTrainee(
+    userId: String,
+): NetworkResult<UserResponse> =
+    safeKtorCall("deactivateTrainee") {
+        client.patch("api/v1/manager/trainees/${userId.encodeURLPathPart()}/deactivate")
+            .body()
     }

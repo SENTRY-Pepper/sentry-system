@@ -28,6 +28,7 @@ from backend.database.models import (
     ScenarioInteraction,
     EvaluationLog,
     AssessmentResult,
+    User,
 )
 from middleware.validators.session_validator import (
     SessionStartRequest,
@@ -64,8 +65,22 @@ async def start_session(
     Creates a new TrainingSession record and returns the session_id
     that must be included in all subsequent requests.
     """
+    user_id = body.user_id
+    if not user_id and body.organisation_id:
+        result = await db.execute(
+            select(User).where(
+                User.participant_id == body.participant_id,
+                User.organisation_id == body.organisation_id,
+                User.role == "trainee",
+                User.is_active.is_(True),
+            )
+        )
+        user = result.scalar_one_or_none()
+        user_id = user.id if user else None
+
     session = TrainingSession(
         participant_id=body.participant_id,
+        user_id=user_id,
         condition=body.condition,
         organisation_id=body.organisation_id,
     )

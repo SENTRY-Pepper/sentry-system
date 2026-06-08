@@ -69,7 +69,10 @@ data class StudyAnalytics(
     @SerialName("grounded_sessions")                val groundedSessions: Int,
     @SerialName("baseline_sessions")                val baselineSessions: Int,
     @SerialName("mean_grounding_accuracy_grounded") val meanGroundingAccuracyGrounded: Float?,
+    @SerialName("mean_grounding_accuracy_baseline") val meanGroundingAccuracyBaseline: Float?,
     @SerialName("mean_hallucination_rate_grounded") val meanHallucinationRateGrounded: Float?,
+    @SerialName("mean_hallucination_rate_baseline") val meanHallucinationRateBaseline: Float?,
+    @SerialName("mean_grounding_improvement")       val meanGroundingImprovement: Float?,
     @SerialName("mean_knowledge_gain_grounded")     val meanKnowledgeGainGrounded: Float?,
     @SerialName("mean_knowledge_gain_baseline")     val meanKnowledgeGainBaseline: Float?,
 )
@@ -83,6 +86,76 @@ data class OrganisationAnalytics(
     @SerialName("mean_post_score")         val meanPostScore: Float?,
     @SerialName("mean_knowledge_gain")     val meanKnowledgeGain: Float?,
     @SerialName("mean_grounding_accuracy") val meanGroundingAccuracy: Float?,
+)
+
+@Serializable
+data class UserResponse(
+    @SerialName("id")              val id: String,
+    @SerialName("participant_id")  val participantId: String,
+    @SerialName("display_name")    val displayName: String,
+    @SerialName("role")            val role: String,
+    @SerialName("organisation_id") val organisationId: String?,
+    @SerialName("department")      val department: String?,
+    @SerialName("position")        val position: String?,
+    @SerialName("is_active")       val isActive: Boolean,
+    @SerialName("created_at")      val createdAt: String,
+)
+
+@Serializable
+data class UserLoginResponse(
+    @SerialName("token") val token: String,
+    @SerialName("user")  val user: UserResponse,
+)
+
+@Serializable
+data class TraineeAnalytics(
+    @SerialName("user_id")            val userId: String?,
+    @SerialName("participant_id")     val participantId: String,
+    @SerialName("display_name")       val displayName: String,
+    @SerialName("department")         val department: String?,
+    @SerialName("position")           val position: String?,
+    @SerialName("is_active")          val isActive: Boolean,
+    @SerialName("session_count")      val sessionCount: Int,
+    @SerialName("completed_sessions") val completedSessions: Int,
+    @SerialName("average_score")      val averageScore: Float?,
+    @SerialName("best_score")         val bestScore: Float?,
+    @SerialName("last_score")         val lastScore: Float?,
+    @SerialName("last_session_at")    val lastSessionAt: String?,
+    @SerialName("risky_answers")      val riskyAnswers: Int,
+    @SerialName("weakest_categories") val weakestCategories: List<String>,
+)
+
+@Serializable
+data class WeaknessAnalytics(
+    @SerialName("scenario_id")     val scenarioId: String,
+    @SerialName("scenario_type")   val scenarioType: String,
+    @SerialName("risky_answers")   val riskyAnswers: Int,
+    @SerialName("correct_answers") val correctAnswers: Int,
+    @SerialName("total_answers")   val totalAnswers: Int,
+    @SerialName("risk_rate")       val riskRate: Float,
+)
+
+@Serializable
+data class DepartmentAnalytics(
+    @SerialName("department")         val department: String,
+    @SerialName("trainee_count")      val traineeCount: Int,
+    @SerialName("completed_sessions") val completedSessions: Int,
+    @SerialName("average_score")      val averageScore: Float?,
+    @SerialName("risky_answers")      val riskyAnswers: Int,
+)
+
+@Serializable
+data class ManagerOverviewAnalytics(
+    @SerialName("organisation_id")     val organisationId: String,
+    @SerialName("trainee_count")       val traineeCount: Int,
+    @SerialName("active_trainees")     val activeTrainees: Int,
+    @SerialName("total_sessions")      val totalSessions: Int,
+    @SerialName("completed_sessions")  val completedSessions: Int,
+    @SerialName("average_score")       val averageScore: Float?,
+    @SerialName("completion_rate")     val completionRate: Float,
+    @SerialName("risky_answers")       val riskyAnswers: Int,
+    @SerialName("top_weaknesses")      val topWeaknesses: List<WeaknessAnalytics>,
+    @SerialName("departments")         val departments: List<DepartmentAnalytics>,
 )
 
 // Local only — never serialized to network
