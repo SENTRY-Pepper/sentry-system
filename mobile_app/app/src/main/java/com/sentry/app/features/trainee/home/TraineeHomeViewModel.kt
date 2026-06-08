@@ -4,8 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sentry.app.core.network.NetworkResult
 import com.sentry.app.data.local.TokenManager
-import com.sentry.app.data.repository.AuthRepository
 import com.sentry.app.data.repository.SessionRepository
+import com.sentry.app.features.trainee.curriculum.OwaspCurriculum
+import com.sentry.app.features.trainee.curriculum.TrainingProgressStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,18 +16,23 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 fun defaultModules() = listOf(
-    ModuleProgress("Phishing Detection",       1.0f, "Complete",    true),
-    ModuleProgress("USB Drop Simulation",      1.0f, "Complete",    true),
-    ModuleProgress("Password Hygiene",         0.4f, "In Progress", false),
-    ModuleProgress("Voice Social Engineering", 0.0f, "Not Started", false),
-    ModuleProgress("Network Hygiene",          0.0f, "Not Started", false),
+    ModuleProgress("A01 Broken Access Control", 0.35f, "In Progress", false),
+    ModuleProgress("A02 Security Misconfiguration", 0.0f, "Not Started", false),
+    ModuleProgress("A03 Software Supply Chain", 0.0f, "Not Started", false),
+    ModuleProgress("A04 Cryptographic Failures", 0.0f, "Not Started", false),
+    ModuleProgress("A05 Injection", 0.0f, "Not Started", false),
+    ModuleProgress("A06 Insecure Design", 0.0f, "Not Started", false),
+    ModuleProgress("A07 Authentication Failures", 0.0f, "Not Started", false),
+    ModuleProgress("A08 Software/Data Integrity", 0.0f, "Not Started", false),
+    ModuleProgress("A09 Logging and Alerting", 0.0f, "Not Started", false),
+    ModuleProgress("A10 Exceptional Conditions", 0.0f, "Not Started", false),
 )
 
 @HiltViewModel
 class TraineeHomeViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
     private val sessionRepository: SessionRepository,
     private val tokenManager: TokenManager,
+    private val progressStore: TrainingProgressStore,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TraineeHomeUiState())
@@ -35,16 +41,43 @@ class TraineeHomeViewModel @Inject constructor(
     private val _events = MutableSharedFlow<TraineeHomeEvent>()
     val events = _events.asSharedFlow()
 
-    init { loadProfile() }
+    init { refreshProfile() }
 
-    private fun loadProfile() {
+    fun refreshProfile() = viewModelScope.launch {
         val participantId = tokenManager.getParticipantId() ?: ""
         val organisation  = tokenManager.getOrganisationId() ?: ""
-        val modulesLeft   = defaultModules().count { !it.isComplete }
+        val completedIds = progressStore.completedModuleIds()
+        val firstIncomplete = OwaspCurriculum.modules.firstOrNull {
+            it.id !in completedIds
+        }?.id
+        val modules = OwaspCurriculum.modules.map { module ->
+            val complete = module.id in completedIds
+            val inProgress = module.id == firstIncomplete
+            ModuleProgress(
+                name = "${module.owaspId} ${module.title}",
+                progress = when {
+                    complete -> 1.0f
+                    inProgress -> 0.35f
+                    else -> 0.0f
+                },
+                status = when {
+                    complete -> "Complete"
+                    inProgress -> "In Progress"
+                    else -> "Not Started"
+                },
+                isComplete = complete,
+            )
+        }
+        val sessionsCompleted = progressStore.sessionsCompleted()
+        val averageAccuracy = progressStore.averageAccuracy()
+        val modulesLeft = modules.count { !it.isComplete }
 
         _uiState.value = _uiState.value.copy(
             participantId = participantId,
             organisation  = organisation,
+            modules = modules,
+            sessionsCompleted = sessionsCompleted,
+            avgAccuracy = averageAccuracy?.let { "${it.toInt()}%" } ?: "--",
             modulesLeft   = modulesLeft,
         )
     }

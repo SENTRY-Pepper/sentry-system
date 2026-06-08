@@ -24,7 +24,7 @@ training system.
 | Derick Richard Tsumah | SCT212-0192/2022 | RAG pipeline, AI grounding, evaluation framework |
 | Timothy Wachira | SCT212-0178/2021 | HRI layer, scenarios, analytics, Android app |
 
-Supervisors: Dr. Eunice Njeri, Prof. Waweru Mwangi
+Supervisors: Dr. Eunice Njeri, Dr. Richard Rimiru
 
 ## Current Status
 
@@ -35,21 +35,23 @@ SENTRY currently supports:
 - PostgreSQL-backed training sessions, interactions, assessments, and
   evaluation logs.
 - Android Jetpack Compose app with trainee and admin flows.
+- Android OWASP Top 10 curriculum with fixed A-D assessments, local saved
+  feedback, and trainee progress tracking.
 - Local-only Android authentication with role and organisation persistence.
 - Organisation analytics keyed by canonical organisation ID strings.
 - Pepper robot interface with scenario orchestration and simulation support.
 - Evaluation utilities for grounded-vs-baseline research comparison.
 
 SENTRY is not yet a production multi-tenant platform. Backend authentication,
-server-side RBAC, user accounts, organisation membership, and full OWASP
-curriculum coverage are planned future work.
+server-side RBAC, user accounts, organisation membership, and detailed
+cross-device per-question learning history are planned future work.
 
 ## Architecture
 
 ```text
 Android App
   Jetpack Compose, Hilt, Ktor CIO, DataStore
-  trainee/admin screens, chat, session flow, analytics
+  trainee/admin screens, chat, OWASP curriculum, session flow, analytics
 
 FastAPI Middleware
   /api/v1/query
@@ -143,9 +145,24 @@ Important packages:
 - `data/local`: DataStore-backed session persistence.
 - `data/remote/api`: Ktor endpoint extension functions.
 - `data/repository`: auth, session, query, and analytics repositories.
+- `features/trainee/curriculum`: OWASP Top 10 modules, saved answer feedback,
+  and local progress persistence.
 - `features`: splash, auth, trainee, admin, chat, settings screens.
 
 The current app does not use Retrofit or OkHttp interceptors.
+
+### OWASP Training Flow
+
+The trainee session flow is now based on the OWASP Top 10:
+
+- Ten modules map to A01 through A10.
+- Every module includes educational content, a workplace scenario, four A-D
+  answers, one objectively correct answer, and practical feedback.
+- Feedback is saved locally in the app for both correct and incorrect answers.
+  The app does not call the RAG API for these fixed assessment explanations.
+- The session still logs interactions and completes the session through the
+  backend so organisation analytics use real completion and score data.
+- Open-ended grounded RAG remains available through the chat screen.
 
 ## Authentication And Organisation Flow
 
@@ -314,9 +331,11 @@ Evaluation tooling lives under `evaluation/`.
 
 ### Phase 5: Production OWASP Training System
 
-- Replace prototype training content with real OWASP Top 10 modules.
-- Add objective assessments with one correct answer.
-- Add high-quality distractors and educational explanations.
+- Implemented in the Android trainee flow with local OWASP modules and saved
+  answer feedback.
+- Remaining follow-up: verify on API 23/Pepper tablet and decide whether
+  detailed per-question history should move from local storage to backend
+  persistence.
 
 ### Phase 6: Organisation Analytics System
 

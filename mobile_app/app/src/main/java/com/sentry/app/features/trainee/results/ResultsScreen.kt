@@ -40,7 +40,6 @@ import com.sentry.app.core.ui.models.SentryTextAlign
 import com.sentry.app.core.ui.models.SentryTextSize
 import com.sentry.app.core.ui.theme.LocalBrandColors
 
-// component-specific tokens
 private val CardBorder = Color(0xFFE0E0E0)
 
 @Composable
@@ -52,14 +51,11 @@ fun ResultsScreen(
     val state by vm.uiState.collectAsStateWithLifecycle()
     val scheme = MaterialTheme.colorScheme
     val brand = LocalBrandColors.current
-
-    val accuracy = if (state.totalCount > 0)
-        (state.correctCount.toFloat() / state.totalCount * 100).toInt() else 0
-    val gain = (state.postScore - state.preScore).toInt()
-    val improvement = if (state.preScore > 0f)
-        ((gain.toFloat() / state.preScore) * 100).toInt() else 0
-
-    // summary data — from real state, falls back gracefully while loading
+    val accuracy = if (state.totalCount > 0) {
+        (state.correctCount.toFloat() / state.totalCount * 100).toInt()
+    } else {
+        state.postScore.toInt()
+    }
     val summary = state.summary
 
     Row(
@@ -67,7 +63,6 @@ fun ResultsScreen(
             .fillMaxSize()
             .background(scheme.background),
     ) {
-        // ── Left column — score + breakdown ─────────────────────────
         Column(
             modifier = Modifier
                 .weight(1f)
@@ -91,15 +86,12 @@ fun ResultsScreen(
                     contentPadding = PaddingValues(20.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    // score card
                     item {
                         ScoreCard(
                             accuracy = accuracy,
                             correctCount = state.correctCount,
                             totalCount = state.totalCount,
-                            preScore = state.preScore,
                             postScore = state.postScore,
-                            improvement = improvement,
                             durationSeconds = state.durationSeconds,
                             vm = vm,
                         )
@@ -110,14 +102,12 @@ fun ResultsScreen(
             }
         }
 
-        // ── Right column — recommendations + actions ─────────────────
         Column(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
                 .background(scheme.surface),
         ) {
-            // right header bar
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -139,7 +129,6 @@ fun ResultsScreen(
                 contentPadding = PaddingValues(20.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                // error state
                 if (state.error.isNotEmpty()) {
                     item {
                         SentryText(
@@ -150,56 +139,19 @@ fun ResultsScreen(
                     }
                 }
 
-                // recommendation card — show if any scenarios were wrong
-                val hasWeakArea = state.correctCount < state.totalCount
-
-                if (hasWeakArea) {
+                if (state.missedModuleIds.isNotEmpty()) {
                     item {
                         RecommendationCard(
+                            missedModules = state.missedModuleIds.map { vm.moduleTitle(it) },
                             onBackHome = { navController.navigateSingleTop("traineeHome") },
                             onOpenChat = { navController.navigateSingleTop("chat") },
                         )
                     }
                 } else if (!state.loading) {
                     item {
-                        // all correct — celebrate
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(16.dp))
-                                .background(brand.green.copy(alpha = 0.10f))
-                                .border(1.dp, brand.green, RoundedCornerShape(16.dp))
-                                .padding(20.dp),
-                        ) {
-                            SentryText(
-                                text = "Perfect score — excellent security awareness!",
-                                size = SentryTextSize.Md,
-                                weight = FontWeight.Bold,
-                                color = brand.green,
-                                align = SentryTextAlign.Center,
-                            )
-                        }
-
-                        Spacer(Modifier.height(12.dp))
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clip(RoundedCornerShape(12.dp))
-                                .background(scheme.primary)
-                                .clickable {
-                                    navController.navigateSingleTop("traineeHome")
-                                }
-                                .padding(vertical = 14.dp),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            SentryText(
-                                text = "Back to home",
-                                size = SentryTextSize.Md,
-                                weight = FontWeight.Bold,
-                                color = Color.White,
-                            )
-                        }
+                        PerfectScoreCard(
+                            onBackHome = { navController.navigateSingleTop("traineeHome") },
+                        )
                     }
                 }
 
@@ -238,7 +190,7 @@ private fun ResultsTopBar(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             SentryText(
-                text = "Session Complete",
+                text = "OWASP Training Complete",
                 size = SentryTextSize.Xl,
                 weight = FontWeight.Bold,
                 color = Color.White,
@@ -259,9 +211,7 @@ private fun ScoreCard(
     accuracy: Int,
     correctCount: Int,
     totalCount: Int,
-    preScore: Float,
     postScore: Float,
-    improvement: Int,
     durationSeconds: Int,
     vm: ResultsViewModel,
 ) {
@@ -277,7 +227,7 @@ private fun ScoreCard(
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             SentryText(
-                text = "Your accuracy score",
+                text = "OWASP Top 10 assessment score",
                 size = SentryTextSize.Sm,
                 color = scheme.outline,
                 align = SentryTextAlign.Center,
@@ -291,7 +241,7 @@ private fun ScoreCard(
                 align = SentryTextAlign.Center,
             )
             SentryText(
-                text = "$correctCount of $totalCount correct",
+                text = "$correctCount of $totalCount modules correct",
                 size = SentryTextSize.Sm,
                 color = scheme.outline,
                 align = SentryTextAlign.Center,
@@ -299,38 +249,37 @@ private fun ScoreCard(
 
             Spacer(Modifier.height(20.dp))
 
-            // stats row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 StatItem(
-                    value = "${preScore.toInt()}%→${postScore.toInt()}%",
-                    label = "Knowledge gain",
+                    value = "${postScore.toInt()}%",
+                    label = "Stored score",
                 )
-                Box(
-                    modifier = Modifier
-                        .width(0.5.dp)
-                        .height(40.dp)
-                        .background(CardBorder),
-                )
+                Divider()
                 StatItem(
                     value = vm.formatDuration(durationSeconds),
                     label = "Duration",
                 )
-                Box(
-                    modifier = Modifier
-                        .width(0.5.dp)
-                        .height(40.dp)
-                        .background(CardBorder),
-                )
+                Divider()
                 StatItem(
-                    value = "+$improvement%",
-                    label = "Improvement",
+                    value = totalCount.toString(),
+                    label = "Modules",
                 )
             }
         }
     }
+}
+
+@Composable
+private fun Divider() {
+    Box(
+        modifier = Modifier
+            .width(0.5.dp)
+            .height(40.dp)
+            .background(CardBorder),
+    )
 }
 
 @Composable
@@ -352,9 +301,9 @@ private fun StatItem(value: String, label: String) {
     }
 }
 
-
 @Composable
 private fun RecommendationCard(
+    missedModules: List<String>,
     onBackHome: () -> Unit,
     onOpenChat: () -> Unit,
 ) {
@@ -370,58 +319,100 @@ private fun RecommendationCard(
     ) {
         Column {
             SentryText(
-                text = "Recommended next step",
+                text = "Review recommended",
                 size = SentryTextSize.Md,
                 weight = FontWeight.Bold,
                 color = scheme.onBackground,
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(6.dp))
             SentryText(
-                text = "Review the scenarios you found difficult with Pepper",
+                text = "Revisit these OWASP areas with Pepper:",
                 size = SentryTextSize.Sm,
                 color = scheme.outline,
             )
-            Spacer(Modifier.height(14.dp))
-
-            // back to home
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(scheme.primary)
-                    .clickable { onBackHome() }
-                    .padding(vertical = 14.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                SentryText(
-                    text = "Back to home",
-                    size = SentryTextSize.Md,
-                    weight = FontWeight.Bold,
-                    color = Color.White,
-                )
-            }
-
             Spacer(Modifier.height(10.dp))
-
-            // ask pepper
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(scheme.surface)
-                    .border(1.5.dp, scheme.primary, RoundedCornerShape(12.dp))
-                    .clickable { onOpenChat() }
-                    .padding(vertical = 14.dp),
-                contentAlignment = Alignment.Center,
-            ) {
+            missedModules.take(4).forEach { title ->
                 SentryText(
-                    text = "Ask Pepper to explain further",
+                    text = "- $title",
                     size = SentryTextSize.Sm,
-                    weight = FontWeight.Bold,
-                    color = scheme.primary,
-                    align = SentryTextAlign.Center,
+                    color = scheme.onBackground,
+                    maxLines = 2,
                 )
+                Spacer(Modifier.height(4.dp))
             }
+            Spacer(Modifier.height(12.dp))
+
+            ActionButton(
+                text = "Back to home",
+                filled = true,
+                onClick = onBackHome,
+            )
+            Spacer(Modifier.height(10.dp))
+            ActionButton(
+                text = "Ask Pepper to explain further",
+                filled = false,
+                onClick = onOpenChat,
+            )
         }
+    }
+}
+
+@Composable
+private fun PerfectScoreCard(
+    onBackHome: () -> Unit,
+) {
+    val scheme = MaterialTheme.colorScheme
+    val brand = LocalBrandColors.current
+
+    Column {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(brand.green.copy(alpha = 0.10f))
+                .border(1.dp, brand.green, RoundedCornerShape(16.dp))
+                .padding(20.dp),
+        ) {
+            SentryText(
+                text = "Perfect score. You handled all OWASP Top 10 scenarios correctly.",
+                size = SentryTextSize.Md,
+                weight = FontWeight.Bold,
+                color = brand.green,
+                align = SentryTextAlign.Center,
+            )
+        }
+        Spacer(Modifier.height(12.dp))
+        ActionButton(
+            text = "Back to home",
+            filled = true,
+            onClick = onBackHome,
+        )
+    }
+}
+
+@Composable
+private fun ActionButton(
+    text: String,
+    filled: Boolean,
+    onClick: () -> Unit,
+) {
+    val scheme = MaterialTheme.colorScheme
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(if (filled) scheme.primary else scheme.surface)
+            .border(1.5.dp, scheme.primary, RoundedCornerShape(12.dp))
+            .clickable { onClick() }
+            .padding(vertical = 14.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        SentryText(
+            text = text,
+            size = SentryTextSize.Sm,
+            weight = FontWeight.Bold,
+            color = if (filled) Color.White else scheme.primary,
+            align = SentryTextAlign.Center,
+        )
     }
 }
