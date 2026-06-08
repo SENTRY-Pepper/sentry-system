@@ -26,6 +26,7 @@ data class SessionUiState(
     val isAnswered: Boolean = false,
     val isCorrect: Boolean = false,
     val isModuleBreak: Boolean = false,
+    val moduleCorrectCount: Int = 0,
     val aiResponse: String = "",
     val aiSources: List<String> = emptyList(),
     val aiLoading: Boolean = false,
@@ -43,6 +44,7 @@ class SessionViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val sessionId: String = checkNotNull(savedStateHandle["sessionId"])
+    private val startModuleId: String? = savedStateHandle["moduleId"]
     private val sessionStartedAtMs: Long = System.currentTimeMillis()
     private val answeredModuleIds = linkedSetOf<String>()
     private val missedModuleIds = linkedSetOf<String>()
@@ -50,6 +52,7 @@ class SessionViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(
         SessionUiState(
             sessionId = sessionId,
+            currentModuleIndex = moduleIndex(startModuleId),
             totalModules = OwaspCurriculum.modules.size,
             totalQuestions = OwaspCurriculum.totalQuestions,
         )
@@ -83,6 +86,7 @@ class SessionViewModel @Inject constructor(
             aiSources = sources,
             aiLoading = false,
             correctCount = state.correctCount + if (choice.isCorrect) 1 else 0,
+            moduleCorrectCount = state.moduleCorrectCount + if (choice.isCorrect) 1 else 0,
         )
 
         sessionRepository.logInteraction(
@@ -114,6 +118,7 @@ class SessionViewModel @Inject constructor(
                     isAnswered = false,
                     isCorrect = false,
                     isModuleBreak = false,
+                    moduleCorrectCount = 0,
                     aiResponse = "",
                     aiSources = emptyList(),
                     aiLoading = false,
@@ -127,6 +132,13 @@ class SessionViewModel @Inject constructor(
         val nextQuestionIndex = state.currentQuestionIndex + 1
         if (nextQuestionIndex >= module.questions.size) {
             answeredModuleIds.add(module.id)
+            viewModelScope.launch {
+                progressStore.recordModuleResult(
+                    moduleId = module.id,
+                    correctCount = _uiState.value.moduleCorrectCount,
+                    totalCount = module.questions.size,
+                )
+            }
             _uiState.value = state.copy(
                 selectedChoiceId = null,
                 isAnswered = false,
@@ -202,4 +214,9 @@ class SessionViewModel @Inject constructor(
             )
         }
     }
+
+    private fun moduleIndex(moduleId: String?): Int =
+        OwaspCurriculum.modules.indexOfFirst { it.id == moduleId }
+            .takeIf { it >= 0 }
+            ?: 0
 }

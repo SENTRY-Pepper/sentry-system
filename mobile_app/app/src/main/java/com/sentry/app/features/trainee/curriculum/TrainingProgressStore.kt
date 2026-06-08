@@ -26,6 +26,22 @@ data class LocalSessionResult(
     val missedModuleIds: List<String>,
 )
 
+data class ModuleResult(
+    val moduleId: String,
+    val correctCount: Int,
+    val totalCount: Int,
+) {
+    val progress: Float
+        get() = if (totalCount > 0) 1f else 0f
+
+    val scorePercent: Int
+        get() = if (totalCount > 0) {
+            ((correctCount.toFloat() / totalCount.toFloat()) * 100f).toInt()
+        } else {
+            0
+        }
+}
+
 @Singleton
 class TrainingProgressStore @Inject constructor(
     @param:ApplicationContext private val context: Context,
@@ -40,6 +56,9 @@ class TrainingProgressStore @Inject constructor(
         private val KEY_LAST_POST_SCORE = floatPreferencesKey("last_post_score")
         private val KEY_LAST_DURATION = intPreferencesKey("last_duration")
         private val KEY_LAST_MISSED = stringPreferencesKey("last_missed")
+        private val KEY_ACTIVE_SESSION_ID = stringPreferencesKey("active_session_id")
+        private val KEY_LAST_MODULE_ID = stringPreferencesKey("last_module_id")
+        private val KEY_MODULE_RESULTS = stringPreferencesKey("module_results")
     }
 
     suspend fun completedModuleIds(): Set<String> {
@@ -55,6 +74,41 @@ class TrainingProgressStore @Inject constructor(
     suspend fun averageAccuracy(): Float? {
         val prefs = context.trainingProgressDataStore.data.first()
         return prefs[KEY_AVERAGE_ACCURACY]
+    }
+
+    suspend fun activeSessionId(): String? {
+        val prefs = context.trainingProgressDataStore.data.first()
+        return prefs[KEY_ACTIVE_SESSION_ID]
+    }
+
+    suspend fun lastModuleId(): String? {
+        val prefs = context.trainingProgressDataStore.data.first()
+        return prefs[KEY_LAST_MODULE_ID]
+    }
+
+    suspend fun moduleResults(): Map<String, ModuleResult> {
+        val prefs = context.trainingProgressDataStore.data.first()
+        return decodeModuleResults(prefs[KEY_MODULE_RESULTS])
+    }
+
+    suspend fun setActiveSession(sessionId: String) {
+        context.trainingProgressDataStore.edit { prefs ->
+            prefs[KEY_ACTIVE_SESSION_ID] = sessionId
+        }
+    }
+
+    suspend fun recordModuleResult(moduleId: String, correctCount: Int, totalCount: Int) {
+        val current = moduleResults().toMutableMap()
+        current[moduleId] = ModuleResult(
+            moduleId = moduleId,
+            correctCount = correctCount,
+            totalCount = totalCount,
+        )
+        context.trainingProgressDataStore.edit { prefs ->
+            prefs[KEY_MODULE_RESULTS] = encodeModuleResults(current.values)
+            prefs[KEY_LAST_MODULE_ID] = moduleId
+            prefs[KEY_COMPLETED_MODULES] = (prefs[KEY_COMPLETED_MODULES] ?: emptySet()) + moduleId
+        }
     }
 
     suspend fun lastResult(sessionId: String): LocalSessionResult? {
@@ -83,11 +137,13 @@ class TrainingProgressStore @Inject constructor(
     suspend fun recordSession(result: LocalSessionResult, completedModuleIds: Set<String>) {
         val currentSessions = sessionsCompleted()
         val currentAverage = averageAccuracy()
-        val newSessionCount = currentSessions + 1
-        val newAverage = if (currentAverage == null) {
-            result.postScore
-        } else {
-            ((currentAverage * currentSessions) + result.postScore) / newSessionCount
+        val prefsSnapshot = context.trainingProgressDataStore.data.first()
+        val isSameSession = prefsSnapshot[KEY_LAST_SESSION_ID] == result.sessionId
+        val newSessionCount = if (isSameSession) currentSessions else currentSessions + 1
+        val newAverage = when {
+            isSameSession -> currentAverage ?: result.postScore
+            currentAverage == null -> result.postScore
+            else -> ((currentAverage * currentSessions) + result.postScore) / newSessionCount
         }
 
         context.trainingProgressDataStore.edit { prefs ->
@@ -102,4 +158,20 @@ class TrainingProgressStore @Inject constructor(
             prefs[KEY_LAST_MISSED] = result.missedModuleIds.joinToString(",")
         }
     }
+
+    private fun decodeModuleResults(raw: String?): Map<String, ModuleResult> =
+        raw
+            ?.split(";")
+            ?.mapNotNull { entry ->
+                val parts = entry.split(":")
+                if (parts.size != 3) return@mapNotNull null
+                val correct = parts[1].toIntOrNull() ?: return@mapNotNull null
+                val total = parts[2].toIntOrNull() ?: return@mapNotNull null
+                ModuleResult(parts[0], correct, total)
+            }
+            ?.associateBy { it.moduleId }
+            ?: emptyMap()
+
+    private fun encodeModuleResults(results: Collection<ModuleResult>): String =
+        results.joinToString(";") { "${it.moduleId}:${it.correctCount}:${it.totalCount}" }
 }

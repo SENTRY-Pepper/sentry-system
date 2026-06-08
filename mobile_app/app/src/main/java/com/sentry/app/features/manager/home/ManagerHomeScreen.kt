@@ -1,5 +1,6 @@
 package com.sentry.app.features.manager.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,6 +55,11 @@ fun ManagerHomeScreen(
     vm: ManagerHomeViewModel = hiltViewModel(),
 ) {
     val state by vm.uiState.collectAsState()
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(Unit) {
+        focusManager.clearFocus(force = true)
+    }
 
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         Row(
@@ -143,7 +152,11 @@ fun ManagerHomeScreen(
 @Composable
 private fun ManagerTopBar(navController: NavHostController, onRefresh: () -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.primary)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -151,30 +164,37 @@ private fun ManagerTopBar(navController: NavHostController, onRefresh: () -> Uni
             SentryText(
                 text = "Manager Dashboard",
                 size = SentryTextSize.Lg,
-                color = MaterialTheme.colorScheme.primary,
+                color = Color.White,
             )
             SentryText(
                 text = "Organisation training performance",
                 size = SentryTextSize.Xs,
-                color = MaterialTheme.colorScheme.outline,
+                color = Color.White.copy(alpha = 0.82f),
             )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(onClick = onRefresh, colors = ButtonDefaults.outlinedButtonColors()) {
+            Button(
+                onClick = onRefresh,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White.copy(alpha = 0.18f)
+                ),
+            ) {
                 SentryText(
                     text = "Refresh",
                     size = SentryTextSize.Sm,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = Color.White,
                 )
             }
             Button(
                 onClick = { navController.navigateSingleTop(Routes.Settings.toString()) },
-                colors = ButtonDefaults.outlinedButtonColors(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White.copy(alpha = 0.18f)
+                ),
             ) {
                 SentryText(
                     text = "Settings",
                     size = SentryTextSize.Sm,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = Color.White,
                 )
             }
         }

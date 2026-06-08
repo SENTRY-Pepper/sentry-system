@@ -54,9 +54,14 @@ fun AppNavGraph(navController: NavHostController) {
         }
 
         // routes with args
-        composable("session/{sessionId}") { backStackEntry ->
+        composable("session/{sessionId}/{moduleId}") { backStackEntry ->
             val sessionId = backStackEntry.arguments?.getString("sessionId") ?: ""
-            SessionScreen(navController = navController, sessionId = sessionId)
+            val moduleId = backStackEntry.arguments?.getString("moduleId")?.ifBlank { null }
+            SessionScreen(
+                navController = navController,
+                sessionId = sessionId,
+                startModuleId = moduleId,
+            )
         }
 
         composable("results/{sessionId}") { backStackEntry ->

@@ -30,7 +30,7 @@ sealed class Routes {
 
     // routes with args
     @Serializable
-    data class Session(val sessionId: String) : Routes()
+    data class Session(val sessionId: String, val moduleId: String? = null) : Routes()
 
     @Serializable
     data class Results(val sessionId: String) : Routes()

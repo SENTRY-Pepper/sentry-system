@@ -1,5 +1,6 @@
 package com.sentry.app.features.admin.analytics
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -149,34 +151,42 @@ fun AnalyticsScreen(
 @Composable
 private fun AnalyticsTopBar(navController: NavHostController, onRefresh: () -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.primary)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         SentryText(
-                            text = "Research Analytics",
+            text = "Research Analytics",
             size = SentryTextSize.Lg,
-            color = MaterialTheme.colorScheme.primary
+            color = Color.White
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(
                 onClick = onRefresh,
-                colors = ButtonDefaults.outlinedButtonColors()
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White.copy(alpha = 0.18f)
+                )
             ) {
                 SentryText(
                     text = "Refresh",
                     size = SentryTextSize.Sm,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Color.White
                 )
             }
             Button(
                 onClick = { navController.popBackStack() },
-                colors = ButtonDefaults.outlinedButtonColors()
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White.copy(alpha = 0.18f)
+                )
             ) {
                 SentryText(
                     text = "Back",
                     size = SentryTextSize.Sm,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Color.White
                 )
             }
         }
@@ -405,4 +415,3 @@ private fun AnalyticsErrorCard(message: String, onRetry: () -> Unit) {
         }
     }
 }
-

@@ -1,5 +1,6 @@
 package com.sentry.app.features.admin.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -147,34 +149,42 @@ fun AdminHomeScreen(
 @Composable
 private fun AdminTopBar(navController: NavHostController) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.primary)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         SentryText(
             text = "Admin Research",
             size = SentryTextSize.Lg,
-            color = MaterialTheme.colorScheme.primary
+            color = Color.White
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(
                 onClick = { navController.navigateSingleTop(Routes.Analytics.toString()) },
-                colors = ButtonDefaults.outlinedButtonColors()
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White.copy(alpha = 0.18f)
+                )
             ) {
                 SentryText(
                     text = "Analytics",
                     size = SentryTextSize.Sm,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Color.White
                 )
             }
             Button(
                 onClick = { navController.navigateSingleTop(Routes.Settings.toString()) },
-                colors = ButtonDefaults.outlinedButtonColors()
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White.copy(alpha = 0.18f)
+                )
             ) {
                 SentryText(
                     text = "Settings",
                     size = SentryTextSize.Sm,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Color.White
                 )
             }
         }

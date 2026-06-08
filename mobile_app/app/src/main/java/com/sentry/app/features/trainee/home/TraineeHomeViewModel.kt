@@ -16,16 +16,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 fun defaultModules() = listOf(
-    ModuleProgress("A01 Broken Access Control", 0.35f, "In Progress", false),
-    ModuleProgress("A02 Security Misconfiguration", 0.0f, "Not Started", false),
-    ModuleProgress("A03 Software Supply Chain", 0.0f, "Not Started", false),
-    ModuleProgress("A04 Cryptographic Failures", 0.0f, "Not Started", false),
-    ModuleProgress("A05 Injection", 0.0f, "Not Started", false),
-    ModuleProgress("A06 Insecure Design", 0.0f, "Not Started", false),
-    ModuleProgress("A07 Authentication Failures", 0.0f, "Not Started", false),
-    ModuleProgress("A08 Software/Data Integrity", 0.0f, "Not Started", false),
-    ModuleProgress("A09 Logging and Alerting", 0.0f, "Not Started", false),
-    ModuleProgress("A10 Exceptional Conditions", 0.0f, "Not Started", false),
+    ModuleProgress("owasp-a01-broken-access-control", "A01 Broken Access Control", 0.35f, null, "In Progress", false),
+    ModuleProgress("owasp-a02-security-misconfiguration", "A02 Security Misconfiguration", 0.0f, null, "Not Started", false),
+    ModuleProgress("owasp-a03-software-supply-chain", "A03 Software Supply Chain", 0.0f, null, "Not Started", false),
+    ModuleProgress("owasp-a04-cryptographic-failures", "A04 Cryptographic Failures", 0.0f, null, "Not Started", false),
+    ModuleProgress("owasp-a05-injection", "A05 Injection", 0.0f, null, "Not Started", false),
+    ModuleProgress("owasp-a06-insecure-design", "A06 Insecure Design", 0.0f, null, "Not Started", false),
+    ModuleProgress("owasp-a07-authentication-failures", "A07 Authentication Failures", 0.0f, null, "Not Started", false),
+    ModuleProgress("owasp-a08-integrity-failures", "A08 Software/Data Integrity", 0.0f, null, "Not Started", false),
+    ModuleProgress("owasp-a09-logging-alerting", "A09 Logging and Alerting", 0.0f, null, "Not Started", false),
+    ModuleProgress("owasp-a10-exceptional-conditions", "A10 Exceptional Conditions", 0.0f, null, "Not Started", false),
 )
 
 @HiltViewModel
@@ -47,13 +47,17 @@ class TraineeHomeViewModel @Inject constructor(
         val participantId = tokenManager.getParticipantId() ?: ""
         val organisation  = tokenManager.getOrganisationId() ?: ""
         val completedIds = progressStore.completedModuleIds()
+        val moduleResults = progressStore.moduleResults()
         val firstIncomplete = OwaspCurriculum.modules.firstOrNull {
             it.id !in completedIds
         }?.id
+        val lastModuleId = progressStore.lastModuleId()
         val modules = OwaspCurriculum.modules.map { module ->
             val complete = module.id in completedIds
-            val inProgress = module.id == firstIncomplete
+            val moduleResult = moduleResults[module.id]
+            val inProgress = module.id == (lastModuleId ?: firstIncomplete)
             ModuleProgress(
+                id = module.id,
                 name = "${module.owaspId} ${module.title}",
                 progress = when {
                     complete -> 1.0f
@@ -65,6 +69,7 @@ class TraineeHomeViewModel @Inject constructor(
                     inProgress -> "In Progress"
                     else -> "Not Started"
                 },
+                scorePercent = moduleResult?.scorePercent,
                 isComplete = complete,
             )
         }
@@ -82,14 +87,26 @@ class TraineeHomeViewModel @Inject constructor(
         )
     }
 
-    fun startSession(condition: String = "grounded") = viewModelScope.launch {
+    fun startSession(condition: String = "grounded", moduleId: String? = null) = viewModelScope.launch {
         _uiState.value = _uiState.value.copy(loading = true, error = "")
+        val targetModuleId = moduleId ?: progressStore.lastModuleId()
+            ?: OwaspCurriculum.modules.firstOrNull {
+                it.id !in progressStore.completedModuleIds()
+            }?.id
+            ?: OwaspCurriculum.modules.first().id
+
+        progressStore.activeSessionId()?.let { existingSessionId ->
+            _uiState.value = _uiState.value.copy(loading = false)
+            _events.emit(TraineeHomeEvent.NavigateToSession(existingSessionId, targetModuleId))
+            return@launch
+        }
 
         // SessionRepository reads participantId + organisationId from TokenManager internally
         when (val result = sessionRepository.startSession(condition = condition)) {
             is NetworkResult.Success -> {
+                progressStore.setActiveSession(result.data.sessionId)
                 _uiState.value = _uiState.value.copy(loading = false)
-                _events.emit(TraineeHomeEvent.NavigateToSession(result.data.sessionId))
+                _events.emit(TraineeHomeEvent.NavigateToSession(result.data.sessionId, targetModuleId))
             }
             is NetworkResult.Error -> _uiState.value = _uiState.value.copy(
                 loading = false,
@@ -99,11 +116,9 @@ class TraineeHomeViewModel @Inject constructor(
                 loading = false,
                 error = "Offline mode: training will continue locally and sync is skipped.",
             ).also {
-                _events.emit(
-                    TraineeHomeEvent.NavigateToSession(
-                        "offline-${System.currentTimeMillis()}"
-                    )
-                )
+                val offlineSessionId = "offline-${System.currentTimeMillis()}"
+                progressStore.setActiveSession(offlineSessionId)
+                _events.emit(TraineeHomeEvent.NavigateToSession(offlineSessionId, targetModuleId))
             }
             is NetworkResult.Loading -> Unit
         }
