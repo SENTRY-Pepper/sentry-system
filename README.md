@@ -39,8 +39,8 @@ SENTRY currently supports:
   organisation training operations.
 - Backend Organisation/User model with trainee account management and
   organisation analytics.
-- Android OWASP Top 10 curriculum with fixed A-D assessments, local saved
-  feedback, and trainee progress tracking.
+- Android OWASP Top 10 curriculum with two A-D questions per topic, local
+  saved feedback, module breaks, and trainee progress tracking.
 - Backend-backed Android authentication with role and organisation persistence.
 - Organisation analytics keyed by canonical organisation ID strings.
 - Pepper robot interface with scenario orchestration and simulation support.
@@ -166,13 +166,35 @@ The current app does not use Retrofit or OkHttp interceptors.
 The trainee session flow is now based on the OWASP Top 10:
 
 - Ten modules map to A01 through A10.
-- Every module includes educational content, a workplace scenario, four A-D
-  answers, one objectively correct answer, and practical feedback.
+- Every module includes educational content, workplace takeaways, two
+  practical questions, four A-D answers per question, one objectively correct
+  answer per question, and practical feedback.
+- Correct answer positions are distributed across A-D to avoid a predictable
+  answer pattern.
+- The session pauses at the end of each OWASP module before moving to the next
+  topic.
 - Feedback is saved locally in the app for both correct and incorrect answers.
   The app does not call the RAG API for these fixed assessment explanations.
 - The session still logs interactions and completes the session through the
   backend so organisation analytics use real completion and score data.
 - Open-ended grounded RAG remains available through the chat screen.
+
+### Offline Behavior
+
+The fixed OWASP training flow can continue during an internet or middleware
+disruption because curriculum content, A-D answer feedback, and latest trainee
+progress are stored locally on the Android device. If session start cannot
+reach the backend, the app creates an `offline-*` session ID and runs the local
+training flow.
+
+Offline limitations:
+
+- Backend login requires connectivity unless the user already has saved local
+  auth state.
+- Interaction sync, manager/admin analytics, chat/RAG, Pepper grounded
+  questions, and cross-device reporting require the backend.
+- Offline session results are stored locally for the trainee view but are not
+  uploaded later yet.
 
 ## Authentication, Roles, And Organisation Flow
 

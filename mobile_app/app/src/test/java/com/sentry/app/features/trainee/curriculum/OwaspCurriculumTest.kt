@@ -13,12 +13,25 @@ class OwaspCurriculumTest {
     }
 
     @Test
-    fun every_module_has_four_labelled_answers_and_one_correct_answer() {
+    fun every_module_has_two_or_three_questions_with_four_labelled_answers() {
         OwaspCurriculum.modules.forEach { module ->
-            assertEquals(4, module.options.size)
-            assertEquals(listOf("A", "B", "C", "D"), module.options.map { it.label })
-            assertEquals(1, module.options.count { it.isCorrect })
-            assertTrue(module.options.any { it.id == module.correctAnswerId && it.isCorrect })
+            assertTrue(module.questions.size in 2..3)
+            module.questions.forEach { question ->
+                assertEquals(4, question.options.size)
+                assertEquals(listOf("A", "B", "C", "D"), question.options.map { it.label })
+                assertEquals(1, question.options.count { it.isCorrect })
+                assertTrue(question.options.any { it.id == question.correctAnswerId && it.isCorrect })
+            }
         }
+    }
+
+    @Test
+    fun correct_answers_are_distributed_across_all_answer_letters() {
+        val correctLabels = OwaspCurriculum.modules
+            .flatMap { it.questions }
+            .map { question -> question.options.first { it.isCorrect }.label }
+            .toSet()
+
+        assertEquals(setOf("A", "B", "C", "D"), correctLabels)
     }
 }

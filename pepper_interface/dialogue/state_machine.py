@@ -123,11 +123,23 @@ class StateMachine(object):
         transitions = {
             (SessionState.IDLE, "start"): SessionState.GREETING,
             (SessionState.GREETING, "greeting_done"): SessionState.PRE_ASSESSMENT,
-            (SessionState.PRE_ASSESSMENT, "assessment_done"): SessionState.SCENARIO_PROMPT,
-            (SessionState.SCENARIO_PROMPT, "scenario_shown"): SessionState.AWAITING_INPUT,
+            (
+                SessionState.PRE_ASSESSMENT,
+                "assessment_done",
+            ): SessionState.SCENARIO_PROMPT,
+            (
+                SessionState.SCENARIO_PROMPT,
+                "scenario_shown",
+            ): SessionState.AWAITING_INPUT,
             (SessionState.AWAITING_INPUT, "response_received"): SessionState.EVALUATING,
-            (SessionState.EVALUATING, "evaluation_done"): SessionState.FETCHING_AI_RESPONSE,
-            (SessionState.FETCHING_AI_RESPONSE, "ai_response_done"): SessionState.FEEDBACK,
+            (
+                SessionState.EVALUATING,
+                "evaluation_done",
+            ): SessionState.FETCHING_AI_RESPONSE,
+            (
+                SessionState.FETCHING_AI_RESPONSE,
+                "ai_response_done",
+            ): SessionState.FEEDBACK,
             (SessionState.CORRECTION_LOOP, "retry"): SessionState.SCENARIO_PROMPT,
         }
 

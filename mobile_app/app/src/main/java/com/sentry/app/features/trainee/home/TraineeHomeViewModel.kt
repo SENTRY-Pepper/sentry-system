@@ -97,8 +97,14 @@ class TraineeHomeViewModel @Inject constructor(
             )
             is NetworkResult.Exception -> _uiState.value = _uiState.value.copy(
                 loading = false,
-                error   = "Cannot reach server. Is the middleware running?",
-            )
+                error = "Offline mode: training will continue locally and sync is skipped.",
+            ).also {
+                _events.emit(
+                    TraineeHomeEvent.NavigateToSession(
+                        "offline-${System.currentTimeMillis()}"
+                    )
+                )
+            }
             is NetworkResult.Loading -> Unit
         }
     }

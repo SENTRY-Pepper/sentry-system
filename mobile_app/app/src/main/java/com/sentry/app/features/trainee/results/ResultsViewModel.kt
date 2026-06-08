@@ -20,7 +20,7 @@ data class ResultsUiState(
     val summary: SessionSummary? = null,
     val error: String = "",
     val correctCount: Int = 0,
-    val totalCount: Int = OwaspCurriculum.totalModules,
+    val totalCount: Int = OwaspCurriculum.totalQuestions,
     val postScore: Float = 0f,
     val durationSeconds: Int = 0,
     val missedModuleIds: List<String> = emptyList(),

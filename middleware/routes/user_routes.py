@@ -22,7 +22,12 @@ from sqlalchemy import case, desc, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.database.connection import get_db
-from backend.database.models import Organisation, ScenarioInteraction, TrainingSession, User
+from backend.database.models import (
+    Organisation,
+    ScenarioInteraction,
+    TrainingSession,
+    User,
+)
 from middleware.auth import require_roles
 from middleware.validators.session_validator import (
     DepartmentAnalytics,
@@ -167,7 +172,9 @@ async def login_user(body: UserLoginRequest, db: AsyncSession = Depends(get_db))
     return UserLoginResponse(token=token, user=user_response(user))
 
 
-@router.get("/manager/trainees", response_model=list[TraineeAnalytics], tags=["Manager"])
+@router.get(
+    "/manager/trainees", response_model=list[TraineeAnalytics], tags=["Manager"]
+)
 async def list_trainees(
     organisation_id: str = Query(...),
     current_user: User = Depends(require_roles("manager")),
@@ -291,7 +298,9 @@ async def manager_overview(
         active_trainees=active_trainees or 0,
         total_sessions=total_sessions or 0,
         completed_sessions=completed_sessions or 0,
-        average_score=round(float(average_score), 2) if average_score is not None else None,
+        average_score=round(float(average_score), 2)
+        if average_score is not None
+        else None,
         completion_rate=completion_rate,
         risky_answers=risky_answers or 0,
         top_weaknesses=await weakness_analytics(db, org_id, limit=5),
@@ -365,15 +374,17 @@ async def department_analytics(
         select(
             department_expr,
             func.count(func.distinct(User.id)).label("trainee_count"),
-            func.count(func.distinct(TrainingSession.id)).filter(
-                TrainingSession.is_complete.is_(True)
-            ).label("completed_sessions"),
+            func.count(func.distinct(TrainingSession.id))
+            .filter(TrainingSession.is_complete.is_(True))
+            .label("completed_sessions"),
             func.avg(TrainingSession.post_assessment_score).label("average_score"),
             risky.label("risky_answers"),
         )
         .select_from(User)
         .outerjoin(TrainingSession, TrainingSession.user_id == User.id)
-        .outerjoin(ScenarioInteraction, ScenarioInteraction.session_id == TrainingSession.id)
+        .outerjoin(
+            ScenarioInteraction, ScenarioInteraction.session_id == TrainingSession.id
+        )
         .where(User.organisation_id == organisation_id, User.role == "trainee")
         .group_by(department_expr)
         .order_by(desc("risky_answers"))
@@ -417,7 +428,11 @@ async def trainee_analytics(
             .order_by(desc(TrainingSession.started_at))
         )
         sessions = sessions_result.scalars().all()
-        scores = [s.post_assessment_score for s in sessions if s.post_assessment_score is not None]
+        scores = [
+            s.post_assessment_score
+            for s in sessions
+            if s.post_assessment_score is not None
+        ]
 
         weakness_rows = await weakness_for_participant(
             db,

@@ -47,6 +47,7 @@ import com.sentry.app.core.ui.models.SentryTextAlign
 import com.sentry.app.core.ui.models.SentryTextSize
 import com.sentry.app.core.ui.theme.LocalBrandColors
 import com.sentry.app.features.trainee.curriculum.OwaspAnswerOption
+import com.sentry.app.features.trainee.curriculum.OwaspQuestion
 import com.sentry.app.features.trainee.curriculum.OwaspTrainingModule
 
 @Composable
@@ -58,6 +59,7 @@ fun SessionScreen(
     val state by vm.uiState.collectAsStateWithLifecycle()
     val scheme = MaterialTheme.colorScheme
     val scenario = vm.getCurrentScenario()
+    val question = vm.getCurrentQuestion()
 
     LaunchedEffect(state.isComplete) {
         if (state.isComplete) {
@@ -76,8 +78,10 @@ fun SessionScreen(
                 .fillMaxHeight(),
         ) {
             SessionTopBar(
-                current = state.currentIndex + 1,
-                total = state.totalScenarios,
+                currentModule = state.currentModuleIndex + 1,
+                totalModules = state.totalModules,
+                currentQuestion = state.currentQuestionIndex + 1,
+                totalQuestionsInModule = scenario.questions.size,
                 type = "${scenario.owaspId} - ${scenario.difficulty}",
                 onBack = { navController.popBackStack() },
             )
@@ -88,12 +92,21 @@ fun SessionScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 item {
-                    ScenarioCard(
-                        scenario = scenario,
-                        selectedChoiceId = state.selectedChoiceId,
-                        isAnswered = state.isAnswered,
-                        onChoiceSelected = { vm.selectChoice(it) },
-                    )
+                    if (state.isModuleBreak) {
+                        ModuleBreakCard(
+                            scenario = scenario,
+                            isLastModule = state.currentModuleIndex == state.totalModules - 1,
+                            onContinue = { vm.nextScenario() },
+                        )
+                    } else {
+                        ScenarioCard(
+                            scenario = scenario,
+                            question = question,
+                            selectedChoiceId = state.selectedChoiceId,
+                            isAnswered = state.isAnswered,
+                            onChoiceSelected = { vm.selectChoice(it) },
+                        )
+                    }
                 }
                 item { Spacer(Modifier.height(80.dp)) }
             }
@@ -128,7 +141,7 @@ fun SessionScreen(
             ) {
                 item {
                     AnimatedVisibility(
-                        visible = state.isAnswered,
+                        visible = state.isAnswered && !state.isModuleBreak,
                         enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
                     ) {
                         ResultFeedback(
@@ -136,12 +149,15 @@ fun SessionScreen(
                             aiResponse = state.aiResponse,
                             aiSources = state.aiSources,
                             aiLoading = state.aiLoading || state.isFinishing,
-                            isLast = state.currentIndex == state.totalScenarios - 1,
+                            isLast = state.currentModuleIndex == state.totalModules - 1 &&
+                                state.currentQuestionIndex == scenario.questions.size - 1,
+                            isLastQuestionInModule = state.currentQuestionIndex ==
+                                scenario.questions.size - 1,
                             onNext = { vm.nextScenario() },
                         )
                     }
 
-                    if (!state.isAnswered) {
+                    if (!state.isAnswered && !state.isModuleBreak) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -165,8 +181,10 @@ fun SessionScreen(
 
 @Composable
 private fun SessionTopBar(
-    current: Int,
-    total: Int,
+    currentModule: Int,
+    totalModules: Int,
+    currentQuestion: Int,
+    totalQuestionsInModule: Int,
     type: String,
     onBack: () -> Unit,
 ) {
@@ -202,13 +220,13 @@ private fun SessionTopBar(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             SentryText(
-                text = "Module $current of $total",
+                text = "Module $currentModule of $totalModules",
                 size = SentryTextSize.Lg,
                 weight = FontWeight.Bold,
                 color = Color.White,
             )
             SentryText(
-                text = type,
+                text = "$type - Question $currentQuestion of $totalQuestionsInModule",
                 size = SentryTextSize.Sm,
                 color = Color.White.copy(alpha = 0.85f),
             )
@@ -221,14 +239,14 @@ private fun SessionTopBar(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            repeat(total.coerceAtMost(10)) { index ->
+            repeat(totalModules.coerceAtMost(10)) { index ->
                 Box(
                     modifier = Modifier
                         .width(18.dp)
                         .height(6.dp)
                         .clip(RoundedCornerShape(3.dp))
                         .background(
-                            if (index < current) Color.White
+                            if (index < currentModule) Color.White
                             else Color.White.copy(alpha = 0.35f)
                         ),
                 )
@@ -240,6 +258,7 @@ private fun SessionTopBar(
 @Composable
 private fun ScenarioCard(
     scenario: OwaspTrainingModule,
+    question: OwaspQuestion,
     selectedChoiceId: String?,
     isAnswered: Boolean,
     onChoiceSelected: (String) -> Unit,
@@ -289,7 +308,7 @@ private fun ScenarioCard(
                 text = scenario.workplaceTakeaway,
             )
             SentryText(
-                text = scenario.scenario,
+                text = question.scenario,
                 size = SentryTextSize.Md,
                 color = MaterialTheme.colorScheme.onBackground,
                 lineHeight = 22.dp.value.sp,
@@ -301,7 +320,7 @@ private fun ScenarioCard(
             modifier = Modifier.padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            scenario.options.forEach { choice ->
+            question.options.forEach { choice ->
                 ChoiceRow(
                     choice = choice,
                     isSelected = selectedChoiceId == choice.id,
@@ -312,6 +331,64 @@ private fun ScenarioCard(
         }
 
         Spacer(Modifier.height(16.dp))
+    }
+}
+
+@Composable
+private fun ModuleBreakCard(
+    scenario: OwaspTrainingModule,
+    isLastModule: Boolean,
+    onContinue: () -> Unit,
+) {
+    val scheme = MaterialTheme.colorScheme
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(scheme.surface)
+            .border(1.dp, NeutralBorder, RoundedCornerShape(16.dp))
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        SentryText(
+            text = "${scenario.owaspId}: ${scenario.title} complete",
+            size = SentryTextSize.Xl,
+            weight = FontWeight.Bold,
+            color = scheme.primary,
+            align = SentryTextAlign.Center,
+        )
+        SentryText(
+            text = "Take a short pause before moving to the next OWASP topic.",
+            size = SentryTextSize.Md,
+            color = scheme.onBackground,
+            align = SentryTextAlign.Center,
+            maxLines = Int.MAX_VALUE,
+        )
+        SentryText(
+            text = scenario.workplaceTakeaway,
+            size = SentryTextSize.Sm,
+            color = scheme.outline,
+            align = SentryTextAlign.Center,
+            maxLines = Int.MAX_VALUE,
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(14.dp))
+                .background(scheme.primary)
+                .clickable { onContinue() }
+                .padding(vertical = 16.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            SentryText(
+                text = if (isLastModule) "Finish training" else "Start next module",
+                size = SentryTextSize.Md,
+                weight = FontWeight.Bold,
+                color = Color.White,
+            )
+        }
     }
 }
 
@@ -420,6 +497,7 @@ private fun ResultFeedback(
     aiSources: List<String>,
     aiLoading: Boolean,
     isLast: Boolean,
+    isLastQuestionInModule: Boolean,
     onNext: () -> Unit,
 ) {
     val brand = LocalBrandColors.current
@@ -543,7 +621,11 @@ private fun ResultFeedback(
                 contentAlignment = Alignment.Center,
             ) {
                 SentryText(
-                    text = if (isLast) "Finish training" else "Next module",
+                    text = when {
+                        isLast -> "Finish module"
+                        isLastQuestionInModule -> "End module"
+                        else -> "Next question"
+                    },
                     size = SentryTextSize.Md,
                     weight = FontWeight.Bold,
                     color = Color.White,

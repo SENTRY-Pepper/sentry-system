@@ -29,7 +29,7 @@ class DialogueManager:
     Drives one complete SENTRY training session from greeting to results.
     """
 
-    def __init__(self, middleware_base_url = "http://localhost:8000"):
+    def __init__(self, middleware_base_url="http://localhost:8000"):
         self._state_machine = StateMachine()
         self._client = MiddlewareClient(base_url=middleware_base_url)
         self._scenarios = ALL_SCENARIOS

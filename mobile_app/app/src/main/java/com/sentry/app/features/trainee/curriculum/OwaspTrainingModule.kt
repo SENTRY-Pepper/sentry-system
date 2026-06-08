@@ -15,11 +15,16 @@ data class OwaspTrainingModule(
     val difficulty: String,
     val summary: String,
     val workplaceTakeaway: String,
-    val scenario: String,
-    val options: List<OwaspAnswerOption>,
-    val correctAnswerId: String,
+    val questions: List<OwaspQuestion>,
     val sourceReference: String,
 )
 
-val OwaspTrainingModule.correctOption: OwaspAnswerOption
+data class OwaspQuestion(
+    val id: String,
+    val scenario: String,
+    val options: List<OwaspAnswerOption>,
+    val correctAnswerId: String,
+)
+
+val OwaspQuestion.correctOption: OwaspAnswerOption
     get() = options.first { it.id == correctAnswerId }

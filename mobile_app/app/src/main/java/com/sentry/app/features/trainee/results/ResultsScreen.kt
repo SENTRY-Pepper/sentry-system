@@ -241,7 +241,7 @@ private fun ScoreCard(
                 align = SentryTextAlign.Center,
             )
             SentryText(
-                text = "$correctCount of $totalCount modules correct",
+                text = "$correctCount of $totalCount questions correct",
                 size = SentryTextSize.Sm,
                 color = scheme.outline,
                 align = SentryTextAlign.Center,
@@ -265,7 +265,7 @@ private fun ScoreCard(
                 Divider()
                 StatItem(
                     value = totalCount.toString(),
-                    label = "Modules",
+                    label = "Questions",
                 )
             }
         }

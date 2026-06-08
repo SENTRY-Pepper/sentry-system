@@ -7,5 +7,5 @@ data class TraineeHomeUiState(
     val modules:        List<ModuleProgress> = defaultModules(),
     val sessionsCompleted: Int              = 0,
     val avgAccuracy:    String              = "--",
-    val modulesLeft:    Int                 = 5,
+    val modulesLeft:    Int                 = 10,
 )
