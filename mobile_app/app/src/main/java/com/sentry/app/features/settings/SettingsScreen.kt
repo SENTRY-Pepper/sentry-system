@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -58,9 +59,11 @@ fun SettingsScreen(
     val state by vm.uiState.collectAsStateWithLifecycle()
     val scheme = MaterialTheme.colorScheme
     val brand = LocalBrandColors.current
+    val focusManager = LocalFocusManager.current
 
     // one-shot logout event — navigate to auth and clear back stack
     LaunchedEffect(Unit) {
+        focusManager.clearFocus(force = true)
         vm.events.collect { event ->
             when (event) {
                 is SettingsEvent.LoggedOut -> {

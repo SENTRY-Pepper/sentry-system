@@ -157,7 +157,7 @@ Important packages:
 - `data/repository`: auth, session, query, and analytics repositories.
 - `features/trainee/curriculum`: OWASP Top 10 modules, saved answer feedback,
   and local progress persistence.
-- `features`: splash, auth, trainee, admin, chat, settings screens.
+- `features`: splash, auth, trainee, admin, manager, chat, settings screens.
 
 The current app does not use Retrofit or OkHttp interceptors.
 
@@ -171,10 +171,20 @@ The trainee session flow is now based on the OWASP Top 10:
   answer per question, and practical feedback.
 - Correct answer positions are distributed across A-D to avoid a predictable
   answer pattern.
+- Trainee Home shows clickable OWASP module cards. The cards open the selected
+  module, show completion status, and show the trainee's saved module score.
+- Continue Your Training resumes the active/local session and last logged
+  module instead of starting the OWASP curriculum again.
 - The session pauses at the end of each OWASP module before moving to the next
   topic.
 - Feedback is saved locally in the app for both correct and incorrect answers.
   The app does not call the RAG API for these fixed assessment explanations.
+- The session screen supports Pepper-style interaction on Android: the app
+  reads the scenario and A-D options aloud, accepts a spoken A/B/C/D answer
+  through Android speech recognition, then reads the stored correctness
+  feedback. Touch selection remains available.
+- Repeated completion of the same local session updates the saved result
+  instead of incrementing the trainee's completed-session count again.
 - The session still logs interactions and completes the session through the
   backend so organisation analytics use real completion and score data.
 - Open-ended grounded RAG remains available through the chat screen.
@@ -191,7 +201,7 @@ Offline limitations:
 
 - Backend login requires connectivity unless the user already has saved local
   auth state.
-- Interaction sync, manager/admin analytics, chat/RAG, Pepper grounded
+- Interaction sync, manager/admin analytics, chat/RAG, robot-client grounded
   questions, and cross-device reporting require the backend.
 - Offline session results are stored locally for the trainee view but are not
   uploaded later yet.
@@ -380,6 +390,18 @@ Pepper's built-in NAOqi speech recognition is vocabulary-based. The current
 implementation prioritizes reliable low-latency HRI for answer choices and
 supported short questions. See `pepper_interface/GUIDE.md` for full setup,
 login details, latency controls, and physical test checklist.
+
+The Android trainee session also contains a Pepper-style interaction mode for
+tablet use: Android TextToSpeech reads each OWASP scenario and the A-D options,
+Android speech recognition accepts a spoken A/B/C/D answer, and the app reads
+the saved feedback. This supports physical Pepper/tablet testing without
+calling the grounded RAG API for fixed curriculum feedback.
+
+Manager-controlled curriculum authoring is planned around organisation-owned
+raw documents and the existing RAG ingestion path. The current implemented
+manager features are trainee account creation/deactivation and organisation
+analytics; a manager UI for changing fixed OWASP assessment questions has not
+yet been implemented.
 
 ## Testing
 

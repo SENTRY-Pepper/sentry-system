@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -60,6 +61,11 @@ fun ChatScreen(
     val state by vm.uiState.collectAsStateWithLifecycle()
     val scheme = MaterialTheme.colorScheme
     val listState = rememberLazyListState()
+    val focusManager = LocalFocusManager.current
+
+    LaunchedEffect(Unit) {
+        focusManager.clearFocus(force = true)
+    }
 
     // auto-scroll to bottom when new message arrives
     LaunchedEffect(state.messages.size) {

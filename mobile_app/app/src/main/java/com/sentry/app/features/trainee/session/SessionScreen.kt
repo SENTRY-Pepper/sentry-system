@@ -1,5 +1,10 @@
 package com.sentry.app.features.trainee.session
 
+import android.content.Intent
+import android.speech.RecognizerIntent
+import android.speech.tts.TextToSpeech
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
@@ -29,12 +34,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -54,16 +64,82 @@ import com.sentry.app.features.trainee.curriculum.OwaspTrainingModule
 fun SessionScreen(
     navController: NavHostController,
     sessionId: String,
+    startModuleId: String? = null,
     vm: SessionViewModel = hiltViewModel(),
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
     val scheme = MaterialTheme.colorScheme
     val scenario = vm.getCurrentScenario()
     val question = vm.getCurrentQuestion()
+    val context = LocalContext.current
+    var tts by remember { mutableStateOf<TextToSpeech?>(null) }
+    val speechLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        val spoken = result.data
+            ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            ?.firstOrNull()
+            ?.lowercase()
+            .orEmpty()
+        spokenAnswerToLabel(spoken)?.let { label ->
+            question.options.firstOrNull { it.label.lowercase() == label }
+                ?.let { vm.selectChoice(it.id) }
+        }
+    }
+
+    DisposableEffect(Unit) {
+        val engine = TextToSpeech(context) { }
+        tts = engine
+        onDispose {
+            engine.stop()
+            engine.shutdown()
+        }
+    }
 
     LaunchedEffect(state.isComplete) {
         if (state.isComplete) {
             navController.navigateSingleTop("results/${state.sessionId}")
+        }
+    }
+
+    LaunchedEffect(
+        state.currentModuleIndex,
+        state.currentQuestionIndex,
+        state.isModuleBreak,
+    ) {
+        val engine = tts ?: return@LaunchedEffect
+        if (state.isModuleBreak) {
+            engine.speak(
+                "${scenario.owaspId} ${scenario.title} complete. " +
+                    "Do you want to proceed to the next module?",
+                TextToSpeech.QUEUE_FLUSH,
+                null,
+                "module-break-${scenario.id}",
+            )
+        } else {
+            engine.speak(
+                buildQuestionSpeech(scenario, question),
+                TextToSpeech.QUEUE_FLUSH,
+                null,
+                question.id,
+            )
+        }
+    }
+
+    LaunchedEffect(state.isAnswered, state.aiResponse) {
+        val engine = tts ?: return@LaunchedEffect
+        if (state.isAnswered && state.aiResponse.isNotBlank()) {
+            val result = if (state.isCorrect) {
+                "That is correct."
+            } else {
+                "That is not the safest answer."
+            }
+            engine.speak(
+                "$result ${state.aiResponse}",
+                TextToSpeech.QUEUE_FLUSH,
+                null,
+                "feedback-${state.currentModuleIndex}-${state.currentQuestionIndex}",
+            )
         }
     }
 
@@ -140,6 +216,14 @@ fun SessionScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 item {
+                    if (!state.isAnswered && !state.isModuleBreak) {
+                        VoiceAnswerButton(
+                            onListen = {
+                                speechLauncher.launch(answerSpeechIntent())
+                            },
+                        )
+                    }
+
                     AnimatedVisibility(
                         visible = state.isAnswered && !state.isModuleBreak,
                         enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
@@ -176,6 +260,36 @@ fun SessionScreen(
                 item { Spacer(Modifier.height(80.dp)) }
             }
         }
+    }
+}
+
+private fun buildQuestionSpeech(
+    scenario: OwaspTrainingModule,
+    question: OwaspQuestion,
+): String {
+    val answers = question.options.joinToString(". ") {
+        "Option ${it.label}. ${it.text}"
+    }
+    return "${scenario.owaspId}. ${scenario.title}. ${question.scenario}. $answers"
+}
+
+private fun answerSpeechIntent(): Intent =
+    Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+        putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
+        )
+        putExtra(RecognizerIntent.EXTRA_PROMPT, "Say option A, B, C, or D")
+    }
+
+private fun spokenAnswerToLabel(spoken: String): String? {
+    val cleaned = spoken.trim().lowercase()
+    return when {
+        cleaned == "a" || "option a" in cleaned || "answer a" in cleaned -> "a"
+        cleaned == "b" || "option b" in cleaned || "answer b" in cleaned -> "b"
+        cleaned == "c" || "option c" in cleaned || "answer c" in cleaned -> "c"
+        cleaned == "d" || "option d" in cleaned || "answer d" in cleaned -> "d"
+        else -> null
     }
 }
 
@@ -389,6 +503,29 @@ private fun ModuleBreakCard(
                 color = Color.White,
             )
         }
+    }
+}
+
+@Composable
+private fun VoiceAnswerButton(onListen: () -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(scheme.primary)
+            .clickable { onListen() }
+            .padding(vertical = 14.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        SentryText(
+            text = "Speak answer: A, B, C, or D",
+            size = SentryTextSize.Md,
+            weight = FontWeight.Bold,
+            color = Color.White,
+            align = SentryTextAlign.Center,
+        )
     }
 }
 
