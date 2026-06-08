@@ -21,6 +21,7 @@ class SentryKtorClient(
     private val baseUrl: String,
 ) {
     val client = HttpClient(CIO) {
+        expectSuccess = true
 
         install(HttpTimeout) {
             connectTimeoutMillis = 10_000   // 10s connect
