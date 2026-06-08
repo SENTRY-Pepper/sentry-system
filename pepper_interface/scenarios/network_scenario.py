@@ -1,5 +1,5 @@
 """
-SENTRY — Network Hygiene Scenario
+SENTRY â€” Network Hygiene Scenario
 ====================================
 Scenario 5: Employee is working remotely and considers connecting
 to public WiFi to access company systems.
@@ -13,19 +13,19 @@ from pepper_interface.scenarios.base_scenario import BaseScenario
 
 class NetworkScenario(BaseScenario):
     @property
-    def scenario_id(self) -> str:
+    def scenario_id(self):
         return "network-01"
 
     @property
-    def scenario_type(self) -> str:
+    def scenario_type(self):
         return "network"
 
     @property
-    def title(self) -> str:
+    def title(self):
         return "Network hygiene"
 
     @property
-    def prompt(self) -> str:
+    def prompt(self):
         return (
             "You are working from a coffee shop and need to access your "
             "company's internal system to submit an urgent report. "
@@ -34,7 +34,7 @@ class NetworkScenario(BaseScenario):
         )
 
     @property
-    def choices(self) -> list[dict]:
+    def choices(self):
         return [
             {
                 "id": "connect_direct",
@@ -59,7 +59,7 @@ class NetworkScenario(BaseScenario):
         ]
 
     @property
-    def correct_keywords(self) -> list[str]:
+    def correct_keywords(self):
         return [
             "vpn",
             "virtual private network",
@@ -74,7 +74,7 @@ class NetworkScenario(BaseScenario):
         ]
 
     @property
-    def risky_keywords(self) -> list[str]:
+    def risky_keywords(self):
         return [
             "public wifi",
             "connect directly",
@@ -84,7 +84,7 @@ class NetworkScenario(BaseScenario):
         ]
 
     @property
-    def rag_query(self) -> str:
+    def rag_query(self):
         return (
             "Is it safe to use public WiFi to access company systems? "
             "What are the risks of unsecured networks and how can employees "
@@ -92,7 +92,7 @@ class NetworkScenario(BaseScenario):
         )
 
     @property
-    def pepper_intro(self) -> str:
+    def pepper_intro(self):
         return (
             "Remote work has become common, but it introduces new security "
             "risks that many employees are unaware of. Let me describe "
@@ -100,7 +100,7 @@ class NetworkScenario(BaseScenario):
         )
 
     @property
-    def pepper_correct_response(self) -> str:
+    def pepper_correct_response(self):
         return (
             "Good thinking. Using a VPN or a personal hotspot before "
             "accessing company systems protects your data from interception "
@@ -109,7 +109,7 @@ class NetworkScenario(BaseScenario):
         )
 
     @property
-    def pepper_risky_response(self) -> str:
+    def pepper_risky_response(self):
         return (
             "Connecting to company systems over unencrypted public WiFi "
             "exposes your data to anyone on the same network. Attackers "

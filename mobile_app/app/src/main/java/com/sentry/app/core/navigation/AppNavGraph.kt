@@ -8,6 +8,7 @@ import com.sentry.app.features.admin.analytics.AnalyticsScreen
 import com.sentry.app.features.admin.home.AdminHomeScreen
 import com.sentry.app.features.auth.AuthScreen
 import com.sentry.app.features.chat.ChatScreen
+import com.sentry.app.features.manager.home.ManagerHomeScreen
 import com.sentry.app.features.settings.SettingsScreen
 import com.sentry.app.features.splash.SplashScreen
 import com.sentry.app.features.trainee.home.TraineeHomeScreen
@@ -34,6 +35,10 @@ fun AppNavGraph(navController: NavHostController) {
 
         composable("adminHome") {
             AdminHomeScreen(navController = navController)
+        }
+
+        composable("managerHome") {
+            ManagerHomeScreen(navController = navController)
         }
 
         composable("analytics") {

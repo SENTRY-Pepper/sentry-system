@@ -16,6 +16,8 @@ from pepper_interface.dialogue.state_machine import (
     SessionContext,
     SessionState,
 )
+from pepper_interface.dialogue.dialogue_manager import DialogueManager
+from pepper_interface.pepper_client import PepperClient
 
 
 def test_all_scenarios_load():
@@ -143,6 +145,67 @@ def test_session_context_metrics():
     print(">>> PASSED")
 
 
+def test_pepper_voice_choice_mapping():
+    print("\n=== Test 8: Pepper voice choice mapping ===")
+    pepper = PepperClient("127.0.0.1", simulation=True)
+    scenario = PhishingScenario()
+    scenario_data = {"choices": scenario.choices}
+
+    vocabulary, phrase_map = pepper._choice_vocabulary_and_map(scenario_data)
+
+    assert "option a" in vocabulary
+    assert phrase_map["option a"] == ("choice", "click")
+    assert phrase_map["choice c"] == ("choice", "report")
+    assert phrase_map["question"] == ("question", None)
+    assert phrase_map["repeat"] == ("repeat", None)
+    print(">>> PASSED")
+
+
+def test_dialogue_manager_spoken_question_routes_to_grounded_query():
+    print("\n=== Test 9: Spoken question routes through middleware client ===")
+
+    class FakeClient:
+        def __init__(self):
+            self.grounded_calls = []
+            self.baseline_calls = []
+
+        def grounded_query(self, query, scenario_id=None):
+            self.grounded_calls.append((query, scenario_id))
+            return {
+                "response": "Grounded answer",
+                "sources": ["OWASP"],
+                "total_ms": 42,
+            }
+
+        def baseline_query(self, query, scenario_id=None):
+            self.baseline_calls.append((query, scenario_id))
+            return {
+                "response": "Baseline answer",
+                "sources": [],
+                "total_ms": 24,
+            }
+
+    manager = DialogueManager()
+    fake_client = FakeClient()
+    manager._client = fake_client
+    manager._context = SessionContext(
+        session_id="test-session",
+        participant_id="TEST_P001",
+        condition="grounded",
+        organisation_id="TEST_ORG",
+    )
+    manager._context.current_scenario_id = "phishing-01"
+
+    answer = manager.answer_question("what is phishing")
+
+    assert answer["response"] == "Grounded answer"
+    assert answer["sources"] == ["OWASP"]
+    assert answer["latency_ms"] == 42
+    assert fake_client.grounded_calls == [("what is phishing", "phishing-01")]
+    assert fake_client.baseline_calls == []
+    print(">>> PASSED")
+
+
 if __name__ == "__main__":
     test_all_scenarios_load()
     test_scenario_map()
@@ -151,5 +214,7 @@ if __name__ == "__main__":
     test_free_text_evaluation()
     test_state_machine_transitions()
     test_session_context_metrics()
+    test_pepper_voice_choice_mapping()
+    test_dialogue_manager_spoken_question_routes_to_grounded_query()
     print("\n" + "=" * 60)
     print("All pepper interface tests PASSED")

@@ -1,5 +1,5 @@
 """
-SENTRY — Phishing Detection Scenario
+SENTRY â€” Phishing Detection Scenario
 ======================================
 Scenario 1: Employee receives a suspicious email and must decide
 whether to click, delete, report, or verify via another channel.
@@ -13,30 +13,30 @@ from pepper_interface.scenarios.base_scenario import BaseScenario
 
 class PhishingScenario(BaseScenario):
     @property
-    def scenario_id(self) -> str:
+    def scenario_id(self):
         return "phishing-01"
 
     @property
-    def scenario_type(self) -> str:
+    def scenario_type(self):
         return "phishing"
 
     @property
-    def title(self) -> str:
+    def title(self):
         return "Phishing email detection"
 
     @property
-    def prompt(self) -> str:
+    def prompt(self):
         return (
             "You receive this email at 8:43 AM from IT Support at "
-            "support@heriitage-bank.com — notice the spelling. "
-            "The subject reads: Urgent — verify your account immediately. "
+            "support@heriitage-bank.com â€” notice the spelling. "
+            "The subject reads: Urgent â€” verify your account immediately. "
             "The email says your account will be suspended in 24 hours "
             "unless you click a link to verify your credentials. "
             "What do you do?"
         )
 
     @property
-    def choices(self) -> list[dict]:
+    def choices(self):
         return [
             {
                 "id": "click",
@@ -48,7 +48,7 @@ class PhishingScenario(BaseScenario):
                 "text": "Delete the email without clicking anything",
                 "is_correct": False,
                 # Deleting is better than clicking but not the best action
-                # — reporting is the correct response
+                # â€” reporting is the correct response
             },
             {
                 "id": "report",
@@ -63,7 +63,7 @@ class PhishingScenario(BaseScenario):
         ]
 
     @property
-    def correct_keywords(self) -> list[str]:
+    def correct_keywords(self):
         return [
             "report",
             "it department",
@@ -81,7 +81,7 @@ class PhishingScenario(BaseScenario):
         ]
 
     @property
-    def risky_keywords(self) -> list[str]:
+    def risky_keywords(self):
         return [
             "click",
             "open",
@@ -94,7 +94,7 @@ class PhishingScenario(BaseScenario):
         ]
 
     @property
-    def rag_query(self) -> str:
+    def rag_query(self):
         return (
             "What is phishing and what are the legal consequences "
             "of phishing attacks in Kenya? How should an employee "
@@ -102,15 +102,15 @@ class PhishingScenario(BaseScenario):
         )
 
     @property
-    def pepper_intro(self) -> str:
+    def pepper_intro(self):
         return (
             "Let us look at a common attack that targets employees every day. "
-            "I will describe a situation — listen carefully and tell me "
+            "I will describe a situation â€” listen carefully and tell me "
             "what you would do."
         )
 
     @property
-    def pepper_correct_response(self) -> str:
+    def pepper_correct_response(self):
         return (
             "Excellent decision. Reporting suspicious emails to your IT team "
             "is exactly the right action. You have helped protect your "
@@ -118,7 +118,7 @@ class PhishingScenario(BaseScenario):
         )
 
     @property
-    def pepper_risky_response(self) -> str:
+    def pepper_risky_response(self):
         return (
             "That choice puts your organisation at risk. Clicking links in "
             "suspicious emails is one of the most common ways attackers "

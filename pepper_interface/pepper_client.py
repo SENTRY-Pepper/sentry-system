@@ -52,6 +52,15 @@ GESTURES = {
     "farewell": "animations/Stand/Gestures/BowShort_1",
 }
 
+QUESTION_VOCABULARY = [
+    "what is phishing",
+    "why is this risky",
+    "what should I do",
+    "what is the law",
+    "how can I stay safe",
+    "repeat",
+]
+
 # ------------------------------------------------------------------
 # Tablet HTML templates
 # Served from Pepper's local tablet browser
@@ -293,6 +302,7 @@ class PepperClient(object):
         self._tablet = None
         self._anim = None
         self._speech_reco = None
+        self._memory = None
 
         if not self.simulation:
             self._connect()
@@ -308,6 +318,7 @@ class PepperClient(object):
             self._tablet = session.service("ALTabletService")
             self._anim = session.service("ALAnimationPlayer")
             self._speech_reco = session.service("ALSpeechRecognition")
+            self._memory = session.service("ALMemory")
 
             # Set language and speech parameters
             self._tts.setLanguage("English")
@@ -358,6 +369,135 @@ class PepperClient(object):
         except Exception as e:
             print("[PepperClient] Say+gesture error: {}".format(e))
             self.say(text)
+
+    def _simulation_input(self, prompt, default_text=None):
+        try:
+            try:
+                value = raw_input(prompt)  # noqa: F821 - Python 2 on Pepper
+            except NameError:
+                value = input(prompt)
+        except EOFError:
+            return default_text
+        value = value.strip()
+        if not value:
+            return default_text
+        return value
+
+    def _normalise_speech_text(self, text):
+        if text is None:
+            return ""
+        return str(text).strip().lower().replace("_", " ")
+
+    def listen_for_response(
+        self,
+        vocabulary=None,
+        timeout_seconds=12,
+        confidence_threshold=0.35,
+        simulation_prompt=None,
+        default_text=None,
+    ):
+        """
+        Listen for a short spoken response.
+        Pepper's NAOqi ASR is vocabulary-based, so callers should pass a
+        compact phrase list for reliable low-latency recognition.
+        """
+        if self.simulation:
+            prompt = simulation_prompt or "[Pepper LISTENING] Response: "
+            return self._simulation_input(prompt, default_text=default_text)
+
+        if not self._speech_reco or not self._memory:
+            return None
+
+        vocabulary = vocabulary or []
+        subscriber = "SENTRYPepperASR"
+        best_word = None
+        best_confidence = 0.0
+
+        try:
+            self._speech_reco.pause(True)
+            self._speech_reco.setLanguage("English")
+            if vocabulary:
+                self._speech_reco.setVocabulary(vocabulary, False)
+            self._speech_reco.pause(False)
+            self._speech_reco.subscribe(subscriber)
+
+            deadline = time.time() + timeout_seconds
+            while time.time() < deadline:
+                recognised = self._memory.getData("WordRecognized")
+                if recognised and len(recognised) >= 2:
+                    for idx in range(0, len(recognised) - 1, 2):
+                        word = recognised[idx]
+                        confidence = recognised[idx + 1]
+                        if confidence > best_confidence:
+                            best_word = word
+                            best_confidence = confidence
+                    if best_word and best_confidence >= confidence_threshold:
+                        return best_word
+                time.sleep(0.15)
+        except Exception as e:
+            print("[PepperClient] ASR error: {}".format(e))
+        finally:
+            try:
+                self._speech_reco.unsubscribe(subscriber)
+            except Exception:
+                pass
+
+        return None
+
+    def _choice_vocabulary_and_map(self, scenario_data):
+        letters = ["a", "b", "c", "d"]
+        vocabulary = ["repeat", "question"]
+        phrase_map = {
+            "repeat": ("repeat", None),
+            "question": ("question", None),
+        }
+
+        for index, choice in enumerate(scenario_data.get("choices", [])):
+            letter = letters[index] if index < len(letters) else str(index + 1)
+            choice_id = choice.get("id")
+            phrases = [
+                letter,
+                "option " + letter,
+                "choice " + letter,
+                choice_id.replace("_", " "),
+            ]
+            for phrase in phrases:
+                normalised = self._normalise_speech_text(phrase)
+                vocabulary.append(normalised)
+                phrase_map[normalised] = ("choice", choice_id)
+
+        return vocabulary, phrase_map
+
+    def listen_for_choice(self, scenario_data, timeout_seconds=12):
+        """
+        Return a tuple: (input_kind, input_value).
+        input_kind is one of choice, question, repeat, free_text, timeout.
+        """
+        vocabulary, phrase_map = self._choice_vocabulary_and_map(scenario_data)
+        spoken = self.listen_for_response(
+            vocabulary=vocabulary,
+            timeout_seconds=timeout_seconds,
+            simulation_prompt=(
+                "[Pepper LISTENING] Say option A-D, 'question', or type text: "
+            ),
+        )
+
+        normalised = self._normalise_speech_text(spoken)
+        if not normalised:
+            return ("timeout", None)
+        if normalised in phrase_map:
+            return phrase_map[normalised]
+        return ("free_text", spoken)
+
+    def listen_for_question(self, timeout_seconds=12):
+        return self.listen_for_response(
+            vocabulary=QUESTION_VOCABULARY,
+            timeout_seconds=timeout_seconds,
+            simulation_prompt=(
+                "[Pepper LISTENING] Ask a question "
+                "(or use: what is phishing / why is this risky): "
+            ),
+        )
 
     # ------------------------------------------------------------------
     # Gestures
@@ -540,6 +680,9 @@ def run_sentry_session(
     organisation_id,
     pre_score,
     simulation=False,
+    response_mode="voice",
+    response_timeout=12,
+    allow_questions=True,
 ):
     """
     Run a complete SENTRY training session on Pepper.
@@ -584,21 +727,86 @@ def run_sentry_session(
         pepper.show_scenario(scenario_data)
         pepper.say(scenario_data["prompt"])
 
-        # In real deployment: wait for tablet button tap from the Android app
-        # In simulation: pick the first correct choice automatically
-        scenario_obj = manager.get_current_scenario()
-        correct_choices = [c for c in scenario_obj.choices if c["is_correct"]]
-        simulated_choice = (
-            correct_choices[0]["id"]
-            if correct_choices
-            else scenario_obj.choices[0]["id"]
+        pepper.say(
+            "Please answer by saying option A, option B, option C, or option D. "
+            "You can also say question or repeat."
         )
 
-        print("[Session] Simulated choice: {}".format(simulated_choice))
-        pepper.say_and_gesture("I am thinking about your response...", "thinking")
+        feedback = None
+        if response_mode == "auto":
+            scenario_obj = manager.get_current_scenario()
+            correct_choices = [c for c in scenario_obj.choices if c["is_correct"]]
+            selected_choice = (
+                correct_choices[0]["id"]
+                if correct_choices
+                else scenario_obj.choices[0]["id"]
+            )
+            print("[Session] Auto choice: {}".format(selected_choice))
+            pepper.say_and_gesture("I am thinking about your response...", "thinking")
+            feedback = manager.process_response(choice_id=selected_choice)
+        else:
+            attempts = 0
+            while not feedback and attempts < 3:
+                attempts += 1
+                input_kind, input_value = pepper.listen_for_choice(
+                    scenario_data,
+                    timeout_seconds=response_timeout,
+                )
 
-        # 5. Process response and get AI feedback
-        feedback = manager.process_response(choice_id=simulated_choice)
+                if input_kind == "repeat":
+                    pepper.say(scenario_data["prompt"])
+                    continue
+
+                if input_kind == "question" and allow_questions:
+                    pepper.say("What would you like to ask?")
+                    question = pepper.listen_for_question(
+                        timeout_seconds=response_timeout,
+                    )
+                    if question:
+                        pepper.say_and_gesture(
+                            "Let me check the training knowledge base.",
+                            "thinking",
+                        )
+                        answer = manager.answer_question(
+                            question,
+                            scenario_id=scenario_data.get("scenario_id"),
+                        )
+                        answer_text = answer.get("response", "")
+                        pepper.show_feedback(
+                            decision="correct",
+                            ai_response=answer_text,
+                            sources=answer.get("sources", []),
+                        )
+                        if len(answer_text) > 260:
+                            answer_text = answer_text[:260] + "..."
+                        pepper.say_and_gesture(answer_text, "explaining")
+                    pepper.say("Now please answer the scenario.")
+                    continue
+
+                if input_kind == "choice":
+                    pepper.say_and_gesture(
+                        "I am thinking about your response...",
+                        "thinking",
+                    )
+                    feedback = manager.process_response(choice_id=input_value)
+                    continue
+
+                if input_kind == "free_text":
+                    pepper.say_and_gesture(
+                        "I am thinking about your response...",
+                        "thinking",
+                    )
+                    feedback = manager.process_response(free_text=input_value)
+                    continue
+
+                pepper.say(
+                    "I did not hear a clear answer. Please say option A, "
+                    "option B, option C, or option D."
+                )
+
+            if not feedback:
+                pepper.say_and_gesture("I am thinking about your response...", "thinking")
+                feedback = manager.process_response(free_text="no clear response")
 
         # Immediate Pepper speech
         pepper.say_and_gesture(
@@ -666,6 +874,23 @@ if __name__ == "__main__":
     parser.add_argument(
         "--simulation", action="store_true", help="Run without a real Pepper robot"
     )
+    parser.add_argument(
+        "--response-mode",
+        default="voice",
+        choices=["voice", "auto"],
+        help="Use voice input or automatic correct choices for smoke tests",
+    )
+    parser.add_argument(
+        "--response-timeout",
+        type=int,
+        default=12,
+        help="Seconds Pepper waits for each spoken answer",
+    )
+    parser.add_argument(
+        "--no-questions",
+        action="store_true",
+        help="Disable spoken trainee questions during scenarios",
+    )
 
     args = parser.parse_args()
 
@@ -678,4 +903,7 @@ if __name__ == "__main__":
         organisation_id=args.organisation,
         pre_score=args.pre_score,
         simulation=args.simulation,
+        response_mode=args.response_mode,
+        response_timeout=args.response_timeout,
+        allow_questions=not args.no_questions,
     )

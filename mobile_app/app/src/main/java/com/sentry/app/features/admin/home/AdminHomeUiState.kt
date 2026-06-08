@@ -5,13 +5,15 @@ import com.sentry.app.data.models.response.SessionSummary
 data class AdminHomeUiState(
     val loading: Boolean = false,
     val error: String = "",
-    // from OrganisationAnalytics
     val totalSessions: Int = 0,
-    val completedSessions: Int = 0,
-    val meanPreScore: Float = 0f,
-    val meanPostScore: Float = 0f,
-    val meanKnowledgeGain: Float = 0f,
-    val meanGroundingAccuracy: Float = 0f,
-    // from listSessions (5 most recent)
+    val groundedSessions: Int = 0,
+    val baselineSessions: Int = 0,
+    val groundedAccuracy: Float = 0f,
+    val baselineAccuracy: Float = 0f,
+    val groundedHallucination: Float = 0f,
+    val baselineHallucination: Float = 0f,
+    val groundingImprovement: Float = 0f,
+    val groundedKnowledgeGain: Float = 0f,
+    val baselineKnowledgeGain: Float = 0f,
     val recentSessions: List<SessionSummary> = emptyList()
 )

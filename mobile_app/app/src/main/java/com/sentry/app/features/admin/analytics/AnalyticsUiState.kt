@@ -8,11 +8,14 @@ data class AnalyticsUiState(
     val error: String = "",
     val sessions: List<SessionSummary> = emptyList(),
     val selectedCondition: String? = null,
-    // computed from sessions list
-    val avgAccuracy: Float = 0f,
-    val avgKnowledgeGain: Float = 0f,
-    val ragSessionCount: Int = 0,
+    val totalSessions: Int = 0,
+    val groundedSessionCount: Int = 0,
     val baselineSessionCount: Int = 0,
-    val ragAvgAccuracy: Float = 0f,
-    val baselineAvgAccuracy: Float = 0f
+    val groundedAccuracy: Float = 0f,
+    val baselineAccuracy: Float = 0f,
+    val groundedHallucination: Float = 0f,
+    val baselineHallucination: Float = 0f,
+    val groundingImprovement: Float = 0f,
+    val groundedKnowledgeGain: Float = 0f,
+    val baselineKnowledgeGain: Float = 0f
 )

@@ -154,7 +154,7 @@ private fun AnalyticsTopBar(navController: NavHostController, onRefresh: () -> U
         verticalAlignment = Alignment.CenterVertically
     ) {
         SentryText(
-            text = "Analytics",
+                            text = "Research Analytics",
             size = SentryTextSize.Lg,
             color = MaterialTheme.colorScheme.primary
         )
@@ -205,18 +205,18 @@ private fun AggregateMetricsCard(state: AnalyticsUiState) {
             ) {
                 MetricCell(
                     modifier = Modifier.weight(1f),
-                    label = "Avg Post Score",
-                    value = "${"%.1f".format(state.avgAccuracy)}%"
-                )
-                MetricCell(
-                    modifier = Modifier.weight(1f),
-                    label = "Avg Knowledge Gain",
-                    value = "${"%.1f".format(state.avgKnowledgeGain)}%"
-                )
-                MetricCell(
-                    modifier = Modifier.weight(1f),
                     label = "Total Sessions",
-                    value = state.sessions.size.toString()
+                    value = state.totalSessions.toString()
+                )
+                MetricCell(
+                    modifier = Modifier.weight(1f),
+                    label = "Grounded",
+                    value = state.groundedSessionCount.toString()
+                )
+                MetricCell(
+                    modifier = Modifier.weight(1f),
+                    label = "Baseline",
+                    value = state.baselineSessionCount.toString()
                 )
             }
         }
@@ -252,18 +252,18 @@ private fun ConditionComparisonCard(state: AnalyticsUiState) {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             SentryText(
-                text = "Grounded vs Baseline Accuracy",
+                text = "Grounding Accuracy",
                 size = SentryTextSize.Sm,
                 color = MaterialTheme.colorScheme.onBackground
             )
             SentryText(
-                text = "Grounded (${state.ragSessionCount} sessions) - ${"%.1f".format(state.ragAvgAccuracy)}%",
+                text = "Grounded (${state.groundedSessionCount} sessions) - ${"%.1f".format(state.groundedAccuracy * 100)}%",
                 size = SentryTextSize.Xs,
                 color = MaterialTheme.colorScheme.outline
             )
             // API 23 safe: non-lambda progress overload
             LinearProgressIndicator(
-                progress = percentToProgress(state.ragAvgAccuracy),
+                progress = state.groundedAccuracy.coerceIn(0f, 1f),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp)
@@ -272,12 +272,12 @@ private fun ConditionComparisonCard(state: AnalyticsUiState) {
                 trackColor = MaterialTheme.colorScheme.surfaceVariant
             )
             SentryText(
-                text = "Baseline (${state.baselineSessionCount} sessions) - ${"%.1f".format(state.baselineAvgAccuracy)}%",
+                text = "Baseline (${state.baselineSessionCount} sessions) - ${"%.1f".format(state.baselineAccuracy * 100)}%",
                 size = SentryTextSize.Xs,
                 color = MaterialTheme.colorScheme.outline
             )
             LinearProgressIndicator(
-                progress = percentToProgress(state.baselineAvgAccuracy),
+                progress = state.baselineAccuracy.coerceIn(0f, 1f),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(8.dp)

@@ -16,6 +16,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from middleware.routes.query_routes import router as query_router
 from middleware.routes.session_routes import router as session_router
 from middleware.routes.analytics_routes import router as analytics_router
+from middleware.routes.user_routes import router as user_router
 from backend.database.connection import init_db
 from config.settings import settings
 
@@ -58,7 +59,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PATCH"],
     allow_headers=["*"],
 )
 
@@ -66,6 +67,7 @@ app.add_middleware(
 app.include_router(query_router, prefix="/api/v1")
 app.include_router(session_router, prefix="/api/v1")
 app.include_router(analytics_router, prefix="/api/v1")
+app.include_router(user_router, prefix="/api/v1")
 
 
 @app.get("/", tags=["Health"])

@@ -37,3 +37,22 @@ data class InteractionLogRequest(
     @SerialName("ai_latency_ms")     val aiLatencyMs: Float?,
     @SerialName("ai_sources")        val aiSources: String?,
 )
+
+@Serializable
+data class UserLoginRequest(
+    @SerialName("participant_id")  val participantId: String,
+    @SerialName("pin")             val pin: String,
+    @SerialName("role")            val role: String,
+    @SerialName("organisation_id") val organisationId: String?,
+)
+
+@Serializable
+data class UserCreateRequest(
+    @SerialName("participant_id")  val participantId: String,
+    @SerialName("display_name")    val displayName: String,
+    @SerialName("role")            val role: String = "trainee",
+    @SerialName("pin")             val pin: String,
+    @SerialName("organisation_id") val organisationId: String,
+    @SerialName("department")      val department: String?,
+    @SerialName("position")        val position: String?,
+)

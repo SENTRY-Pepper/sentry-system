@@ -1,5 +1,5 @@
 """
-SENTRY — USB Drop Attack Scenario
+SENTRY â€” USB Drop Attack Scenario
 ====================================
 Scenario 2: Employee finds an unknown USB drive in the office
 and must decide what to do with it.
@@ -13,28 +13,28 @@ from pepper_interface.scenarios.base_scenario import BaseScenario
 
 class USBDropScenario(BaseScenario):
     @property
-    def scenario_id(self) -> str:
+    def scenario_id(self):
         return "usb-drop-01"
 
     @property
-    def scenario_type(self) -> str:
+    def scenario_type(self):
         return "usb_drop"
 
     @property
-    def title(self) -> str:
+    def title(self):
         return "USB drop attack"
 
     @property
-    def prompt(self) -> str:
+    def prompt(self):
         return (
             "You arrive at work on Monday morning and find a USB drive "
             "on your desk. There is no label on it and you do not know "
-            "who left it there. It could contain important files — "
+            "who left it there. It could contain important files â€” "
             "or it could be something else entirely. What do you do?"
         )
 
     @property
-    def choices(self) -> list[dict]:
+    def choices(self):
         return [
             {
                 "id": "plug_in",
@@ -55,12 +55,12 @@ class USBDropScenario(BaseScenario):
                 "id": "discard",
                 "text": "Discard it in the bin without plugging it in",
                 "is_correct": False,
-                # Discarding is not ideal — IT should examine it
+                # Discarding is not ideal â€” IT should examine it
             },
         ]
 
     @property
-    def correct_keywords(self) -> list[str]:
+    def correct_keywords(self):
         return [
             "it department",
             "it team",
@@ -75,7 +75,7 @@ class USBDropScenario(BaseScenario):
         ]
 
     @property
-    def risky_keywords(self) -> list[str]:
+    def risky_keywords(self):
         return [
             "plug in",
             "connect",
@@ -89,7 +89,7 @@ class USBDropScenario(BaseScenario):
         ]
 
     @property
-    def rag_query(self) -> str:
+    def rag_query(self):
         return (
             "What should an employee do if they find an unknown USB drive "
             "at work? What are the cybersecurity risks of plugging in "
@@ -97,7 +97,7 @@ class USBDropScenario(BaseScenario):
         )
 
     @property
-    def pepper_intro(self) -> str:
+    def pepper_intro(self):
         return (
             "This next scenario is about a physical security threat that "
             "attackers use to bypass digital defences entirely. "
@@ -105,7 +105,7 @@ class USBDropScenario(BaseScenario):
         )
 
     @property
-    def pepper_correct_response(self) -> str:
+    def pepper_correct_response(self):
         return (
             "Well done. Handing the USB drive to IT without plugging it in "
             "is the safest action. USB drives can carry malware that "
@@ -114,10 +114,10 @@ class USBDropScenario(BaseScenario):
         )
 
     @property
-    def pepper_risky_response(self) -> str:
+    def pepper_risky_response(self):
         return (
-            "That is a risky decision. Plugging in an unknown USB drive — "
-            "even on a different computer — can trigger malware that spreads "
+            "That is a risky decision. Plugging in an unknown USB drive â€” "
+            "even on a different computer â€” can trigger malware that spreads "
             "across your organisation's network. Let me explain what you "
             "should do instead."
         )

@@ -26,7 +26,9 @@ from backend.database.connection import get_db
 from backend.database.models import (
     TrainingSession,
     EvaluationLog,
+    User,
 )
+from middleware.auth import require_roles
 from middleware.validators.session_validator import (
     SessionSummary,
     StudyAnalytics,
@@ -47,7 +49,10 @@ router = APIRouter()
     ),
     tags=["Analytics"],
 )
-async def get_study_analytics(db: AsyncSession = Depends(get_db)):
+async def get_study_analytics(
+    _: User = Depends(require_roles("admin")),
+    db: AsyncSession = Depends(get_db),
+):
     """
     Aggregates all session and evaluation data for the study report.
     This is the primary analytics endpoint for Derick's evaluation chapter.
@@ -130,6 +135,7 @@ async def list_sessions(
     condition: Optional[str] = Query(default=None),
     organisation_id: Optional[str] = Query(default=None),
     limit: int = Query(default=100, le=500),
+    current_user: User = Depends(require_roles("admin", "manager")),
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -140,8 +146,11 @@ async def list_sessions(
 
     if condition:
         query = query.where(TrainingSession.condition == condition)
-    if organisation_id:
-        query = query.where(TrainingSession.organisation_id == organisation_id)
+    effective_org = organisation_id
+    if current_user.role == "manager":
+        effective_org = current_user.organisation_id
+    if effective_org:
+        query = query.where(TrainingSession.organisation_id == effective_org)
 
     query = query.limit(limit)
     result = await db.execute(query)
@@ -171,36 +180,43 @@ async def list_sessions(
 )
 async def get_organisation_analytics(
     organisation_id: str,
+    current_user: User = Depends(require_roles("admin", "manager")),
     db: AsyncSession = Depends(get_db),
 ):
     """
     Returns aggregated training metrics for one organisation.
     Powers the organisational dashboard in the Android app.
     """
+    effective_org = (
+        current_user.organisation_id
+        if current_user.role == "manager"
+        else organisation_id
+    )
+
     total = await db.scalar(
         select(func.count(TrainingSession.id)).where(
-            TrainingSession.organisation_id == organisation_id
+            TrainingSession.organisation_id == effective_org
         )
     )
     completed = await db.scalar(
         select(func.count(TrainingSession.id)).where(
-            TrainingSession.organisation_id == organisation_id,
+            TrainingSession.organisation_id == effective_org,
             TrainingSession.is_complete.is_(True),
         )
     )
     mean_pre = await db.scalar(
         select(func.avg(TrainingSession.pre_assessment_score)).where(
-            TrainingSession.organisation_id == organisation_id
+            TrainingSession.organisation_id == effective_org
         )
     )
     mean_post = await db.scalar(
         select(func.avg(TrainingSession.post_assessment_score)).where(
-            TrainingSession.organisation_id == organisation_id
+            TrainingSession.organisation_id == effective_org
         )
     )
     mean_gain = await db.scalar(
         select(func.avg(TrainingSession.knowledge_gain)).where(
-            TrainingSession.organisation_id == organisation_id
+            TrainingSession.organisation_id == effective_org
         )
     )
 
@@ -208,19 +224,19 @@ async def get_organisation_analytics(
     grounding = await db.scalar(
         select(func.avg(EvaluationLog.grounding_accuracy))
         .join(TrainingSession, EvaluationLog.session_id == TrainingSession.id)
-        .where(TrainingSession.organisation_id == organisation_id)
+        .where(TrainingSession.organisation_id == effective_org)
     )
     hallucination = await db.scalar(
         select(func.avg(EvaluationLog.hallucination_rate))
         .join(TrainingSession, EvaluationLog.session_id == TrainingSession.id)
-        .where(TrainingSession.organisation_id == organisation_id)
+        .where(TrainingSession.organisation_id == effective_org)
     )
 
     def safe_round(val, digits=2):
         return round(float(val), digits) if val is not None else None
 
     return OrganisationAnalytics(
-        organisation_id=organisation_id,
+        organisation_id=effective_org,
         total_sessions=total or 0,
         completed_sessions=completed or 0,
         mean_pre_score=safe_round(mean_pre),

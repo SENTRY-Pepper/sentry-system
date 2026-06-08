@@ -84,7 +84,11 @@ fun AuthScreen(
         vm.events.collect { event ->
             when (event) {
                 is AuthEvent.NavigateToHome -> {
-                    val route = if (event.role == UserRole.ADMIN) "adminHome" else "traineeHome"
+                    val route = when (event.role) {
+                        UserRole.ADMIN -> "adminHome"
+                        UserRole.MANAGER -> "managerHome"
+                        UserRole.TRAINEE -> "traineeHome"
+                    }
                     navController.navigateAndClear(route, popUpToRoute = "auth")
 
                 }
@@ -161,7 +165,7 @@ fun AuthScreen(
             // ── Role toggle ───────────────────────────────────────────────
             Row(
                 modifier = Modifier
-                    .fillMaxWidth(0.5f)
+                    .fillMaxWidth(0.65f)
                     .clip(AuthRadius)
                     .background(scheme.inverseOnSurface)
                     .padding(4.dp),
@@ -176,6 +180,13 @@ fun AuthScreen(
                 )
                 RoleButton(
                     icon = R.drawable.briefcase,
+                    label = "Manager",
+                    selected = selectedRole == UserRole.MANAGER,
+                    onClick = { selectedRole = UserRole.MANAGER },
+                    modifier = Modifier.weight(1f),
+                )
+                RoleButton(
+                    icon = R.drawable.grid,
                     label = "Admin",
                     selected = selectedRole == UserRole.ADMIN,
                     onClick = { selectedRole = UserRole.ADMIN },
@@ -217,7 +228,7 @@ fun AuthScreen(
                         Spacer(Modifier.height(16.dp))
 
                         // organisation — admin only
-                        if (selectedRole == UserRole.ADMIN) {
+                        if (selectedRole != UserRole.TRAINEE) {
                             AuthField(
                                 label = "Organisation:",
                                 value = organisation,
@@ -264,10 +275,11 @@ fun AuthScreen(
                         ) {
                             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                                 SentryText(
-                                    text = if (selectedRole == UserRole.TRAINEE)
-                                        "Signing in as an Employee"
-                                    else
-                                        "Sign in as an Admin",
+                                    text = when (selectedRole) {
+                                        UserRole.TRAINEE -> "Signing in as an Employee"
+                                        UserRole.MANAGER -> "Sign in as a Manager"
+                                        UserRole.ADMIN -> "Sign in as an Admin"
+                                    },
                                     size = SentryTextSize.Md,
                                     weight = FontWeight.Bold,
                                     color = Color.White,
@@ -280,8 +292,12 @@ fun AuthScreen(
                                 InfoItem("Real-world scenarios")
                                 InfoItem("AI grounded explanations")
                                 InfoItem("Legal context from Kenyan Law")
-                                if (selectedRole == UserRole.ADMIN) {
+                                if (selectedRole == UserRole.MANAGER) {
                                     InfoItem("Organisational analytics")
+                                    InfoItem("Trainee account management")
+                                }
+                                if (selectedRole == UserRole.ADMIN) {
+                                    InfoItem("Grounded vs baseline study data")
                                 }
                             }
                         }
@@ -297,7 +313,7 @@ fun AuthScreen(
                                     if (state.loading) scheme.outline else AuthGreenDark
                                 )
                                 .clickable(enabled = !state.loading) {
-                                    val org = if (selectedRole == UserRole.ADMIN)
+                                    val org = if (selectedRole != UserRole.TRAINEE)
                                         organisation else "SENTRY_STUDY"
                                     vm.login(
                                         participantId = participantId,
@@ -320,10 +336,11 @@ fun AuthScreen(
                                 )
                             } else {
                                 SentryText(
-                                    text = if (selectedRole == UserRole.TRAINEE)
-                                        "Proceed to sessions"
-                                    else
-                                        "Proceed to Admin Panel",
+                                    text = when (selectedRole) {
+                                        UserRole.TRAINEE -> "Proceed to sessions"
+                                        UserRole.MANAGER -> "Proceed to Manager Panel"
+                                        UserRole.ADMIN -> "Proceed to Admin Panel"
+                                    },
                                     size = SentryTextSize.Lg,
                                     weight = FontWeight.Bold,
                                     color = Color.White,

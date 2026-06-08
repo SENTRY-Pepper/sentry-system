@@ -1,11 +1,11 @@
 """
-SENTRY — Social Engineering / Voice Phishing Scenario
+SENTRY â€” Social Engineering / Voice Phishing Scenario
 =======================================================
 Scenario 4: Employee receives a phone call from someone claiming
 to be from IT support requesting their credentials.
 
 Based on: OWASP A07 2025 and Computer Misuse and Cybercrimes
-Act 2018 — fraud and impersonation provisions.
+Act 2018 â€” fraud and impersonation provisions.
 """
 
 from pepper_interface.scenarios.base_scenario import BaseScenario
@@ -13,19 +13,19 @@ from pepper_interface.scenarios.base_scenario import BaseScenario
 
 class SocialEngineeringScenario(BaseScenario):
     @property
-    def scenario_id(self) -> str:
+    def scenario_id(self):
         return "social-engineering-01"
 
     @property
-    def scenario_type(self) -> str:
+    def scenario_type(self):
         return "social_engineering"
 
     @property
-    def title(self) -> str:
+    def title(self):
         return "Voice social engineering"
 
     @property
-    def prompt(self) -> str:
+    def prompt(self):
         return (
             "You receive a phone call. The caller says they are from your "
             "company's IT helpdesk and that there is a critical security "
@@ -35,7 +35,7 @@ class SocialEngineeringScenario(BaseScenario):
         )
 
     @property
-    def choices(self) -> list[dict]:
+    def choices(self):
         return [
             {
                 "id": "give_credentials",
@@ -60,7 +60,7 @@ class SocialEngineeringScenario(BaseScenario):
         ]
 
     @property
-    def correct_keywords(self) -> list[str]:
+    def correct_keywords(self):
         return [
             "hang up",
             "hang-up",
@@ -78,7 +78,7 @@ class SocialEngineeringScenario(BaseScenario):
         ]
 
     @property
-    def risky_keywords(self) -> list[str]:
+    def risky_keywords(self):
         return [
             "give",
             "provide",
@@ -91,7 +91,7 @@ class SocialEngineeringScenario(BaseScenario):
         ]
 
     @property
-    def rag_query(self) -> str:
+    def rag_query(self):
         return (
             "What is social engineering and vishing? How should employees "
             "respond to phone calls requesting their credentials? "
@@ -99,7 +99,7 @@ class SocialEngineeringScenario(BaseScenario):
         )
 
     @property
-    def pepper_intro(self) -> str:
+    def pepper_intro(self):
         return (
             "Attackers do not always use technology to breach organisations. "
             "Sometimes they simply pick up the phone. This is called "
@@ -107,7 +107,7 @@ class SocialEngineeringScenario(BaseScenario):
         )
 
     @property
-    def pepper_correct_response(self) -> str:
+    def pepper_correct_response(self):
         return (
             "Exactly right. Legitimate IT support will never ask for your "
             "password over the phone. Hanging up and calling back on a "
@@ -116,10 +116,10 @@ class SocialEngineeringScenario(BaseScenario):
         )
 
     @property
-    def pepper_risky_response(self) -> str:
+    def pepper_risky_response(self):
         return (
             "That is a dangerous response. No legitimate IT team needs your "
-            "password to fix an issue. This is a classic vishing attack — "
+            "password to fix an issue. This is a classic vishing attack â€” "
             "voice phishing. Sharing credentials with an unverified caller "
             "can lead to a full account takeover."
         )

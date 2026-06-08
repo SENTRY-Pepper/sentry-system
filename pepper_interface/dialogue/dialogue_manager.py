@@ -1,5 +1,5 @@
 """
-SENTRY — Dialogue Manager
+SENTRY â€” Dialogue Manager
 ===========================
 Orchestrates a complete training session. Coordinates between:
     - The state machine (what state are we in?)
@@ -15,10 +15,8 @@ Used by: pepper_interface/pepper_client.py
 """
 
 import time
-from typing import Optional
 
 from pepper_interface.scenarios import ALL_SCENARIOS
-from pepper_interface.scenarios.base_scenario import ScenarioResult
 from pepper_interface.dialogue.state_machine import (
     StateMachine,
     SessionContext,
@@ -31,11 +29,11 @@ class DialogueManager:
     Drives one complete SENTRY training session from greeting to results.
     """
 
-    def __init__(self, middleware_base_url: str = "http://localhost:8000"):
+    def __init__(self, middleware_base_url = "http://localhost:8000"):
         self._state_machine = StateMachine()
         self._client = MiddlewareClient(base_url=middleware_base_url)
         self._scenarios = ALL_SCENARIOS
-        self._context: Optional[SessionContext] = None
+        self._context = None
 
     # ------------------------------------------------------------------
     # Session lifecycle
@@ -43,10 +41,10 @@ class DialogueManager:
 
     def start_session(
         self,
-        participant_id: str,
-        condition: str,
-        organisation_id: str,
-    ) -> SessionContext:
+        participant_id,
+        condition,
+        organisation_id,
+    ):
         """
         Initialise a new session context and register it
         with the middleware backend.
@@ -67,16 +65,16 @@ class DialogueManager:
         )
 
         self._state_machine.transition(self._context, "start")
-        print(f"[DialogueManager] Session started: {self._context.session_id}")
+        print("[DialogueManager] Session started: {}".format(self._context.session_id))
         return self._context
 
-    def get_greeting(self) -> str:
+    def get_greeting(self):
         """Returns Pepper's opening greeting for the session."""
         greeting = (
             "Hello! I am Pepper, your SENTRY cybersecurity training assistant. "
             "Today we will work through five real-world security scenarios together. "
             "For each one, I will describe a situation and ask what you would do. "
-            "There are no trick questions — just realistic situations that employees "
+            "There are no trick questions â€” just realistic situations that employees "
             "face every day. Are you ready to begin?"
         )
         self._state_machine.transition(self._context, "greeting_done")
@@ -89,7 +87,7 @@ class DialogueManager:
             return None
         return self._scenarios[idx]
 
-    def present_scenario(self) -> dict:
+    def present_scenario(self):
         """
         Return scenario data for the current scenario.
         Called when transitioning into SCENARIO_PROMPT state.
@@ -114,9 +112,9 @@ class DialogueManager:
             "total_scenarios": self._context.total_scenarios,
         }
 
-    def process_response(self, choice_id: str = None, free_text: str = None) -> dict:
+    def process_response(self, choice_id=None, free_text=None):
         """
-        Process the employee's response — either a button selection
+        Process the employee's response â€” either a button selection
         or free-text voice input.
 
         Returns a dict with:
@@ -137,9 +135,9 @@ class DialogueManager:
 
         # Evaluate the response
         if choice_id:
-            result: ScenarioResult = scenario.evaluate_choice(choice_id)
+            result = scenario.evaluate_choice(choice_id)
         elif free_text:
-            result: ScenarioResult = scenario.evaluate_response(free_text)
+            result = scenario.evaluate_response(free_text)
         else:
             return {"error": "No response provided"}
 
@@ -168,7 +166,7 @@ class DialogueManager:
                     scenario_id=result.scenario_id,
                 )
         except Exception as e:
-            print(f"[DialogueManager] AI query failed: {e}")
+            print("[DialogueManager] AI query failed: {}".format(e))
             ai_data = {
                 "response": "I encountered an issue retrieving additional information. "
                 "Please consult your IT security team.",
@@ -202,7 +200,7 @@ class DialogueManager:
                 ai_sources=",".join(ai_data.get("sources", [])),
             )
         except Exception as e:
-            print(f"[DialogueManager] Interaction log failed: {e}")
+            print("[DialogueManager] Interaction log failed: {}".format(e))
 
         # Immediate Pepper speech (before AI response loads)
         pepper_immediate = (
@@ -221,7 +219,45 @@ class DialogueManager:
             "ai_latency_ms": ai_data.get("total_ms", 0),
         }
 
-    def advance_scenario(self) -> bool:
+    def answer_question(self, question, scenario_id=None):
+        """
+        Answer a trainee's spoken question during a Pepper session.
+        Uses the session condition so research sessions still compare
+        grounded and baseline behavior consistently.
+        """
+        active_scenario_id = scenario_id
+        if not active_scenario_id and self._context:
+            active_scenario_id = self._context.current_scenario_id
+
+        ai_start = time.time()
+        try:
+            if self._context and self._context.condition == "baseline":
+                ai_data = self._client.baseline_query(
+                    query=question,
+                    scenario_id=active_scenario_id,
+                )
+            else:
+                ai_data = self._client.grounded_query(
+                    query=question,
+                    scenario_id=active_scenario_id,
+                )
+        except Exception as e:
+            print("[DialogueManager] Question query failed: {}".format(e))
+            ai_data = {
+                "response": "I could not retrieve that answer right now. "
+                "Please continue with the scenario, or ask your security team.",
+                "sources": [],
+                "total_ms": 0,
+            }
+
+        fallback_latency_ms = round((time.time() - ai_start) * 1000, 2)
+        return {
+            "response": ai_data.get("response", ""),
+            "sources": ai_data.get("sources", []),
+            "latency_ms": ai_data.get("total_ms", fallback_latency_ms),
+        }
+
+    def advance_scenario(self):
         """
         Move to the next scenario.
         Returns True if there is a next scenario, False if session is complete.
@@ -237,9 +273,9 @@ class DialogueManager:
 
     def end_session(
         self,
-        pre_score: float,
-        post_score: float,
-    ) -> dict:
+        pre_score,
+        post_score,
+    ):
         """
         Close the session, compute knowledge gain, and post to middleware.
         Returns the final session summary.
@@ -256,7 +292,7 @@ class DialogueManager:
                 duration_seconds=duration_seconds,
             )
         except Exception as e:
-            print(f"[DialogueManager] End session failed: {e}")
+            print("[DialogueManager] End session failed: {}".format(e))
             summary = {}
 
         self._state_machine.transition(self._context, "assessment_done")

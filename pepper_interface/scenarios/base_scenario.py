@@ -1,66 +1,64 @@
+# -*- coding: utf-8 -*-
 """
-SENTRY — Base Scenario
-========================
-Abstract base class that all five cybersecurity training scenarios
-inherit from. Defines the contract every scenario must fulfil:
-    - A scenario prompt Pepper reads aloud / displays on tablet
-    - A set of correct and risky response keywords
-    - An evaluate_response() method that classifies employee input
-    - A follow-up query string for Derick's RAG pipeline
-
-Used by: pepper_interface/dialogue/dialogue_manager.py
+SENTRY - Base Scenario
+======================
+Python 2.7-compatible scenario contract for Pepper/NAOqi runtime.
 """
 
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from abc import ABCMeta, abstractmethod
 
 
-@dataclass
-class ScenarioResult:
-    """
-    The outcome of one employee interaction with a scenario.
-    Passed back to the dialogue manager for state transitions
-    and to the middleware for session logging.
-    """
+class ScenarioResult(object):
+    def __init__(
+        self,
+        scenario_id,
+        scenario_type,
+        decision,
+        employee_response,
+        confidence,
+        rag_query,
+        correction_needed,
+    ):
+        self.scenario_id = scenario_id
+        self.scenario_type = scenario_type
+        self.decision = decision
+        self.employee_response = employee_response
+        self.confidence = confidence
+        self.rag_query = rag_query
+        self.correction_needed = correction_needed
 
-    scenario_id: str
-    scenario_type: str
-    decision: str  # "correct" or "risky"
-    employee_response: str
-    confidence: float  # 0.0 – 1.0 how confident the classifier is
-    rag_query: str  # Query sent to Derick's /query endpoint
-    correction_needed: bool
 
-
-class BaseScenario(ABC):
+class BaseScenario(object):
     """
     Abstract base for all SENTRY training scenarios.
     Each scenario encapsulates one attack vector simulation.
     """
 
+    __metaclass__ = ABCMeta
+
     @property
     @abstractmethod
-    def scenario_id(self) -> str:
+    def scenario_id(self):
         """Unique identifier e.g. 'phishing-01'"""
 
     @property
     @abstractmethod
-    def scenario_type(self) -> str:
+    def scenario_type(self):
         """Category e.g. 'phishing', 'usb_drop'"""
 
     @property
     @abstractmethod
-    def title(self) -> str:
+    def title(self):
         """Short display title for the tablet UI"""
 
     @property
     @abstractmethod
-    def prompt(self) -> str:
+    def prompt(self):
         """The scenario description Pepper reads to the employee"""
 
     @property
     @abstractmethod
-    def choices(self) -> list[dict]:
+    def choices(self):
         """
         List of choice dicts for the tablet UI.
         Each dict: {"id": str, "text": str, "is_correct": bool}
@@ -68,39 +66,39 @@ class BaseScenario(ABC):
 
     @property
     @abstractmethod
-    def correct_keywords(self) -> list[str]:
+    def correct_keywords(self):
         """Keywords indicating a correct response in free-text input"""
 
     @property
     @abstractmethod
-    def risky_keywords(self) -> list[str]:
+    def risky_keywords(self):
         """Keywords indicating a risky response"""
 
     @property
     @abstractmethod
-    def rag_query(self) -> str:
-        """Query sent to Derick's middleware for grounded feedback"""
+    def rag_query(self):
+        """Query sent to the middleware for grounded feedback"""
 
     @property
     @abstractmethod
-    def pepper_intro(self) -> str:
+    def pepper_intro(self):
         """What Pepper says when introducing this scenario"""
 
     @property
     @abstractmethod
-    def pepper_correct_response(self) -> str:
+    def pepper_correct_response(self):
         """What Pepper says immediately when employee is correct"""
 
     @property
     @abstractmethod
-    def pepper_risky_response(self) -> str:
+    def pepper_risky_response(self):
         """What Pepper says immediately when employee makes risky choice"""
 
-    def evaluate_response(self, employee_response: str) -> ScenarioResult:
+    def evaluate_response(self, employee_response):
         """
-        Classify the employee's free-text or button response.
+        Classify the employee's free-text or spoken response.
         Checks for correct keywords first, then risky keywords.
-        Defaults to risky if neither matches (conservative approach).
+        Defaults to risky if neither matches.
         """
         response_lower = employee_response.lower().strip()
 
@@ -109,15 +107,14 @@ class BaseScenario(ABC):
 
         total = correct_score + risky_score
         if total == 0:
-            # Cannot classify — treat as risky, conservative default
             decision = "risky"
             confidence = 0.5
         elif correct_score > risky_score:
             decision = "correct"
-            confidence = round(correct_score / total, 2)
+            confidence = round(float(correct_score) / float(total), 2)
         else:
             decision = "risky"
-            confidence = round(risky_score / total, 2)
+            confidence = round(float(risky_score) / float(total), 2)
 
         return ScenarioResult(
             scenario_id=self.scenario_id,
@@ -129,12 +126,16 @@ class BaseScenario(ABC):
             correction_needed=(decision == "risky"),
         )
 
-    def evaluate_choice(self, choice_id: str) -> ScenarioResult:
+    def evaluate_choice(self, choice_id):
         """
-        Evaluate a tablet button selection by choice_id.
-        Simpler and more reliable than keyword matching for button UI.
+        Evaluate a tablet button or spoken option selection by choice_id.
         """
-        selected = next((c for c in self.choices if c["id"] == choice_id), None)
+        selected = None
+        for choice in self.choices:
+            if choice["id"] == choice_id:
+                selected = choice
+                break
+
         if not selected:
             decision = "risky"
             employee_response = "unknown choice"
@@ -147,7 +148,7 @@ class BaseScenario(ABC):
             scenario_type=self.scenario_type,
             decision=decision,
             employee_response=employee_response,
-            confidence=1.0,  # Button selection is unambiguous
+            confidence=1.0,
             rag_query=self.rag_query,
             correction_needed=(decision == "risky"),
         )

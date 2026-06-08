@@ -1,5 +1,6 @@
 from typing import AsyncGenerator
 
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -54,10 +55,27 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 # Table initialisation — called at server startup
 
 
+async def ensure_schema_updates(conn) -> None:
+    """Apply additive schema updates for the current non-Alembic setup."""
+    await conn.execute(
+        text(
+            "ALTER TABLE training_sessions "
+            "ADD COLUMN IF NOT EXISTS user_id VARCHAR(36)"
+        )
+    )
+    await conn.execute(
+        text(
+            "CREATE INDEX IF NOT EXISTS ix_training_sessions_user_id "
+            "ON training_sessions (user_id)"
+        )
+    )
+
+
 async def init_db() -> None:
     # Import models here to ensure they are registered with Base.metadata
     import backend.database.models  # noqa: F401
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        await ensure_schema_updates(conn)
     print("[Database] Tables initialised successfully.")

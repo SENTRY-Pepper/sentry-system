@@ -2,9 +2,12 @@ package com.sentry.app.data.repository
 
 import com.sentry.app.core.navigation.UserRole
 import com.sentry.app.core.network.NetworkResult
+import com.sentry.app.core.network.SentryKtorClient
 import com.sentry.app.core.organisation.normaliseOrganisationId
 import com.sentry.app.data.local.TokenManager
+import com.sentry.app.data.models.request.UserLoginRequest
 import com.sentry.app.data.models.response.AuthState
+import com.sentry.app.data.remote.api.loginUser
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import timber.log.Timber
@@ -14,6 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class AuthRepository @Inject constructor(
     private val tokenManager: TokenManager,
+    private val ktorClient: SentryKtorClient,
 ) {
     val authStateFlow: Flow<AuthState> = combine(
         tokenManager.tokenFlow,
@@ -36,18 +40,47 @@ class AuthRepository @Inject constructor(
         return try {
             require(participantId.isNotBlank()) { "Participant ID is required" }
             require(pin.length >= 4) { "PIN must be at least 4 digits" }
-            require(role != UserRole.ADMIN.name.lowercase() || organisationId.isNotBlank()) {
-                "Organisation ID is required for admin login"
+            require(role == UserRole.TRAINEE.name.lowercase() || organisationId.isNotBlank()) {
+                "Organisation ID is required for manager/admin login"
             }
 
-            // local fake token — no backend auth endpoint in this study
-            val token = "${participantId}_${System.currentTimeMillis()}"
             val canonicalOrganisationId = normaliseOrganisationId(organisationId)
                 .ifEmpty { "SENTRY_STUDY" }
-            tokenManager.saveSession(token, participantId, role, canonicalOrganisationId)
+            when (
+                val loginResult = ktorClient.loginUser(
+                    UserLoginRequest(
+                        participantId = participantId.trim(),
+                        pin = pin.trim(),
+                        role = role,
+                        organisationId = canonicalOrganisationId,
+                    )
+                )
+            ) {
+                is NetworkResult.Success -> {
+                    val user = loginResult.data.user
+                    val resolvedOrg = user.organisationId ?: canonicalOrganisationId
+                    tokenManager.saveSession(
+                        token = loginResult.data.token,
+                        participantId = user.participantId,
+                        role = user.role,
+                        organisationId = resolvedOrg,
+                    )
 
-            Timber.i("AuthRepository: login — $participantId ($role)")
-            NetworkResult.Success(AuthState(true, participantId, role, canonicalOrganisationId))
+                    Timber.i("AuthRepository: backend login - ${user.participantId} (${user.role})")
+                    NetworkResult.Success(
+                        AuthState(
+                            isAuthenticated = true,
+                            participantId = user.participantId,
+                            role = user.role,
+                            organisationId = resolvedOrg,
+                        )
+                    )
+                }
+
+                is NetworkResult.Error -> loginResult
+                is NetworkResult.Exception -> loginResult
+                is NetworkResult.Loading -> NetworkResult.Loading
+            }
         } catch (e: IllegalArgumentException) {
             NetworkResult.Error(
                 message = e.message ?: "Validation failed"

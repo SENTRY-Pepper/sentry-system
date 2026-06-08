@@ -35,49 +35,66 @@ class AnalyticsViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(loading = true, error = "")
 
-            when (val result = analyticsRepository.listSessions()) {
+            when (val studyResult = analyticsRepository.getStudyAnalytics()) {
                 is NetworkResult.Success -> {
-                    val sessions = result.data
+                    val study = studyResult.data
                     _uiState.value = _uiState.value.copy(
-                        loading = false,
-                        sessions = sessions,
-                        avgAccuracy = avgPostScore(sessions),
-                        avgKnowledgeGain = avgKnowledgeGain(sessions),
-                        ragSessionCount = sessions.count { it.condition == "grounded" },
-                        baselineSessionCount = sessions.count { it.condition == "baseline" },
-                        ragAvgAccuracy = avgPostScore(sessions.filter { it.condition == "grounded" }),
-                        baselineAvgAccuracy = avgPostScore(sessions.filter { it.condition == "baseline" })
+                        totalSessions = study.totalSessions,
+                        groundedSessionCount = study.groundedSessions,
+                        baselineSessionCount = study.baselineSessions,
+                        groundedAccuracy = study.meanGroundingAccuracyGrounded ?: 0f,
+                        baselineAccuracy = study.meanGroundingAccuracyBaseline ?: 0f,
+                        groundedHallucination = study.meanHallucinationRateGrounded ?: 0f,
+                        baselineHallucination = study.meanHallucinationRateBaseline ?: 0f,
+                        groundingImprovement = study.meanGroundingImprovement ?: 0f,
+                        groundedKnowledgeGain = study.meanKnowledgeGainGrounded ?: 0f,
+                        baselineKnowledgeGain = study.meanKnowledgeGainBaseline ?: 0f,
                     )
                 }
 
                 is NetworkResult.Error -> {
                     _uiState.value = _uiState.value.copy(
                         loading = false,
-                        error = result.message
+                        error = studyResult.message
+                    )
+                    return@launch
+                }
+
+                is NetworkResult.Exception -> {
+                    _uiState.value = _uiState.value.copy(
+                        loading = false,
+                        error = studyResult.e.message ?: "unexpected error"
+                    )
+                    return@launch
+                }
+
+                is NetworkResult.Loading -> Unit
+            }
+
+            when (val sessionsResult = analyticsRepository.listSessions(limit = 100)) {
+                is NetworkResult.Success -> {
+                    _uiState.value = _uiState.value.copy(
+                        loading = false,
+                        sessions = sessionsResult.data,
+                    )
+                }
+
+                is NetworkResult.Error -> {
+                    _uiState.value = _uiState.value.copy(
+                        loading = false,
+                        error = sessionsResult.message
                     )
                 }
 
                 is NetworkResult.Exception -> {
                     _uiState.value = _uiState.value.copy(
                         loading = false,
-                        error = result.e.message ?: "unexpected error"
+                        error = sessionsResult.e.message ?: "unexpected error"
                     )
                 }
 
                 is NetworkResult.Loading -> Unit
             }
         }
-    }
-
-    private fun avgPostScore(sessions: List<SessionSummary>): Float {
-        val scored = sessions.mapNotNull { it.postAssessmentScore }
-        if (scored.isEmpty()) return 0f
-        return scored.average().toFloat()
-    }
-
-    private fun avgKnowledgeGain(sessions: List<SessionSummary>): Float {
-        val gained = sessions.mapNotNull { it.knowledgeGain }
-        if (gained.isEmpty()) return 0f
-        return gained.average().toFloat()
     }
 }
