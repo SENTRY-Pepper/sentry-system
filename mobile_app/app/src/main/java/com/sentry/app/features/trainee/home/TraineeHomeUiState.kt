@@ -8,4 +8,9 @@ data class TraineeHomeUiState(
     val sessionsCompleted: Int              = 0,
     val avgAccuracy:    String              = "--",
     val modulesLeft:    Int                 = 10,
+    val quickAskOpen:   Boolean             = false,
+    val quickAskTranscript: String          = "",
+    val quickAskResponse: String            = "",
+    val quickAskLoading: Boolean            = false,
+    val quickAskError: String               = "",
 )

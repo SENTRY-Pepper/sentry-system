@@ -177,17 +177,17 @@ async def login_user(body: UserLoginRequest, db: AsyncSession = Depends(get_db))
 )
 async def list_trainees(
     organisation_id: str = Query(...),
-    current_user: User = Depends(require_roles("manager")),
+    current_user: User = Depends(require_roles("admin", "manager")),
     db: AsyncSession = Depends(get_db),
 ):
     org_id = canonicalise(current_user.organisation_id or organisation_id)
     return await trainee_analytics(db, org_id)
 
 
-@router.post("/manager/trainees", response_model=UserResponse, tags=["Manager"])
+@router.post("/manager/trainees", response_model=UserResponse, tags=["Admin"])
 async def create_trainee(
     body: UserCreateRequest,
-    current_user: User = Depends(require_roles("manager")),
+    current_user: User = Depends(require_roles("admin")),
     db: AsyncSession = Depends(get_db),
 ):
     role = body.role.lower()
@@ -219,11 +219,11 @@ async def create_trainee(
 @router.patch(
     "/manager/trainees/{user_id}/deactivate",
     response_model=UserResponse,
-    tags=["Manager"],
+    tags=["Admin"],
 )
 async def deactivate_trainee(
     user_id: str,
-    current_user: User = Depends(require_roles("manager")),
+    current_user: User = Depends(require_roles("admin")),
     db: AsyncSession = Depends(get_db),
 ):
     user = await db.get(User, user_id)

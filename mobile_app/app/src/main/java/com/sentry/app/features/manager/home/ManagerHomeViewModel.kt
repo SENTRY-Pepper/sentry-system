@@ -3,7 +3,6 @@ package com.sentry.app.features.manager.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sentry.app.core.network.NetworkResult
-import com.sentry.app.data.models.request.UserCreateRequest
 import com.sentry.app.data.repository.AnalyticsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,94 +25,6 @@ class ManagerHomeViewModel @Inject constructor(
     fun refresh() {
         loadOverview()
         loadTrainees()
-    }
-
-    fun createTrainee(
-        participantId: String,
-        displayName: String,
-        pin: String,
-        department: String,
-        position: String,
-    ) {
-        if (participantId.isBlank() || displayName.isBlank() || pin.length < 4) {
-            _uiState.value = _uiState.value.copy(
-                error = "Participant ID, name, and a 4+ digit PIN are required.",
-                message = "",
-            )
-            return
-        }
-
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(saving = true, error = "", message = "")
-            val request = UserCreateRequest(
-                participantId = participantId.trim(),
-                displayName = displayName.trim(),
-                role = "trainee",
-                pin = pin.trim(),
-                organisationId = _uiState.value.organisationId,
-                department = department.trim().ifBlank { null },
-                position = position.trim().ifBlank { null },
-            )
-
-            when (val result = analyticsRepository.createTrainee(request)) {
-                is NetworkResult.Success -> {
-                    _uiState.value = _uiState.value.copy(
-                        saving = false,
-                        message = "Trainee account created.",
-                    )
-                    refresh()
-                }
-
-                is NetworkResult.Error -> {
-                    _uiState.value = _uiState.value.copy(
-                        saving = false,
-                        error = result.message,
-                    )
-                }
-
-                is NetworkResult.Exception -> {
-                    _uiState.value = _uiState.value.copy(
-                        saving = false,
-                        error = result.e.message ?: "Could not create trainee.",
-                    )
-                }
-
-                is NetworkResult.Loading -> Unit
-            }
-        }
-    }
-
-    fun deactivateTrainee(userId: String?) {
-        if (userId.isNullOrBlank()) return
-
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(saving = true, error = "", message = "")
-            when (val result = analyticsRepository.deactivateTrainee(userId)) {
-                is NetworkResult.Success -> {
-                    _uiState.value = _uiState.value.copy(
-                        saving = false,
-                        message = "Trainee account deactivated.",
-                    )
-                    refresh()
-                }
-
-                is NetworkResult.Error -> {
-                    _uiState.value = _uiState.value.copy(
-                        saving = false,
-                        error = result.message,
-                    )
-                }
-
-                is NetworkResult.Exception -> {
-                    _uiState.value = _uiState.value.copy(
-                        saving = false,
-                        error = result.e.message ?: "Could not deactivate trainee.",
-                    )
-                }
-
-                is NetworkResult.Loading -> Unit
-            }
-        }
     }
 
     private fun loadOverview() {

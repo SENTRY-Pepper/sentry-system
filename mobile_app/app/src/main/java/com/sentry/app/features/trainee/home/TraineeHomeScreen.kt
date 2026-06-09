@@ -1,5 +1,11 @@
 package com.sentry.app.features.trainee.home
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.speech.RecognizerIntent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,10 +29,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.window.Dialog
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -52,6 +64,16 @@ fun TraineeHomeScreen(
 ) {
     val state by vm.uiState.collectAsStateWithLifecycle()
     val scheme = MaterialTheme.colorScheme
+    val speechLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode != Activity.RESULT_OK) return@rememberLauncherForActivityResult
+        val spoken = result.data
+            ?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            ?.firstOrNull()
+            .orEmpty()
+        vm.submitQuickAsk(spoken)
+    }
 
     LaunchedEffect(Unit) {
         vm.refreshProfile()
@@ -72,6 +94,7 @@ fun TraineeHomeScreen(
     ) {
         TraineeTopBar(
             participantId = state.participantId,
+            onOpenChat = { navController.navigateSingleTop("chat") },
             onOpenSettings = { navController.navigateSingleTop("settings") },
         )
 
@@ -86,7 +109,14 @@ fun TraineeHomeScreen(
                     .padding(vertical = 10.dp)
                     .clip(RoundedCornerShape(13.dp))
                     .background(scheme.primary)
-                    .clickable { navController.navigateSingleTop("chat") }
+                    .clickable {
+                        vm.openQuickAsk()
+                        try {
+                            speechLauncher.launch(quickAskSpeechIntent())
+                        } catch (_: ActivityNotFoundException) {
+                            vm.quickAskSpeechUnavailable()
+                        }
+                    }
                     .padding(horizontal = 20.dp, vertical = 17.dp),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -155,6 +185,24 @@ fun TraineeHomeScreen(
                 )
             }
         }
+
+        if (state.quickAskOpen) {
+            QuickAskDialog(
+                state = state,
+                onDismiss = vm::closeQuickAsk,
+                onTalk = {
+                    try {
+                        speechLauncher.launch(quickAskSpeechIntent())
+                    } catch (_: ActivityNotFoundException) {
+                        vm.quickAskSpeechUnavailable()
+                    }
+                },
+                onOpenChat = {
+                    vm.closeQuickAsk()
+                    navController.navigateSingleTop("chat")
+                },
+            )
+        }
     }
 }
 
@@ -165,9 +213,19 @@ private val TrafficAmber = Color(0xFFFFC107)
 private val TrafficRed = Color(0xFFF44336)
 private val ProgressTrack = Color(0xFFE0E0E0)
 
+private fun quickAskSpeechIntent(): Intent =
+    Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+        putExtra(
+            RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+            RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
+        )
+        putExtra(RecognizerIntent.EXTRA_PROMPT, "Ask Pepper your cybersecurity question")
+    }
+
 @Composable
 private fun TraineeTopBar(
     participantId: String,
+    onOpenChat: () -> Unit,
     onOpenSettings: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
@@ -190,7 +248,8 @@ private fun TraineeTopBar(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(Color.White.copy(alpha = 0.25f)),
+                    .background(Color.White.copy(alpha = 0.25f))
+                    .clickable { onOpenChat() },
                 contentAlignment = Alignment.Center,
             ) {
                 SentryText(
@@ -236,6 +295,98 @@ private fun TraineeTopBar(
                 tint = Color.White,
                 modifier = Modifier.size(26.dp),
             )
+        }
+    }
+}
+
+@Composable
+private fun QuickAskDialog(
+    state: TraineeHomeUiState,
+    onDismiss: () -> Unit,
+    onTalk: () -> Unit,
+    onOpenChat: () -> Unit,
+) {
+    val scheme = MaterialTheme.colorScheme
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            colors = CardDefaults.cardColors(containerColor = scheme.surface),
+            shape = RoundedCornerShape(18.dp),
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(92.dp)
+                        .clip(CircleShape)
+                        .background(scheme.primary)
+                        .clickable(enabled = !state.quickAskLoading) { onTalk() },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    SentryText(
+                        text = "Talk",
+                        size = SentryTextSize.Md,
+                        weight = FontWeight.Bold,
+                        color = Color.White,
+                        align = SentryTextAlign.Center,
+                    )
+                }
+
+                if (state.quickAskTranscript.isNotBlank()) {
+                    SentryText(
+                        text = state.quickAskTranscript,
+                        size = SentryTextSize.Md,
+                        color = scheme.onBackground,
+                        align = SentryTextAlign.Center,
+                        maxLines = 4,
+                    )
+                } else {
+                    SentryText(
+                        text = "Ask Pepper a cybersecurity question",
+                        size = SentryTextSize.Md,
+                        color = scheme.outline,
+                        align = SentryTextAlign.Center,
+                    )
+                }
+
+                when {
+                    state.quickAskLoading -> CircularProgressIndicator(color = scheme.primary)
+                    state.quickAskError.isNotBlank() -> SentryText(
+                        text = state.quickAskError,
+                        size = SentryTextSize.Sm,
+                        color = TrafficRed,
+                        align = SentryTextAlign.Center,
+                    )
+                    state.quickAskResponse.isNotBlank() -> SentryText(
+                        text = state.quickAskResponse,
+                        size = SentryTextSize.Sm,
+                        color = scheme.onBackground,
+                        align = SentryTextAlign.Center,
+                        maxLines = 8,
+                    )
+                }
+
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    TextButton(onClick = onDismiss) {
+                        SentryText(
+                            text = "Close",
+                            size = SentryTextSize.Sm,
+                            color = scheme.primary,
+                        )
+                    }
+                    Button(onClick = onOpenChat) {
+                        SentryText(
+                            text = "Open Chat",
+                            size = SentryTextSize.Sm,
+                            color = Color.White,
+                        )
+                    }
+                }
+            }
         }
     }
 }

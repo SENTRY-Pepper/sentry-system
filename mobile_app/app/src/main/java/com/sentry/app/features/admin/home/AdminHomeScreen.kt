@@ -22,14 +22,19 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -38,6 +43,7 @@ import com.sentry.app.core.navigation.navigateSingleTop
 import com.sentry.app.core.ui.components.texts.SentryText
 import com.sentry.app.core.ui.models.SentryTextSize
 import com.sentry.app.data.models.response.SessionSummary
+import com.sentry.app.data.models.response.TraineeAnalytics
 import com.sentry.app.core.ui.theme.LocalBrandColors
 
 @Composable
@@ -85,6 +91,9 @@ fun AdminHomeScreen(
                         ErrorCard(message = state.error, onRetry = { vm.loadDashboard() })
                     }
                 }
+                if (state.message.isNotEmpty()) {
+                    item { StatusCard(message = state.message) }
+                }
 
                 if (!state.loading && state.error.isEmpty()) {
                     item { ResearchCountCard(state = state) }
@@ -126,6 +135,39 @@ fun AdminHomeScreen(
                     }
                 }
 
+                item {
+                    AdminAccountCard(
+                        saving = state.saving,
+                        onCreate = vm::createTrainee,
+                    )
+                }
+
+                item {
+                    SentryText(
+                        text = "Trainee Accounts",
+                        size = SentryTextSize.Md,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+
+                if (state.trainees.isEmpty() && !state.loading) {
+                    item {
+                        SentryText(
+                            text = "No trainee accounts yet.",
+                            size = SentryTextSize.Sm,
+                            color = MaterialTheme.colorScheme.outline
+                        )
+                    }
+                } else {
+                    items(state.trainees) { trainee ->
+                        AdminTraineeCard(
+                            trainee = trainee,
+                            saving = state.saving,
+                            onDeactivate = { vm.deactivateTrainee(trainee.userId) },
+                        )
+                    }
+                }
+
                 if (state.recentSessions.isEmpty() && !state.loading) {
                     item {
                         SentryText(
@@ -144,6 +186,165 @@ fun AdminHomeScreen(
             }
         }
     }
+}
+
+@Composable
+private fun AdminAccountCard(
+    saving: Boolean,
+    onCreate: (String, String, String, String, String) -> Unit,
+) {
+    var participantId by remember { mutableStateOf("") }
+    var displayName by remember { mutableStateOf("") }
+    var pin by remember { mutableStateOf("") }
+    var department by remember { mutableStateOf("") }
+    var position by remember { mutableStateOf("") }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            SentryText(
+                text = "Create Trainee Account",
+                size = SentryTextSize.Sm,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            CompactField("Participant ID", participantId) { participantId = it }
+            CompactField("Name", displayName) { displayName = it }
+            CompactField("PIN", pin, true) { pin = it }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                CompactField("Department", department, modifier = Modifier.weight(1f)) {
+                    department = it
+                }
+                CompactField("Position", position, modifier = Modifier.weight(1f)) {
+                    position = it
+                }
+            }
+            Button(
+                enabled = !saving,
+                onClick = {
+                    onCreate(participantId, displayName, pin, department, position)
+                    participantId = ""
+                    displayName = ""
+                    pin = ""
+                    department = ""
+                    position = ""
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                SentryText(
+                    text = if (saving) "Saving..." else "Create Account",
+                    size = SentryTextSize.Sm,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AdminTraineeCard(
+    trainee: TraineeAnalytics,
+    saving: Boolean,
+    onDeactivate: () -> Unit,
+) {
+    val brandColors = LocalBrandColors.current
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    SentryText(
+                        text = trainee.participantId,
+                        size = SentryTextSize.Sm,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    SentryText(
+                        text = "${trainee.displayName} - ${trainee.department ?: "Unassigned"}",
+                        size = SentryTextSize.Xs,
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                }
+                SentryText(
+                    text = if (trainee.isActive) "active" else "inactive",
+                    size = SentryTextSize.Xs,
+                    color = if (trainee.isActive) brandColors.green else brandColors.red
+                )
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                MetricCell(
+                    modifier = Modifier.weight(1f),
+                    label = "Score",
+                    value = "${"%.0f".format(trainee.averageScore ?: 0f)}%",
+                )
+                MetricCell(
+                    modifier = Modifier.weight(1f),
+                    label = "Sessions",
+                    value = trainee.completedSessions.toString(),
+                )
+                MetricCell(
+                    modifier = Modifier.weight(1f),
+                    label = "Risks",
+                    value = trainee.riskyAnswers.toString(),
+                )
+            }
+            if (trainee.isActive) {
+                Button(
+                    enabled = !saving,
+                    onClick = onDeactivate,
+                    colors = ButtonDefaults.outlinedButtonColors()
+                ) {
+                    SentryText(
+                        text = "Deactivate",
+                        size = SentryTextSize.Xs,
+                        color = brandColors.red
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CompactField(
+    label: String,
+    value: String,
+    isPassword: Boolean = false,
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit,
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = {
+            SentryText(
+                text = label,
+                size = SentryTextSize.Xs,
+                color = MaterialTheme.colorScheme.outline
+            )
+        },
+        visualTransformation = if (isPassword) {
+            PasswordVisualTransformation()
+        } else {
+            androidx.compose.ui.text.input.VisualTransformation.None
+        },
+        singleLine = true,
+        modifier = modifier.fillMaxWidth()
+    )
 }
 
 @Composable
@@ -397,6 +598,23 @@ private fun ErrorCard(message: String, onRetry: () -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun StatusCard(message: String) {
+    val brandColors = LocalBrandColors.current
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = brandColors.green.copy(alpha = 0.1f)),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        SentryText(
+            text = message,
+            size = SentryTextSize.Sm,
+            color = brandColors.green,
+            modifier = Modifier.padding(12.dp)
+        )
     }
 }
 

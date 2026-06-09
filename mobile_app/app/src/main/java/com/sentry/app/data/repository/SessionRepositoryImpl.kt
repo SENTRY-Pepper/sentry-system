@@ -47,8 +47,14 @@ class SessionRepositoryImpl @Inject constructor(
         preAssessmentScore: Float?,
         postAssessmentScore: Float?,
         durationSeconds: Int?,
-    ): NetworkResult<SessionEndResponse> =
-        ktorClient.endSession(
+    ): NetworkResult<SessionEndResponse> {
+        if (sessionId.isOfflineSessionId()) {
+            Timber.i("SessionRepository: skipping backend end for local offline session")
+            return NetworkResult.Exception(
+                IllegalStateException("Session saved locally only")
+            )
+        }
+        return ktorClient.endSession(
             SessionEndRequest(
                 sessionId = sessionId,
                 preAssessmentScore = preAssessmentScore,
@@ -56,11 +62,18 @@ class SessionRepositoryImpl @Inject constructor(
                 durationSeconds = durationSeconds,
             )
         )
+    }
 
     override suspend fun getSession(
         sessionId: String,
-    ): NetworkResult<SessionSummary> =
-        ktorClient.getSession(sessionId)
+    ): NetworkResult<SessionSummary> {
+        if (sessionId.isOfflineSessionId()) {
+            return NetworkResult.Exception(
+                IllegalStateException("Offline session exists only on this device")
+            )
+        }
+        return ktorClient.getSession(sessionId)
+    }
 
     // fire-and-forget — launched on IO, failure is logged but never surfaced to UI
     override fun logInteraction(
@@ -74,6 +87,10 @@ class SessionRepositoryImpl @Inject constructor(
         aiLatencyMs: Float?,
         aiSources: String?,
     ) {
+        if (sessionId.isOfflineSessionId()) {
+            Timber.i("SessionRepository: skipping backend interaction for local offline session")
+            return
+        }
         CoroutineScope(Dispatchers.IO).launch {
             val result = ktorClient.logInteraction(
                 InteractionLogRequest(
@@ -93,4 +110,6 @@ class SessionRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    private fun String.isOfflineSessionId(): Boolean = startsWith("offline-")
 }

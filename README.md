@@ -2,8 +2,8 @@
 
 SENTRY is an AI-powered cybersecurity training research prototype that combines
 a FastAPI middleware, a custom Retrieval-Augmented Generation (RAG) pipeline,
-PostgreSQL analytics storage, an Android trainee/admin app, and a Pepper robot
-interface.
+PostgreSQL analytics storage, an Android trainee/manager/admin app, and a
+Pepper robot interface.
 
 The project investigates whether RAG-grounded responses can reduce
 hallucination and improve factual reliability in an embodied cybersecurity
@@ -37,10 +37,15 @@ SENTRY currently supports:
 - Android Jetpack Compose app with trainee and admin flows.
 - Admin and Manager role split: Admin for research analytics, Manager for
   organisation training operations.
-- Backend Organisation/User model with trainee account management and
-  organisation analytics.
+- Admin owns trainee account creation/deactivation so identity-bearing account
+  data is not exposed to Managers.
+- Backend Organisation/User model with Admin trainee account management and
+  Manager organisation analytics.
 - Android OWASP Top 10 curriculum with two A-D questions per topic, local
   saved feedback, module breaks, and trainee progress tracking.
+- Local trainee progress is scoped by participant and organisation on the
+  device, so new trainee accounts do not inherit previous local module/session
+  state.
 - Backend-backed Android authentication with role and organisation persistence.
 - Organisation analytics keyed by canonical organisation ID strings.
 - Pepper robot interface with scenario orchestration and simulation support.
@@ -188,6 +193,8 @@ The trainee session flow is now based on the OWASP Top 10:
 - The session still logs interactions and completes the session through the
   backend so organisation analytics use real completion and score data.
 - Open-ended grounded RAG remains available through the chat screen.
+- Chat supports typed questions and tap-to-talk speech recognition. Recognized
+  speech is sent through the same grounded RAG endpoint as typed questions.
 
 ### Offline Behavior
 
@@ -205,6 +212,9 @@ Offline limitations:
   questions, and cross-device reporting require the backend.
 - Offline session results are stored locally for the trainee view but are not
   uploaded later yet.
+- Offline session IDs are local-only. The Android app does not send
+  `offline-*` interactions or completion calls to the backend; the backend also
+  returns a clean not-found response for unknown session IDs.
 
 ## Authentication, Roles, And Organisation Flow
 
@@ -219,8 +229,10 @@ Authentication is backend-backed but still prototype-grade:
 
 The backend now stores organisations and users:
 
-- Admin: research-wide grounded-vs-baseline analytics.
-- Manager: organisation trainee management and performance analytics.
+- Admin: research-wide grounded-vs-baseline analytics and trainee account
+  creation/deactivation.
+- Manager: anonymized organisation performance analytics by trainee ID,
+  department, and weakness area.
 - Trainee: learning sessions and personal progress.
 
 Android normalizes organisation names before analytics calls:
@@ -394,8 +406,11 @@ login details, latency controls, and physical test checklist.
 The Android trainee session also contains a Pepper-style interaction mode for
 tablet use: Android TextToSpeech reads each OWASP scenario and the A-D options,
 Android speech recognition accepts a spoken A/B/C/D answer, and the app reads
-the saved feedback. This supports physical Pepper/tablet testing without
-calling the grounded RAG API for fixed curriculum feedback.
+the saved feedback. The current Android chat/home quick-ask speech path uses
+Android speech recognition as an interim implementation. The intended Whisper
+path should be backend-mediated: capture audio on Android, send it to
+middleware, transcribe with Whisper/OpenAI audio transcription, then pass the
+transcript into the grounded RAG endpoint.
 
 Manager-controlled curriculum authoring is planned around organisation-owned
 raw documents and the existing RAG ingestion path. The current implemented
@@ -442,30 +457,35 @@ Tracked metrics include:
 
 Evaluation tooling lives under `evaluation/`.
 
-## Current Roadmap
+## Remaining Implementation Audit
 
-### Phase 5: Production OWASP Training System
+The completed phase checklist has been removed from this README. Current
+remaining work is tracked by capability area:
 
-- Implemented in the Android trainee flow with local OWASP modules and saved
-  answer feedback.
-- Remaining follow-up: verify on API 23/Pepper tablet and decide whether
-  detailed per-question history should move from local storage to backend
-  persistence.
+- Security: signed/expiring tokens, token revocation, salted password hashing,
+  login rate limiting, and broader endpoint scoping review.
+- Architecture: Alembic migrations and removal of schema evolution from startup
+  helpers.
+- Functionality: Manager-controlled organisation content ingestion/authoring,
+  server-side per-question progress if cross-device history is required, and
+  offline result sync.
+- Mobile/Pepper: API 23 emulator validation, Pepper tablet validation,
+  microphone/speech-recognition failure handling, and physical HRI latency
+  testing.
+- RAG operations: reproducible vector-store generation, clearer RAG readiness
+  diagnostics, and rate-limit/cache handling for live generation.
+- Analytics: pagination, date filters, query profiling/indexes, trend snapshots,
+  and Admin export/report generation.
+- Design: route construction standardization, continued component cleanup, and
+  screen-size checks on target hardware.
+- CI/CD: Android CI, Python path filters, explicit live-test separation, and
+  documented pilot deployment profiles.
 
-### Phase 6: Organisation Analytics System
+The detailed audit is maintained in:
 
-- Implemented additive Organisation/User models.
-- Implemented Admin research analytics vs Manager organisation analytics split.
-- Implemented Manager trainee create/deactivate flow.
-- Implemented organisation overview, trainee performance, department
-  performance, and OWASP weakness analytics from real session activity.
-- Remaining: signed/expiring tokens, stronger password hashing, wider endpoint
-  authorization, and richer historical user trend persistence.
-
-### Phase 7: Final Review
-
-- Review architecture, mobile, backend, RAG, security, scalability, and
-  technical debt.
+```text
+SENTRY_skills/sentry-skill/references/remaining_implementation_audit.md
+```
 
 ## Development Guardrails
 
