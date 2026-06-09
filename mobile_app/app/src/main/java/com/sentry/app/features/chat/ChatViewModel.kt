@@ -24,7 +24,11 @@ class ChatViewModel @Inject constructor(
     }
 
     fun sendMessage() {
-        val text = _uiState.value.inputText.trim()
+        sendText(_uiState.value.inputText)
+    }
+
+    fun sendText(rawText: String) {
+        val text = rawText.trim()
         if (text.isBlank() || _uiState.value.loading) return
 
         val userMsg = ChatMessage(text = text, isUser = true)

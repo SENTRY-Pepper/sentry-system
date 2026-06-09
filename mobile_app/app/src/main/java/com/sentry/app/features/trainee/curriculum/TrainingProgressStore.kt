@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.sentry.app.data.local.TokenManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
@@ -45,59 +46,47 @@ data class ModuleResult(
 @Singleton
 class TrainingProgressStore @Inject constructor(
     @param:ApplicationContext private val context: Context,
+    private val tokenManager: TokenManager,
 ) {
-    companion object {
-        private val KEY_COMPLETED_MODULES = stringSetPreferencesKey("completed_modules")
-        private val KEY_SESSIONS_COMPLETED = intPreferencesKey("sessions_completed")
-        private val KEY_AVERAGE_ACCURACY = floatPreferencesKey("average_accuracy")
-        private val KEY_LAST_SESSION_ID = stringPreferencesKey("last_session_id")
-        private val KEY_LAST_CORRECT = intPreferencesKey("last_correct")
-        private val KEY_LAST_TOTAL = intPreferencesKey("last_total")
-        private val KEY_LAST_POST_SCORE = floatPreferencesKey("last_post_score")
-        private val KEY_LAST_DURATION = intPreferencesKey("last_duration")
-        private val KEY_LAST_MISSED = stringPreferencesKey("last_missed")
-        private val KEY_ACTIVE_SESSION_ID = stringPreferencesKey("active_session_id")
-        private val KEY_LAST_MODULE_ID = stringPreferencesKey("last_module_id")
-        private val KEY_MODULE_RESULTS = stringPreferencesKey("module_results")
-    }
-
     suspend fun completedModuleIds(): Set<String> {
         val prefs = context.trainingProgressDataStore.data.first()
-        return prefs[KEY_COMPLETED_MODULES] ?: emptySet()
+        return prefs[keys().completedModules] ?: emptySet()
     }
 
     suspend fun sessionsCompleted(): Int {
         val prefs = context.trainingProgressDataStore.data.first()
-        return prefs[KEY_SESSIONS_COMPLETED] ?: 0
+        return prefs[keys().sessionsCompleted] ?: 0
     }
 
     suspend fun averageAccuracy(): Float? {
         val prefs = context.trainingProgressDataStore.data.first()
-        return prefs[KEY_AVERAGE_ACCURACY]
+        return prefs[keys().averageAccuracy]
     }
 
     suspend fun activeSessionId(): String? {
         val prefs = context.trainingProgressDataStore.data.first()
-        return prefs[KEY_ACTIVE_SESSION_ID]
+        return prefs[keys().activeSessionId]
     }
 
     suspend fun lastModuleId(): String? {
         val prefs = context.trainingProgressDataStore.data.first()
-        return prefs[KEY_LAST_MODULE_ID]
+        return prefs[keys().lastModuleId]
     }
 
     suspend fun moduleResults(): Map<String, ModuleResult> {
         val prefs = context.trainingProgressDataStore.data.first()
-        return decodeModuleResults(prefs[KEY_MODULE_RESULTS])
+        return decodeModuleResults(prefs[keys().moduleResults])
     }
 
     suspend fun setActiveSession(sessionId: String) {
+        val keys = keys()
         context.trainingProgressDataStore.edit { prefs ->
-            prefs[KEY_ACTIVE_SESSION_ID] = sessionId
+            prefs[keys.activeSessionId] = sessionId
         }
     }
 
     suspend fun recordModuleResult(moduleId: String, correctCount: Int, totalCount: Int) {
+        val keys = keys()
         val current = moduleResults().toMutableMap()
         current[moduleId] = ModuleResult(
             moduleId = moduleId,
@@ -105,21 +94,22 @@ class TrainingProgressStore @Inject constructor(
             totalCount = totalCount,
         )
         context.trainingProgressDataStore.edit { prefs ->
-            prefs[KEY_MODULE_RESULTS] = encodeModuleResults(current.values)
-            prefs[KEY_LAST_MODULE_ID] = moduleId
-            prefs[KEY_COMPLETED_MODULES] = (prefs[KEY_COMPLETED_MODULES] ?: emptySet()) + moduleId
+            prefs[keys.moduleResults] = encodeModuleResults(current.values)
+            prefs[keys.lastModuleId] = moduleId
+            prefs[keys.completedModules] = (prefs[keys.completedModules] ?: emptySet()) + moduleId
         }
     }
 
     suspend fun lastResult(sessionId: String): LocalSessionResult? {
+        val keys = keys()
         val prefs = context.trainingProgressDataStore.data.first()
-        if (prefs[KEY_LAST_SESSION_ID] != sessionId) return null
+        if (prefs[keys.lastSessionId] != sessionId) return null
 
-        val total = prefs[KEY_LAST_TOTAL] ?: return null
-        val correct = prefs[KEY_LAST_CORRECT] ?: 0
-        val postScore = prefs[KEY_LAST_POST_SCORE] ?: 0f
-        val duration = prefs[KEY_LAST_DURATION] ?: 0
-        val missed = prefs[KEY_LAST_MISSED]
+        val total = prefs[keys.lastTotal] ?: return null
+        val correct = prefs[keys.lastCorrect] ?: 0
+        val postScore = prefs[keys.lastPostScore] ?: 0f
+        val duration = prefs[keys.lastDuration] ?: 0
+        val missed = prefs[keys.lastMissed]
             ?.split(",")
             ?.filter { it.isNotBlank() }
             ?: emptyList()
@@ -135,10 +125,11 @@ class TrainingProgressStore @Inject constructor(
     }
 
     suspend fun recordSession(result: LocalSessionResult, completedModuleIds: Set<String>) {
+        val keys = keys()
         val currentSessions = sessionsCompleted()
         val currentAverage = averageAccuracy()
         val prefsSnapshot = context.trainingProgressDataStore.data.first()
-        val isSameSession = prefsSnapshot[KEY_LAST_SESSION_ID] == result.sessionId
+        val isSameSession = prefsSnapshot[keys.lastSessionId] == result.sessionId
         val newSessionCount = if (isSameSession) currentSessions else currentSessions + 1
         val newAverage = when {
             isSameSession -> currentAverage ?: result.postScore
@@ -147,16 +138,48 @@ class TrainingProgressStore @Inject constructor(
         }
 
         context.trainingProgressDataStore.edit { prefs ->
-            prefs[KEY_COMPLETED_MODULES] = completedModuleIds
-            prefs[KEY_SESSIONS_COMPLETED] = newSessionCount
-            prefs[KEY_AVERAGE_ACCURACY] = newAverage
-            prefs[KEY_LAST_SESSION_ID] = result.sessionId
-            prefs[KEY_LAST_CORRECT] = result.correctCount
-            prefs[KEY_LAST_TOTAL] = result.totalCount
-            prefs[KEY_LAST_POST_SCORE] = result.postScore
-            prefs[KEY_LAST_DURATION] = result.durationSeconds
-            prefs[KEY_LAST_MISSED] = result.missedModuleIds.joinToString(",")
+            prefs[keys.completedModules] = completedModuleIds
+            prefs[keys.sessionsCompleted] = newSessionCount
+            prefs[keys.averageAccuracy] = newAverage
+            prefs[keys.lastSessionId] = result.sessionId
+            prefs[keys.lastCorrect] = result.correctCount
+            prefs[keys.lastTotal] = result.totalCount
+            prefs[keys.lastPostScore] = result.postScore
+            prefs[keys.lastDuration] = result.durationSeconds
+            prefs[keys.lastMissed] = result.missedModuleIds.joinToString(",")
         }
+    }
+
+    private fun keys(): ProgressKeys {
+        val participant = tokenManager.getParticipantId()
+            ?.ifBlank { null }
+            ?: "anonymous"
+        val organisation = tokenManager.getOrganisationId()
+            ?.ifBlank { null }
+            ?: "no_org"
+        val owner = "${participant}_$organisation"
+            .lowercase()
+            .replace(Regex("[^a-z0-9_]+"), "_")
+            .trim('_')
+            .ifBlank { "anonymous" }
+        return ProgressKeys(owner)
+    }
+
+    private data class ProgressKeys(
+        val owner: String,
+    ) {
+        val completedModules = stringSetPreferencesKey("${owner}_completed_modules")
+        val sessionsCompleted = intPreferencesKey("${owner}_sessions_completed")
+        val averageAccuracy = floatPreferencesKey("${owner}_average_accuracy")
+        val lastSessionId = stringPreferencesKey("${owner}_last_session_id")
+        val lastCorrect = intPreferencesKey("${owner}_last_correct")
+        val lastTotal = intPreferencesKey("${owner}_last_total")
+        val lastPostScore = floatPreferencesKey("${owner}_last_post_score")
+        val lastDuration = intPreferencesKey("${owner}_last_duration")
+        val lastMissed = stringPreferencesKey("${owner}_last_missed")
+        val activeSessionId = stringPreferencesKey("${owner}_active_session_id")
+        val lastModuleId = stringPreferencesKey("${owner}_last_module_id")
+        val moduleResults = stringPreferencesKey("${owner}_module_results")
     }
 
     private fun decodeModuleResults(raw: String?): Map<String, ModuleResult> =

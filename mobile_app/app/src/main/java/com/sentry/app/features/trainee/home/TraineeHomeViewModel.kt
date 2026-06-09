@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sentry.app.core.network.NetworkResult
 import com.sentry.app.data.local.TokenManager
+import com.sentry.app.data.repository.QueryRepository
 import com.sentry.app.data.repository.SessionRepository
 import com.sentry.app.features.trainee.curriculum.OwaspCurriculum
 import com.sentry.app.features.trainee.curriculum.TrainingProgressStore
@@ -31,6 +32,7 @@ fun defaultModules() = listOf(
 @HiltViewModel
 class TraineeHomeViewModel @Inject constructor(
     private val sessionRepository: SessionRepository,
+    private val queryRepository: QueryRepository,
     private val tokenManager: TokenManager,
     private val progressStore: TrainingProgressStore,
 ) : ViewModel() {
@@ -96,9 +98,11 @@ class TraineeHomeViewModel @Inject constructor(
             ?: OwaspCurriculum.modules.first().id
 
         progressStore.activeSessionId()?.let { existingSessionId ->
-            _uiState.value = _uiState.value.copy(loading = false)
-            _events.emit(TraineeHomeEvent.NavigateToSession(existingSessionId, targetModuleId))
-            return@launch
+            if (!existingSessionId.startsWith("offline-")) {
+                _uiState.value = _uiState.value.copy(loading = false)
+                _events.emit(TraineeHomeEvent.NavigateToSession(existingSessionId, targetModuleId))
+                return@launch
+            }
         }
 
         // SessionRepository reads participantId + organisationId from TokenManager internally
@@ -121,6 +125,61 @@ class TraineeHomeViewModel @Inject constructor(
                 _events.emit(TraineeHomeEvent.NavigateToSession(offlineSessionId, targetModuleId))
             }
             is NetworkResult.Loading -> Unit
+        }
+    }
+
+    fun openQuickAsk() {
+        _uiState.value = _uiState.value.copy(
+            quickAskOpen = true,
+            quickAskTranscript = "",
+            quickAskResponse = "",
+            quickAskError = "",
+        )
+    }
+
+    fun closeQuickAsk() {
+        _uiState.value = _uiState.value.copy(quickAskOpen = false)
+    }
+
+    fun quickAskSpeechUnavailable() {
+        _uiState.value = _uiState.value.copy(
+            quickAskOpen = true,
+            quickAskLoading = false,
+            quickAskError = "Speech recognition is not available on this device.",
+        )
+    }
+
+    fun submitQuickAsk(text: String) {
+        val question = text.trim()
+        if (question.isBlank() || _uiState.value.quickAskLoading) return
+
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                quickAskOpen = true,
+                quickAskTranscript = question,
+                quickAskResponse = "",
+                quickAskError = "",
+                quickAskLoading = true,
+            )
+
+            when (val result = queryRepository.groundedQuery(query = question, scenarioId = null)) {
+                is NetworkResult.Success -> _uiState.value = _uiState.value.copy(
+                    quickAskLoading = false,
+                    quickAskResponse = result.data.response,
+                )
+
+                is NetworkResult.Error -> _uiState.value = _uiState.value.copy(
+                    quickAskLoading = false,
+                    quickAskError = result.message,
+                )
+
+                is NetworkResult.Exception -> _uiState.value = _uiState.value.copy(
+                    quickAskLoading = false,
+                    quickAskError = result.e.message ?: "Could not reach SENTRY middleware.",
+                )
+
+                is NetworkResult.Loading -> Unit
+            }
         }
     }
 }

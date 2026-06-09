@@ -196,6 +196,15 @@ async def log_interaction(
     Logs the decision, response time, correction loops, and
     AI latency for behavioural analytics.
     """
+    session = await db.scalar(
+        select(TrainingSession.id).where(TrainingSession.id == body.session_id)
+    )
+    if not session:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Session '{body.session_id}' not found.",
+        )
+
     interaction = ScenarioInteraction(
         session_id=body.session_id,
         scenario_id=body.scenario_id,
