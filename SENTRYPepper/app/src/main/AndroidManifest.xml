@@ -21,7 +21,6 @@
         <activity
             android:name="com.sentry.app.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.SENTRY"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

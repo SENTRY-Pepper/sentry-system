@@ -55,7 +55,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            manifestPlaceholders["usesCleartextTraffic"] = "false"
+            // Pepper prototype sessions run against LAN middleware over HTTP.
+            manifestPlaceholders["usesCleartextTraffic"] = "true"
         }
     }
     compileOptions {

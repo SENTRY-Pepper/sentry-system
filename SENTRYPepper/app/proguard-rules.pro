@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Ktor/OkHttp transitively references SLF4J's optional static binding. Android
+# logging is handled through Timber in this app, so the binding is not required.
+-dontwarn org.slf4j.impl.StaticLoggerBinder
