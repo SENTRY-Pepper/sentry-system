@@ -22,7 +22,22 @@ android {
         buildConfigField(
             "String",
             "MIDDLEWARE_BASE_URL",
-            "\"${project.findProperty("MIDDLEWARE_URL") ?: "http://10.0.2.2:8000"}\""
+            "\"${project.findProperty("MIDDLEWARE_URL") ?: "http://10.5.17.53:8000"}\""
+        )
+        buildConfigField(
+            "boolean",
+            "PEPPER_KIOSK_MODE",
+            "${project.findProperty("PEPPER_KIOSK_MODE") ?: "true"}"
+        )
+        buildConfigField(
+            "String",
+            "PEPPER_PARTICIPANT_ID",
+            "\"${project.findProperty("PEPPER_PARTICIPANT_ID") ?: "PEPPER_P001"}\""
+        )
+        buildConfigField(
+            "String",
+            "PEPPER_ORGANISATION_ID",
+            "\"${project.findProperty("PEPPER_ORGANISATION_ID") ?: "SENTRY_STUDY"}\""
         )
     }
 

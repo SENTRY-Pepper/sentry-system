@@ -49,7 +49,10 @@ fun SplashScreen(
     LaunchedEffect(Unit) {
         alpha.animateTo(1f, animationSpec = tween(600))
         delay(2500)
-        if (vm.isAuthenticated()) {
+        if (vm.isPepperKioskMode()) {
+            vm.enablePepperKioskSession()
+            navController.navigateAndClear("traineeHome", popUpToRoute = "splash")
+        } else if (vm.isAuthenticated()) {
             val route = when (vm.getRole()) {
                 UserRole.ADMIN -> "adminHome"
                 UserRole.MANAGER -> "managerHome"
