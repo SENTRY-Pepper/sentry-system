@@ -40,6 +40,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -62,6 +63,7 @@ import com.sentry.app.R
 import com.sentry.app.core.ui.components.texts.SentryText
 import com.sentry.app.core.ui.models.SentryTextAlign
 import com.sentry.app.core.ui.models.SentryTextSize
+import com.sentry.app.pepper.PepperRobotBridge
 
 @Composable
 fun ChatScreen(
@@ -91,9 +93,18 @@ fun ChatScreen(
         focusManager.clearFocus(force = true)
     }
 
+    DisposableEffect(Unit) {
+        onDispose {
+            PepperRobotBridge.stopSpeaking()
+        }
+    }
+
     LaunchedEffect(state.messages.size) {
         if (state.messages.isNotEmpty()) {
             listState.animateScrollToItem(state.messages.lastIndex)
+            state.messages.lastOrNull()
+                ?.takeIf { !it.isUser && it.text.isNotBlank() }
+                ?.let { PepperRobotBridge.say(it.text) }
         }
     }
 
@@ -104,7 +115,10 @@ fun ChatScreen(
             .imePadding(),
     ) {
         ChatTopBar(
-            onBack = { navController.navigateUp() },
+            onBack = {
+                PepperRobotBridge.stopSpeaking()
+                navController.navigateUp()
+            },
         )
 
         Box(
@@ -118,6 +132,7 @@ fun ChatScreen(
                 enabled = !state.loading,
                 onClick = {
                     focusManager.clearFocus(force = true)
+                    PepperRobotBridge.stopSpeaking()
                     try {
                         speechLauncher.launch(chatSpeechIntent())
                     } catch (_: ActivityNotFoundException) {
@@ -168,6 +183,7 @@ fun ChatScreen(
             onSend = { vm.sendMessage() },
             onVoice = {
                 focusManager.clearFocus(force = true)
+                PepperRobotBridge.stopSpeaking()
                 try {
                     speechLauncher.launch(chatSpeechIntent())
                 } catch (_: ActivityNotFoundException) {

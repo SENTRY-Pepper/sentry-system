@@ -2,7 +2,6 @@ package com.sentry.app.features.trainee.session
 
 import android.content.Intent
 import android.speech.RecognizerIntent
-import android.speech.tts.TextToSpeech
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -27,24 +26,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.sentry.app.core.navigation.navigateSingleTop
+import com.sentry.app.R
 import com.sentry.app.core.ui.components.texts.SentryText
 import com.sentry.app.core.ui.models.SentryTextAlign
 import com.sentry.app.core.ui.models.SentryTextSize
@@ -72,8 +66,6 @@ fun SessionScreen(
     val scheme = MaterialTheme.colorScheme
     val scenario = vm.getCurrentScenario()
     val question = vm.getCurrentQuestion()
-    val context = LocalContext.current
-    var tts by remember { mutableStateOf<TextToSpeech?>(null) }
     val speechLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -89,11 +81,8 @@ fun SessionScreen(
     }
 
     DisposableEffect(Unit) {
-        val engine = TextToSpeech(context) { }
-        tts = engine
         onDispose {
-            engine.stop()
-            engine.shutdown()
+            PepperRobotBridge.stopSpeaking()
         }
     }
 
@@ -108,35 +97,27 @@ fun SessionScreen(
         state.currentQuestionIndex,
         state.isModuleBreak,
     ) {
-        val engine = tts ?: return@LaunchedEffect
         if (state.isModuleBreak) {
-            speakWithRobotFallback(
-                engine = engine,
+            PepperRobotBridge.say(
                 text = "${scenario.owaspId} ${scenario.title} complete. " +
                     "Do you want to proceed to the next module?",
-                utteranceId = "module-break-${scenario.id}",
             )
         } else {
-            speakWithRobotFallback(
-                engine = engine,
+            PepperRobotBridge.say(
                 text = buildQuestionSpeech(scenario, question),
-                utteranceId = question.id,
             )
         }
     }
 
     LaunchedEffect(state.isAnswered, state.aiResponse) {
-        val engine = tts ?: return@LaunchedEffect
         if (state.isAnswered && state.aiResponse.isNotBlank()) {
             val result = if (state.isCorrect) {
                 "That is correct."
             } else {
                 "That is not the safest answer."
             }
-            speakWithRobotFallback(
-                engine = engine,
+            PepperRobotBridge.say(
                 text = "$result ${state.aiResponse}",
-                utteranceId = "feedback-${state.currentModuleIndex}-${state.currentQuestionIndex}",
             )
         }
     }
@@ -157,7 +138,10 @@ fun SessionScreen(
                 currentQuestion = state.currentQuestionIndex + 1,
                 totalQuestionsInModule = scenario.questions.size,
                 type = "${scenario.owaspId} - ${scenario.difficulty}",
-                onBack = { navController.popBackStack() },
+                onBack = {
+                    PepperRobotBridge.stopSpeaking()
+                    navController.popBackStack()
+                },
             )
 
             LazyColumn(
@@ -217,6 +201,7 @@ fun SessionScreen(
                     if (!state.isAnswered && !state.isModuleBreak) {
                         VoiceAnswerButton(
                             onListen = {
+                                PepperRobotBridge.stopSpeaking()
                                 speechLauncher.launch(answerSpeechIntent())
                             },
                         )
@@ -258,21 +243,6 @@ fun SessionScreen(
                 item { Spacer(Modifier.height(80.dp)) }
             }
         }
-    }
-}
-
-private fun speakWithRobotFallback(
-    engine: TextToSpeech,
-    text: String,
-    utteranceId: String,
-) {
-    if (!PepperRobotBridge.say(text)) {
-        engine.speak(
-            text,
-            TextToSpeech.QUEUE_FLUSH,
-            null,
-            utteranceId,
-        )
     }
 }
 
@@ -323,23 +293,28 @@ private fun SessionTopBar(
             .height(64.dp)
             .background(scheme.primary),
     ) {
-        IconButton(
-            onClick = onBack,
-            modifier = Modifier.align(Alignment.CenterStart),
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterStart)
+                .padding(start = 14.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .clickable { onBack() }
+                .padding(end = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White,
-                )
-                SentryText(
-                    text = "BACK",
-                    size = SentryTextSize.Sm,
-                    weight = FontWeight.Bold,
-                    color = Color.White,
-                )
-            }
+            Icon(
+                painter = painterResource(R.drawable.arrow_left_circle),
+                contentDescription = "Back",
+                tint = Color.White,
+                modifier = Modifier.size(30.dp),
+            )
+            Spacer(Modifier.width(8.dp))
+            SentryText(
+                text = "Back",
+                size = SentryTextSize.Md,
+                weight = FontWeight.Bold,
+                color = Color.White,
+            )
         }
 
         Column(

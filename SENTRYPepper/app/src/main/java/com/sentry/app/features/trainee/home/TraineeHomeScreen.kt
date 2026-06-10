@@ -56,6 +56,7 @@ import com.sentry.app.core.ui.components.texts.SentryText
 import com.sentry.app.core.ui.models.SentryTextAlign
 import com.sentry.app.core.ui.models.SentryTextSize
 import com.sentry.app.core.ui.theme.LocalBrandColors
+import com.sentry.app.pepper.PepperRobotBridge
 
 @Composable
 fun TraineeHomeScreen(
@@ -87,6 +88,12 @@ fun TraineeHomeScreen(
         }
     }
 
+    LaunchedEffect(state.quickAskOpen, state.quickAskResponse) {
+        if (state.quickAskOpen && state.quickAskResponse.isNotBlank()) {
+            PepperRobotBridge.say(state.quickAskResponse)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -110,6 +117,7 @@ fun TraineeHomeScreen(
                     .clip(RoundedCornerShape(13.dp))
                     .background(scheme.primary)
                     .clickable {
+                        PepperRobotBridge.stopSpeaking()
                         vm.openQuickAsk()
                         try {
                             speechLauncher.launch(quickAskSpeechIntent())
@@ -189,8 +197,12 @@ fun TraineeHomeScreen(
         if (state.quickAskOpen) {
             QuickAskDialog(
                 state = state,
-                onDismiss = vm::closeQuickAsk,
+                onDismiss = {
+                    PepperRobotBridge.stopSpeaking()
+                    vm.closeQuickAsk()
+                },
                 onTalk = {
+                    PepperRobotBridge.stopSpeaking()
                     try {
                         speechLauncher.launch(quickAskSpeechIntent())
                     } catch (_: ActivityNotFoundException) {
@@ -198,6 +210,7 @@ fun TraineeHomeScreen(
                     }
                 },
                 onOpenChat = {
+                    PepperRobotBridge.stopSpeaking()
                     vm.closeQuickAsk()
                     navController.navigateSingleTop("chat")
                 },
