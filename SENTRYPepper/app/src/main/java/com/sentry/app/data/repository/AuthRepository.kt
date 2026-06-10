@@ -95,6 +95,32 @@ class AuthRepository @Inject constructor(
         tokenManager.clearToken()
     }
 
+    suspend fun enablePepperKioskSession(
+        participantId: String,
+        organisationId: String,
+    ): AuthState {
+        val resolvedParticipantId = participantId.trim().ifEmpty { "PEPPER_P001" }
+        val resolvedOrganisationId = normaliseOrganisationId(organisationId)
+            .ifEmpty { "SENTRY_STUDY" }
+
+        tokenManager.saveSession(
+            token = "pepper-kiosk-local-token",
+            participantId = resolvedParticipantId,
+            role = UserRole.TRAINEE.name.lowercase(),
+            organisationId = resolvedOrganisationId,
+        )
+
+        Timber.i(
+            "AuthRepository: Pepper kiosk session - $resolvedParticipantId ($resolvedOrganisationId)"
+        )
+        return AuthState(
+            isAuthenticated = true,
+            participantId = resolvedParticipantId,
+            role = UserRole.TRAINEE.name.lowercase(),
+            organisationId = resolvedOrganisationId,
+        )
+    }
+
     fun isAuthenticated() = tokenManager.isAuthenticated()
     fun getCurrentRole() = UserRole.from(tokenManager.getRole() ?: "trainee")
 }
