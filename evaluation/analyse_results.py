@@ -158,10 +158,6 @@ def load_all_sessions() -> pd.DataFrame:
 
 
 def analyse(df: pd.DataFrame) -> dict:
-    """
-    Run the full statistical analysis on the combined dataset.
-    Returns a report dict suitable for JSON serialisation.
-    """
     conditions = df["condition"].unique().tolist()
     grounded_df = df[df["condition"] == "grounded"]
     baseline_df = df[df["condition"] == "baseline"]
